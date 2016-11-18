@@ -42,4 +42,32 @@ void ImGuiApplication::onRender()
     ImGui::Render();
 }
 
+bool ImGuiApplication::onMouseButton(int button, int action, int mods)
+{
+    ImGuiBinding::mouseButtonCallback(_window, button, action, mods);
+    ImGuiIO &io = ImGui::GetIO();
+    return io.WantCaptureMouse;
+}
+
+bool ImGuiApplication::onScroll(double xoffset, double yoffset)
+{
+    ImGuiBinding::scrollCallback(_window, xoffset, yoffset);
+    ImGuiIO &io = ImGui::GetIO();
+    return io.WantCaptureMouse;
+}
+
+bool ImGuiApplication::onKey(int key, int scancode, int action, int mods)
+{
+    ImGuiBinding::keyCallback(_window, key, scancode, action, mods);
+    ImGuiIO &io = ImGui::GetIO();
+    return io.WantCaptureKeyboard;
+}
+
+bool ImGuiApplication::onChar(unsigned int c)
+{
+    ImGuiBinding::charCallback(_window, c);
+    ImGuiIO &io = ImGui::GetIO();
+    return io.WantTextInput;
+}
+
 }

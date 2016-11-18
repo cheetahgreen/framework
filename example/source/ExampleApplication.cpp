@@ -42,20 +42,4 @@ void ExampleApplication::onRender()
     ImGuiApplication::onRender();
 }
 
-void ExampleApplication::onMouseButton(int button, int action, int mods)
-{
-}
-
-void ExampleApplication::onScroll(double xoffset, double yoffset)
-{
-}
-
-void ExampleApplication::onKey(int key, int scancode, int action, int mods)
-{
-}
-
-void ExampleApplication::onChar(unsigned int c)
-{
-}
-
 }

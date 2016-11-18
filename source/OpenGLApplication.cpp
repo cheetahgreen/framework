@@ -99,24 +99,29 @@ void OpenGLApplication::onRender()
 {
 }
 
-void OpenGLApplication::onMouseButton(int button, int action, int mods)
+bool OpenGLApplication::onMouseButton(int button, int action, int mods)
 {
+    return false;
 }
 
-void OpenGLApplication::onScroll(double xoffset, double yoffset)
+bool OpenGLApplication::onScroll(double xoffset, double yoffset)
 {
+    return false;
 }
 
-void OpenGLApplication::onKey(int key, int scancode, int action, int mods)
+bool OpenGLApplication::onKey(int key, int scancode, int action, int mods)
 {
+    return false;
 }
 
-void OpenGLApplication::onChar(unsigned int c)
+bool OpenGLApplication::onChar(unsigned int c)
 {
+    return false;
 }
 
-void OpenGLApplication::onResize()
+bool OpenGLApplication::onResize()
 {
+    return false;
 }
 
 void OpenGLApplication::setWindowSize(const glm::ivec2& size)

@@ -25,11 +25,14 @@ protected:
     );
     virtual void onRender();
 
-    virtual void onMouseButton(int button, int action, int mods);
-    virtual void onScroll(double xoffset, double yoffset);
-    virtual void onKey(int key, int scancode, int action, int mods);
-    virtual void onChar(unsigned int c);
-    virtual void onResize();
+    // \brief Mouse button event. Base class should be acknowledged first
+    //        about it, if it will return true, that means it was already
+    //        handled and user should ignore the event.
+    virtual bool onMouseButton(int button, int action, int mods);
+    virtual bool onScroll(double xoffset, double yoffset);
+    virtual bool onKey(int key, int scancode, int action, int mods);
+    virtual bool onChar(unsigned int c);
+    virtual bool onResize();
 
     void setWindowSize(const glm::ivec2& size);
     const glm::ivec2& getWindowSize() const;
