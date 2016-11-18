@@ -5,6 +5,8 @@ set(PROJECT_NAME_LIB ${PROJECT_NAME}-lib)
 set(PROJECT_NAME_TEST ${PROJECT_NAME}-test)
 set(DEPENDENCIES_DIR ${PROJECT_SOURCE_DIR}/dependencies/)
 
+set(FRAMEWORK_BUILD_EXAMPLE ON CACHE BOOL "")
+
 find_library(OpenGL REQUIRED)
 
 if (WIN32)
@@ -89,6 +91,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/HeightmapGeometry.cpp
     source/HeightmapTextureConverter.cpp
     source/HeightmapVisualizationEffect.cpp
+    source/ImGuiApplication.cpp
     source/ImGuiBinding.cpp
     source/IntersectionCurve.cpp
     source/OpenGLApplication.cpp
@@ -145,3 +148,7 @@ target_compile_features(${PROJECT_NAME_TEST} PRIVATE
 )
 
 add_test(NAME ${PROJECT_NAME_TEST} COMMAND ${PROJECT_NAME_TEST})
+
+if (FRAMEWORK_BUILD_EXAMPLE)
+    add_subdirectory(example)
+endif()

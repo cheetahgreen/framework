@@ -3,7 +3,9 @@
 
 using namespace std;
 
-OpenGLApplication::OpenGLApplication()
+OpenGLApplication::OpenGLApplication():
+    _windowSize{800, 600},
+    _windowTitle{"Framework Application"}
 {
 }
 
@@ -27,15 +29,20 @@ void OpenGLApplication::create()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    _window = glfwCreateWindow(640, 480, "Milling Simulator", nullptr, 
-        nullptr);
+    _window = glfwCreateWindow(
+        _windowSize.x,
+        _windowSize.y,
+        _windowTitle.c_str(),
+        nullptr,
+        nullptr
+    );
 
     if (!_window)
     {
         glfwTerminate();
         throw string("Cannot create GLFW3 window.");
     }
-    
+
     glfwMakeContextCurrent(_window);
     gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 
@@ -57,12 +64,17 @@ void OpenGLApplication::destroy()
 
 void OpenGLApplication::run()
 {
+    _currentFrameStartTime = _previousFrameStartTime =
+        std::chrono::high_resolution_clock::now();
+
     while (!glfwWindowShouldClose(_window))
     {
         glfwPollEvents();
-        onUpdate();
+        updateFrameTimes();
 
+        onUpdate(_currentFrameDeltaTime);
         onRender();
+
         glfwSwapBuffers(_window);
     }
 
@@ -77,7 +89,9 @@ void OpenGLApplication::onDestroy()
 {
 }
 
-void OpenGLApplication::onUpdate()
+void OpenGLApplication::onUpdate(
+    const std::chrono::high_resolution_clock::duration& deltaTime
+)
 {
 }
 
@@ -100,6 +114,39 @@ void OpenGLApplication::onKey(int key, int scancode, int action, int mods)
 void OpenGLApplication::onChar(unsigned int c)
 {
 }
+
+void OpenGLApplication::onResize()
+{
+}
+
+void OpenGLApplication::setWindowSize(const glm::ivec2& size)
+{
+    _windowSize = size;
+    if (_window != nullptr)
+    {
+        glfwSetWindowSize(_window, _windowSize.x, _windowSize.y);
+    }
+}
+
+const glm::ivec2& OpenGLApplication::getWindowSize() const
+{
+    return _windowSize;
+}
+
+void OpenGLApplication::setWindowTitle(const std::string& title)
+{
+    _windowTitle = title;
+    if (_window != nullptr)
+    {
+        glfwSetWindowTitle(_window, _windowTitle.c_str());
+    }
+}
+
+const std::string& OpenGLApplication::getTitle() const
+{
+    return _windowTitle;
+}
+
 
 void OpenGLApplication::mouseButtonCallback(
     GLFWwindow *window, int button, int action, int mods
@@ -143,10 +190,32 @@ void OpenGLApplication::charCallback(GLFWwindow *window, unsigned int c)
     app->onChar(c);
 }
 
+void OpenGLApplication::windowSizeCallback(
+    GLFWwindow *window,
+    int width,
+    int height
+)
+{
+    auto app = static_cast<OpenGLApplication*>(
+        glfwGetWindowUserPointer(window)
+    );
+
+    app->setWindowSize({width, height});
+    app->onResize();
+}
+
 glm::vec2 OpenGLApplication::getMousePosition()
 {
     double xPos, yPos;
     glfwGetCursorPos(_window, &xPos, &yPos);
     return glm::vec2((float)xPos, (float)yPos);
+}
+
+void OpenGLApplication::updateFrameTimes()
+{
+    _previousFrameStartTime = _currentFrameStartTime;
+    _currentFrameStartTime = std::chrono::high_resolution_clock::now();
+    _currentFrameDeltaTime =
+        _currentFrameStartTime - _previousFrameStartTime;
 }
 
