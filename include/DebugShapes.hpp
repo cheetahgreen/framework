@@ -5,6 +5,7 @@
 
 #include <glad/glad.h>
 
+#include <memory>
 #include <vector>
 
 Mesh<VertexNormalTexCoords> createPlane(float width, float length);

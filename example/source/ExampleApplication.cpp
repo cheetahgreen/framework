@@ -1,10 +1,18 @@
 #include "ExampleApplication.hpp"
+
+#include <iostream>
+
+#include "glm/gtc/matrix_transform.hpp"
 #include "imgui.h"
+
+#include "DebugShapes.hpp"
+
 
 namespace example
 {
 
-ExampleApplication::ExampleApplication()
+ExampleApplication::ExampleApplication():
+    _enableCameraRotations{false}
 {
 }
 
@@ -15,6 +23,15 @@ ExampleApplication::~ExampleApplication()
 void ExampleApplication::onCreate()
 {
     ImGuiApplication::onCreate();
+
+    _phongEffect = std::make_shared<TexturedPhongEffect>();
+    _phongEffect->create();
+
+    _cube = createBox({1.0, 1.0, 1.0});
+
+    auto windowSize = getWindowSize();
+    auto aspectRatio = static_cast<float>(windowSize.x) / windowSize.y;
+    _projectionMatrix = glm::perspective(45.0f, aspectRatio, 0.5f, 100.0f);
 }
 
 void ExampleApplication::onDestroy()
@@ -39,7 +56,66 @@ void ExampleApplication::onRender()
 {
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    _phongEffect->setProjectionMatrix(_projectionMatrix);
+    _phongEffect->setViewMatrix(_camera.getViewMatrix());
+    _phongEffect->setModelMatrix({});
+    _phongEffect->begin();
+    _cube->render();
+    _phongEffect->end();
+
     ImGuiApplication::onRender();
+}
+
+bool ExampleApplication::onMouseButton(int button, int action, int mods)
+{
+    if (ImGuiApplication::onMouseButton(button, action, mods)) { return true; }
+
+    if (GLFW_MOUSE_BUTTON_LEFT == button)
+    {
+        _enableCameraRotations = GLFW_PRESS == action;
+    }
+
+    return true;
+}
+
+bool ExampleApplication::onMouseMove(glm::dvec2 newPosition)
+{
+    if (ImGuiApplication::onMouseMove(newPosition)) { return true; }
+
+    if (_enableCameraRotations)
+    {
+        auto movement = getMouseMovement();
+        _camera.rotate(movement.y, movement.x);
+    }
+
+    return true;
+}
+
+bool ExampleApplication::onScroll(double xoffset, double yoffset)
+{
+    if (fw::ImGuiApplication::onScroll(xoffset, yoffset))
+        return true;
+
+    const double cMinimumDistance = 1.0;
+    const double cMaximumDistance = 10.0;
+    const double cZoomStep = 0.5;
+    auto currentDistance = _camera.getDist();
+    _camera.setDist(
+        std::min(
+            std::max(currentDistance + cZoomStep * yoffset, cMinimumDistance),
+            cMaximumDistance
+        )
+    );
+
+    return true;
+}
+
+bool ExampleApplication::onResize()
+{
+    auto windowSize = getWindowSize();
+    auto aspectRatio = static_cast<float>(windowSize.x) / windowSize.y;
+    _projectionMatrix = glm::perspective(45.0f, aspectRatio, 0.5f, 100.0f);
 }
 
 }

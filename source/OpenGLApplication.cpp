@@ -49,9 +49,19 @@ void OpenGLApplication::create()
     glfwSetWindowUserPointer(_window, static_cast<void*>(this));
 
     glfwSetMouseButtonCallback(_window, OpenGLApplication::mouseButtonCallback);
-    glfwSetScrollCallback(_window, OpenGLApplication::scrollCallback);
+    glfwSetCursorPosCallback(_window, OpenGLApplication::mouseMoveCallback);
     glfwSetKeyCallback(_window, OpenGLApplication::keyCallback);
     glfwSetCharCallback(_window, OpenGLApplication::charCallback);
+    glfwSetScrollCallback(_window, OpenGLApplication::scrollCallback);
+    glfwSetWindowSizeCallback(_window, OpenGLApplication::windowSizeCallback);
+
+    glfwGetCursorPos(
+        _window,
+        &_currentMousePosition.x,
+        &_currentMousePosition.y
+    );
+
+    _previousMousePosition = _currentMousePosition;
 
     onCreate();
 }
@@ -124,6 +134,14 @@ bool OpenGLApplication::onResize()
     return false;
 }
 
+bool OpenGLApplication::onMouseMove(glm::dvec2 newPosition)
+{
+    _previousMousePosition = _currentMousePosition;
+    _currentMousePosition = newPosition;
+    _mouseMovement = _currentMousePosition - _previousMousePosition;
+    return false;
+}
+
 void OpenGLApplication::setWindowSize(const glm::ivec2& size)
 {
     _windowSize = size;
@@ -152,6 +170,20 @@ const std::string& OpenGLApplication::getTitle() const
     return _windowTitle;
 }
 
+glm::dvec2 OpenGLApplication::getCurrentMousePosition() const
+{
+    return _currentMousePosition;
+}
+
+glm::dvec2 OpenGLApplication::getPreviousMousePosition() const
+{
+    return _previousMousePosition;
+}
+
+glm::dvec2 OpenGLApplication::getMouseMovement() const
+{
+    return _mouseMovement;
+}
 
 void OpenGLApplication::mouseButtonCallback(
     GLFWwindow *window, int button, int action, int mods
@@ -162,6 +194,19 @@ void OpenGLApplication::mouseButtonCallback(
     );
 
     app->onMouseButton(button, action, mods);
+}
+
+void OpenGLApplication::mouseMoveCallback(
+    GLFWwindow *window,
+    double xpos,
+    double ypos
+)
+{
+    auto app = static_cast<OpenGLApplication*>(
+        glfwGetWindowUserPointer(window)
+    );
+
+    app->onMouseMove({xpos, ypos});
 }
 
 void OpenGLApplication::scrollCallback(
@@ -207,13 +252,6 @@ void OpenGLApplication::windowSizeCallback(
 
     app->setWindowSize({width, height});
     app->onResize();
-}
-
-glm::vec2 OpenGLApplication::getMousePosition()
-{
-    double xPos, yPos;
-    glfwGetCursorPos(_window, &xPos, &yPos);
-    return glm::vec2((float)xPos, (float)yPos);
 }
 
 void OpenGLApplication::updateFrameTimes()
