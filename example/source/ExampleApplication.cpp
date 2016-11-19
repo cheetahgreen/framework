@@ -5,14 +5,16 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "imgui.h"
 
+#include "Config.hpp"
 #include "DebugShapes.hpp"
-
+#include "TextureUtils.hpp"
 
 namespace example
 {
 
 ExampleApplication::ExampleApplication():
-    _enableCameraRotations{false}
+    _enableCameraRotations{false},
+    _cameraRotationSensitivity{0.2, 0.2}
 {
 }
 
@@ -28,10 +30,16 @@ void ExampleApplication::onCreate()
     _phongEffect->create();
 
     _cube = createBox({1.0, 1.0, 1.0});
+    _grid = std::make_shared<fw::Grid>(
+        glm::ivec2{32, 32},
+        glm::vec2{0.5f, 0.5f}
+    );
 
-    auto windowSize = getWindowSize();
-    auto aspectRatio = static_cast<float>(windowSize.x) / windowSize.y;
-    _projectionMatrix = glm::perspective(45.0f, aspectRatio, 0.5f, 100.0f);
+    std::string resourcePath = RESOURCE("checker-base.png");
+    std::cerr << "res path: " << resourcePath << std::endl;
+    _testTexture = loadTextureFromFile(RESOURCE("textures/checker-base.png"));
+
+    updateProjectionMatrix();
 }
 
 void ExampleApplication::onDestroy()
@@ -55,13 +63,16 @@ void ExampleApplication::onUpdate(
 void ExampleApplication::onRender()
 {
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
 
     _phongEffect->setProjectionMatrix(_projectionMatrix);
     _phongEffect->setViewMatrix(_camera.getViewMatrix());
     _phongEffect->setModelMatrix({});
+    _phongEffect->setTexture(_testTexture);
     _phongEffect->begin();
     _cube->render();
+    _grid->render();
     _phongEffect->end();
 
     ImGuiApplication::onRender();
@@ -85,7 +96,7 @@ bool ExampleApplication::onMouseMove(glm::dvec2 newPosition)
 
     if (_enableCameraRotations)
     {
-        auto movement = getMouseMovement();
+        auto movement = getMouseMovement() * _cameraRotationSensitivity;
         _camera.rotate(movement.y, movement.x);
     }
 
@@ -112,6 +123,12 @@ bool ExampleApplication::onScroll(double xoffset, double yoffset)
 }
 
 bool ExampleApplication::onResize()
+{
+    updateProjectionMatrix();
+    return true;
+}
+
+void ExampleApplication::updateProjectionMatrix()
 {
     auto windowSize = getWindowSize();
     auto aspectRatio = static_cast<float>(windowSize.x) / windowSize.y;

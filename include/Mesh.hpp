@@ -16,6 +16,7 @@ public:
         const std::vector<GLuint> &indices
     );
 
+    Mesh(const Mesh<VertexType> &mesh) = delete;
     Mesh(Mesh<VertexType> &&mesh);
 
     ~Mesh();

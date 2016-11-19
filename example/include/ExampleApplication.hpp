@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Grid.hpp"
 #include "ImGuiApplication.hpp"
 #include "Mesh.hpp"
 #include "OrbitingCamera.hpp"
@@ -33,13 +34,19 @@ protected:
     virtual bool onScroll(double xoffset, double yoffset) override;
     virtual bool onResize() override;
 
+    void updateProjectionMatrix();
+
 private:
     std::shared_ptr<TexturedPhongEffect> _phongEffect;
     std::shared_ptr<Mesh<VertexNormalTexCoords>> _cube;
 
+    std::shared_ptr<fw::Grid> _grid;
     OrbitingCamera _camera;
     glm::mat4 _projectionMatrix;
     bool _enableCameraRotations;
+
+    glm::dvec2 _cameraRotationSensitivity;
+    GLuint _testTexture;
 };
 
 }
