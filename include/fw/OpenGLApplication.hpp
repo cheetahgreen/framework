@@ -7,6 +7,9 @@
 
 #include "OpenGLHeaders.hpp"
 
+namespace fw
+{
+
 class OpenGLApplication
 {
 public:
@@ -74,3 +77,5 @@ private:
     std::chrono::high_resolution_clock::time_point _currentFrameStartTime;
     std::chrono::high_resolution_clock::duration _currentFrameDeltaTime;
 };
+
+}

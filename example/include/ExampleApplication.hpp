@@ -37,11 +37,11 @@ protected:
     void updateProjectionMatrix();
 
 private:
-    std::shared_ptr<TexturedPhongEffect> _phongEffect;
-    std::shared_ptr<Mesh<VertexNormalTexCoords>> _cube;
+    std::shared_ptr<fw::TexturedPhongEffect> _phongEffect;
+    std::shared_ptr<fw::Mesh<fw::VertexNormalTexCoords>> _cube;
 
     std::shared_ptr<fw::Grid> _grid;
-    OrbitingCamera _camera;
+    fw::OrbitingCamera _camera;
     glm::mat4 _projectionMatrix;
     bool _enableCameraRotations;
 

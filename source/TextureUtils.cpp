@@ -3,6 +3,9 @@
 
 using namespace std;
 
+namespace fw
+{
+
 GLuint loadTextureFromFile(const string &filename)
 {
     int width, height, components;
@@ -44,4 +47,6 @@ GLuint loadTextureFromFile(const string &filename)
     stbi_image_free(image);
 
     return texture;
+}
+
 }

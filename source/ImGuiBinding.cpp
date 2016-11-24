@@ -9,6 +9,8 @@ Rewritten to learn how it works & change it to a bit more friendly form.
 
 #include "OpenGLHeaders.hpp"
 
+namespace fw
+{
 namespace ImGuiBinding
 {
     static GLFWwindow *gWindow;
@@ -427,4 +429,6 @@ namespace ImGuiBinding
         if (c > 0 && c < 0x10000)
             io.AddInputCharacter((unsigned short)c);
     }
+}
+
 }

@@ -2,6 +2,9 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+namespace fw
+{
+
 namespace uniforms
 {
     const std::string ModelMatrixName = "model";
@@ -70,4 +73,6 @@ void EffectBase::setProjectionMatrix(const glm::mat4 &projMatrix)
     );
 
     glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, glm::value_ptr(projMatrix));
+}
+
 }

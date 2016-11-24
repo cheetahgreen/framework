@@ -2,8 +2,11 @@
 
 struct GLFWwindow;
 
+namespace fw 
+{ 
 namespace ImGuiBinding
 {
+
     bool initialize(GLFWwindow *window, bool setGLFWCallbacks);
     void shutdown();
     bool newFrame();
@@ -29,4 +32,6 @@ namespace ImGuiBinding
     );
 
     void charCallback(GLFWwindow *window, unsigned int c);
+
+}
 }

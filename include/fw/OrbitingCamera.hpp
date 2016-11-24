@@ -1,9 +1,12 @@
-#ifndef __ORBITING_CAMERA_HPP__
-#define __ORBITING_CAMERA_HPP__
+#pragma once
 
 #include <glm/mat4x4.hpp>
 
-class OrbitingCamera {
+namespace fw
+{
+
+class OrbitingCamera
+{
 public:
   OrbitingCamera();
 
@@ -24,4 +27,4 @@ private:
   float _rotationX, _rotationY;
 };
 
-#endif
+}

@@ -5,6 +5,9 @@
 using namespace std;
 using namespace glm;
 
+namespace fw
+{
+
 HeightmapGeometry::HeightmapGeometry() :
     _skirtEnabled(true)
 {
@@ -187,4 +190,6 @@ void HeightmapGeometry::generateHeightmapGeometry()
     }
 
     _mesh = make_shared<Mesh<Vertex3DNormal2TexCoord>>(vertices, indices);
+}
+
 }

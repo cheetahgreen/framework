@@ -4,7 +4,9 @@
 #include <vector>
 
 #include <iostream>
-using namespace std;
+
+namespace fw
+{
 
 template<typename VertexType>
 class Mesh
@@ -123,4 +125,6 @@ void Mesh<VertexType>::destroyBuffers()
     if (_ebo) glDeleteBuffers(1, &_ebo);
     if (_vao) glDeleteVertexArrays(1, &_vao);
     _vao = _vbo = _ebo = 0;
+}
+
 }

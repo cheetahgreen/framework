@@ -26,10 +26,10 @@ void ExampleApplication::onCreate()
 {
     ImGuiApplication::onCreate();
 
-    _phongEffect = std::make_shared<TexturedPhongEffect>();
+    _phongEffect = std::make_shared<fw::TexturedPhongEffect>();
     _phongEffect->create();
 
-    _cube = createBox({1.0, 1.0, 1.0});
+    _cube = fw::createBox({1.0, 1.0, 1.0});
     _grid = std::make_shared<fw::Grid>(
         glm::ivec2{32, 32},
         glm::vec2{0.5f, 0.5f}
@@ -37,7 +37,7 @@ void ExampleApplication::onCreate()
 
     std::string resourcePath = RESOURCE("checker-base.png");
     std::cerr << "res path: " << resourcePath << std::endl;
-    _testTexture = loadTextureFromFile(RESOURCE("textures/checker-base.png"));
+    _testTexture = fw::loadTextureFromFile(RESOURCE("textures/checker-base.png"));
 
     updateProjectionMatrix();
 }

@@ -4,6 +4,9 @@
 using namespace std;
 using namespace glm;
 
+namespace fw
+{
+
 Mesh<VertexNormalTexCoords> createPlane(float width, float length)
 {
     std::vector<VertexNormalTexCoords> vertices;
@@ -161,7 +164,7 @@ Mesh<VertexNormalTexCoords> createCylinder(
     for (int angleStep = 0; angleStep <= circleSubdivisions; ++angleStep)
     {
         float progress = angleStep/static_cast<float>(circleSubdivisions);
-        float angle = static_cast<float>(2.0*common::pi()*progress);
+        float angle = static_cast<float>(2.0*pi()*progress);
 
         float fx = sinf(angle) * radius;
         float fz = cosf(angle) * radius;
@@ -211,7 +214,7 @@ Mesh<VertexNormalTexCoords> createCylinder(
 
         for (int angleStep = 0; angleStep <= circleSubdivisions; ++angleStep)
         {
-            float theta = 2.0f * common::pif()
+            float theta = 2.0f * pif()
                 * angleStep/static_cast<float>(circleSubdivisions);
 
             float fx = sinf(theta);
@@ -252,9 +255,9 @@ Mesh<VertexNormalTexCoords> createSphere(
              longtitude < longtitudeSubdivisions;
              ++longtitude)
         {
-            float theta = 2.0f * common::pif() *
+            float theta = 2.0f * pif() *
                 latitude / static_cast<float>(latitudeSubdivisions);
-            float phi = common::pif() *
+            float phi = pif() *
                 longtitude / (static_cast<float>(longtitudeSubdivisions) - 1);
 
             float costheta = cosf(theta);
@@ -300,4 +303,6 @@ Mesh<VertexNormalTexCoords> createSphere(
     }
 
     return Mesh<VertexNormalTexCoords>(vertices, indices);
+}
+
 }

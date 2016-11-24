@@ -1,10 +1,12 @@
-#ifndef __SHADER_HPP__
-#define __SHADER_HPP__
+#pragma once
 
 #include <glad/glad.h>
 
 #include <string>
 #include <vector>
+
+namespace fw
+{
 
 class Shader
 {
@@ -40,4 +42,4 @@ private:
   GLuint _program;
 };
 
-#endif
+}

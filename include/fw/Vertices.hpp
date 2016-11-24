@@ -20,8 +20,6 @@ struct VertexColor
     static void setupAttribPointers();
 };
 
-}
-
 struct VertexNormalTexCoords
 {
     VertexNormalTexCoords();
@@ -71,3 +69,5 @@ struct Vertex3DNormal2TexCoord
 
     static void setupAttribPointers();
 };
+
+}

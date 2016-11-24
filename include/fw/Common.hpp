@@ -3,18 +3,20 @@
 #include <cmath>
 #include <string>
 
-namespace common
+namespace fw
 {
-    double pi();
-    float pif();
 
-    std::string loadASCIITextFile(const std::string &filepath);
+double pi();
+float pif();
 
-    const char *transformStringToCStr(const std::string &str);
+std::string loadASCIITextFile(const std::string &filepath);
 
-    template <typename T>
-    int sgn(T val)
-    {
-        return (T(0) < val) - (val < T(0));
-    }
+const char *transformStringToCStr(const std::string &str);
+
+template <typename T>
+int sgn(T val)
+{
+    return (T(0) < val) - (val < T(0));
+}
+
 }

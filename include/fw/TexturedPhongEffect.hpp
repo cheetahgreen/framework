@@ -6,6 +6,9 @@
 
 #include <memory>
 
+namespace fw
+{
+
 class TexturedPhongEffect : 
     public EffectBase
 {
@@ -24,3 +27,5 @@ public:
 private:
     void createShaders();
 };
+
+}

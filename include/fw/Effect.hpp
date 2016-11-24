@@ -7,6 +7,9 @@
 #include <string>
 #include <memory>
 
+namespace fw
+{
+
 namespace uniforms
 {
     extern const std::string ModelMatrixName;
@@ -58,3 +61,5 @@ protected:
     std::shared_ptr<ShaderProgram> _shaderProgram;    
     glm::mat4 _modelMatrix, _viewMatrix, _projMatrix;
 };
+
+}

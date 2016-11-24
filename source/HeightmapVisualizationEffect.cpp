@@ -6,7 +6,7 @@
 
 using namespace std;
 
-namespace ms
+namespace fw
 {
 
 HeightmapVisualizationEffect::HeightmapVisualizationEffect()

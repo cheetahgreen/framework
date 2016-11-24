@@ -3,7 +3,7 @@
 
 TEST(CommonTests, PiShouldBeAroundTrueValue)
 {
-    auto piValue = common::pi();
+    auto piValue = fw::pi();
     EXPECT_TRUE(3.13 < piValue && piValue < 3.15);
 }
 

@@ -8,6 +8,9 @@
 #include <memory>
 #include <vector>
 
+namespace fw
+{
+
 Mesh<VertexNormalTexCoords> createPlane(float width, float length);
 std::vector<GLfloat> createCube(float width, float height, float length);
 
@@ -22,3 +25,5 @@ Mesh<VertexNormalTexCoords> createSphere(
     int latitudeSubdivisions,
     int longtitudeSubdivisions
 );
+
+}

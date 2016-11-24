@@ -6,17 +6,17 @@
 
 using namespace std;
 
-double common::pi()
+double fw::pi()
 {
     return std::acos(-1.0);
 }
 
-float common::pif()
+float fw::pif()
 {
     return std::acos(-1.0f);
 }
 
-std::string common::loadASCIITextFile(const std::string &filepath)
+std::string fw::loadASCIITextFile(const std::string &filepath)
 {
     ifstream file(filepath);
     string output;
@@ -33,7 +33,7 @@ std::string common::loadASCIITextFile(const std::string &filepath)
     return output;
 }
 
-const char *common::transformStringToCStr(const std::string &str)
+const char *fw::transformStringToCStr(const std::string &str)
 {
     return str.c_str();
 }

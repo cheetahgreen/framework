@@ -8,8 +8,11 @@
 
 using namespace std;
 
+namespace fw
+{
+
 OrbitingCamera::OrbitingCamera() :
-  _xMin(-0.49f*common::pif()), _xMax(0.49f*common::pif()),
+  _xMin(-0.49f*pif()), _xMax(0.49f*pif()),
   _dist(1.0f),
   _rotationX(0.0f), _rotationY(0.0f) {
 }
@@ -26,10 +29,10 @@ void OrbitingCamera::rotate(float dx, float dy) {
     _rotationX = _xMax;
   }
 
-  while (_rotationY > 2.0f*common::pif())
-    _rotationY -= 2.0f*common::pif();
-  while (_rotationY < -2.0f*common::pif())
-    _rotationY += 2.0f*common::pif();
+  while (_rotationY > 2.0f*pif())
+    _rotationY -= 2.0f*pif();
+  while (_rotationY < -2.0f*pif())
+    _rotationY += 2.0f*pif();
 
 }
 
@@ -50,4 +53,6 @@ glm::vec3 OrbitingCamera::getPosition() const {
 
   auto position = cameraPositionTransform * cameraStartPosition;
   return glm::vec3(position.x, position.y, position.z);
+}
+
 }

@@ -5,6 +5,9 @@
 
 using namespace std;
 
+namespace fw
+{
+
 TexturedPhongEffect::TexturedPhongEffect()
 {
 }
@@ -55,4 +58,6 @@ void TexturedPhongEffect::createShaders()
     _shaderProgram->attach(vs.get());
     _shaderProgram->attach(fs.get());
     _shaderProgram->link();
+}
+
 }

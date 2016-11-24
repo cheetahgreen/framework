@@ -8,6 +8,9 @@
 
 using namespace std;
 
+namespace fw
+{
+
 Shader::Shader() : _shaderType(0), _shaderId(0) {
 }
 
@@ -20,7 +23,7 @@ Shader::~Shader() {
 
 void Shader::addSourceFromFile(const string &filename)
 {
-  string shaderCode = common::loadASCIITextFile(filename);
+  string shaderCode = loadASCIITextFile(filename);
   _sources.push_back(shaderCode);
 }
 
@@ -32,7 +35,7 @@ void Shader::compile(GLenum shaderType)
         _sources.begin(),
         _sources.end(),
         back_inserter(transformedSources),
-        common::transformStringToCStr
+        transformStringToCStr
     );
 
     GLuint shader = glCreateShader(shaderType);
@@ -90,4 +93,6 @@ void ShaderProgram::link() {
 void ShaderProgram::use()
 {
     glUseProgram(_program);
+}
+
 }

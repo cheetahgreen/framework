@@ -1,17 +1,13 @@
 #pragma once
 
 #include <memory>
-
 #include <glm/glm.hpp>
-
-struct VertexNormalTexCoords;
-
-template<typename VertexType>
-class Mesh;
+#include "IParametricSurfaceUV.hpp"
+#include "Mesh.hpp"
+#include "Vertices.hpp"
 
 namespace fw
 {
-class IParametricSurfaceUV;
 
 class ParametricSurfaceMeshBuilder
 {

@@ -6,7 +6,7 @@
 
 #include <memory>
 
-namespace ms
+namespace fw
 {
 
 class HeightmapVisualizationEffect:

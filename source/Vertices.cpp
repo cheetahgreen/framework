@@ -39,8 +39,6 @@ void VertexColor::setupAttribPointers()
     );
 }
 
-}
-
 VertexNormalTexCoords::VertexNormalTexCoords()
 {
 }
@@ -148,4 +146,6 @@ void Vertex3DNormal2TexCoord::setupAttribPointers()
         sizeof(Vertex3DNormal2TexCoord),
         reinterpret_cast<GLvoid*>(offsetof(Vertex3DNormal2TexCoord, texCoord2))
     );
+}
+
 }

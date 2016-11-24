@@ -3,6 +3,9 @@
 
 using namespace std;
 
+namespace fw
+{
+
 OpenGLApplication::OpenGLApplication():
     _windowSize{800, 600},
     _windowTitle{"Framework Application"}
@@ -262,3 +265,4 @@ void OpenGLApplication::updateFrameTimes()
         _currentFrameStartTime - _previousFrameStartTime;
 }
 
+}

@@ -9,6 +9,9 @@
 #include <vector>
 #include <memory>
 
+namespace fw
+{
+
 struct VertexNormalTexCoords;
 
 class HeightmapGeometry
@@ -33,3 +36,5 @@ private:
 
     std::shared_ptr<Mesh<Vertex3DNormal2TexCoord>> _mesh;
 };
+
+}
