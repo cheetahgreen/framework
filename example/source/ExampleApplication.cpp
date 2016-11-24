@@ -4,10 +4,10 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "imgui.h"
+#include "fw/DebugShapes.hpp"
+#include "fw/TextureUtils.hpp"
 
 #include "Config.hpp"
-#include "DebugShapes.hpp"
-#include "TextureUtils.hpp"
 
 namespace example
 {

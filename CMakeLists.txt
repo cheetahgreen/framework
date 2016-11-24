@@ -76,6 +76,7 @@ endif()
 include_directories(
     ${PROJECT_BINARY_DIR}
     ${FRAMEWORK_INCLUDE_DIRS}
+    ${PROJECT_SOURCE_DIR}/include/fw
 )
 
 set(FRAMEWORK_SOURCE_FILES
