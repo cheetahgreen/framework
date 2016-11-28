@@ -1,15 +1,16 @@
 #pragma once
 
-#include "Grid.hpp"
-#include "ImGuiApplication.hpp"
-#include "Mesh.hpp"
-#include "OrbitingCamera.hpp"
-#include "TexturedPhongEffect.hpp"
-#include "Vertices.hpp"
-
 #include <memory>
 
 #include "glm/glm.hpp"
+
+#include "fw/FrameMarker.hpp"
+#include "fw/Grid.hpp"
+#include "fw/ImGuiApplication.hpp"
+#include "fw/Mesh.hpp"
+#include "fw/OrbitingCamera.hpp"
+#include "fw/TexturedPhongEffect.hpp"
+#include "fw/Vertices.hpp"
 
 namespace example
 {
@@ -41,6 +42,8 @@ private:
     std::shared_ptr<fw::Mesh<fw::VertexNormalTexCoords>> _cube;
 
     std::shared_ptr<fw::Grid> _grid;
+    std::shared_ptr<fw::FrameMarker> _frameMarker;
+
     fw::OrbitingCamera _camera;
     glm::mat4 _projectionMatrix;
     bool _enableCameraRotations;

@@ -90,6 +90,8 @@ set(FRAMEWORK_SOURCE_FILES
     source/DebugShapes.cpp
     source/Effect.cpp
     source/EquidistantParametricSurface.cpp
+    source/FrameMarker.cpp
+    source/GeometryChunk.cpp
     source/Grid.cpp
     source/HeightmapGeometry.cpp
     source/HeightmapTextureConverter.cpp
@@ -97,6 +99,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/ImGuiApplication.cpp
     source/ImGuiBinding.cpp
     source/IntersectionCurve.cpp
+    source/Material.cpp
     source/OpenGLApplication.cpp
     source/OrbitingCamera.cpp
     source/ParametricSurfaceClosestPointNaiveFinder.cpp
@@ -107,6 +110,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/Shaders.cpp
     source/StbImplementation.c
     source/SurfaceIntersectionNewtonIterable.cpp
+    source/Texture.cpp
     source/TextureUtils.cpp
     source/TexturedPhongEffect.cpp
     source/Vertices.cpp

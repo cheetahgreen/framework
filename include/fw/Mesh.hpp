@@ -8,8 +8,17 @@
 namespace fw
 {
 
+class IMesh
+{
+public:
+    virtual ~IMesh() = default;
+    virtual void destroy() = 0;
+    virtual void render() const = 0;
+};
+
 template<typename VertexType>
-class Mesh
+class Mesh:
+    public IMesh
 {
 public:
     Mesh();
@@ -21,10 +30,10 @@ public:
     Mesh(const Mesh<VertexType> &mesh) = delete;
     Mesh(Mesh<VertexType> &&mesh);
 
-    ~Mesh();
+    virtual ~Mesh();
 
-    void destroy();
-    void render() const;
+    virtual void destroy();
+    virtual void render() const;
 
 protected:
     GLuint _vao, _vbo, _ebo;

@@ -26,4 +26,11 @@ Mesh<VertexNormalTexCoords> createSphere(
     int longtitudeSubdivisions
 );
 
+std::shared_ptr<Mesh<VertexNormalTexCoords>> createCone(
+    float height,
+    float radius,
+    int circleSubdivisions = 16,
+    int circleCuts = 16
+);
+
 }
