@@ -29,6 +29,8 @@ void ExampleApplication::onCreate()
     _phongEffect = std::make_shared<fw::TexturedPhongEffect>();
     _phongEffect->create();
 
+    _universalPhongEffect = std::make_shared<fw::UniversalPhongEffect>();
+
     _cube = fw::createBox({1.0, 1.0, 1.0});
     _grid = std::make_shared<fw::Grid>(
         glm::ivec2{32, 32},
@@ -68,21 +70,29 @@ void ExampleApplication::onRender()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
+    _phongEffect->begin();
     _phongEffect->setProjectionMatrix(_projectionMatrix);
     _phongEffect->setViewMatrix(_camera.getViewMatrix());
     _phongEffect->setModelMatrix({});
     _phongEffect->setTexture(_testTexture);
-    _phongEffect->begin();
     _cube->render();
     _grid->render();
     _phongEffect->end();
 
     for (const auto& chunk: _frameMarker->getGeometryChunks())
     {
-        _phongEffect->setModelMatrix(chunk.getModelMatrix());
-        _phongEffect->begin();
+        _universalPhongEffect->setLightDirection({-1, 1, 0});
+        _universalPhongEffect->setSolidColor(
+            chunk.getMaterial()->getBaseAlbedoColor()
+        );
+
+        _universalPhongEffect->begin();
+        // todo: standarize a way to change uniforms
+        _universalPhongEffect->setProjectionMatrix(_projectionMatrix);
+        _universalPhongEffect->setViewMatrix(_camera.getViewMatrix());
+        _universalPhongEffect->setModelMatrix(chunk.getModelMatrix());
         chunk.getMesh()->render();
-        _phongEffect->end();
+        _universalPhongEffect->end();
     }
 
     ImGuiApplication::onRender();

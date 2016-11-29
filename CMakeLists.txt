@@ -113,6 +113,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/Texture.cpp
     source/TextureUtils.cpp
     source/TexturedPhongEffect.cpp
+    source/UniversalPhongEffect.cpp
     source/Vertices.cpp
 )
 

@@ -10,6 +10,7 @@
 #include "fw/Mesh.hpp"
 #include "fw/OrbitingCamera.hpp"
 #include "fw/TexturedPhongEffect.hpp"
+#include "fw/UniversalPhongEffect.hpp"
 #include "fw/Vertices.hpp"
 
 namespace example
@@ -39,6 +40,8 @@ protected:
 
 private:
     std::shared_ptr<fw::TexturedPhongEffect> _phongEffect;
+    std::shared_ptr<fw::UniversalPhongEffect> _universalPhongEffect;
+
     std::shared_ptr<fw::Mesh<fw::VertexNormalTexCoords>> _cube;
 
     std::shared_ptr<fw::Grid> _grid;

@@ -135,9 +135,12 @@ std::vector<GeometryChunk> FrameMarker::getGeoChunksOfArrow(
     glm::mat4 cylinderTransformation = cylinderTranslation * rotationMat
         * cylinderScale;
 
+    auto material = std::make_shared<Material>();
+    material->setBaseAlbedoColor({color, 1.0f});
+
     return {
-        { _cone, std::make_shared<Material>(), coneTransformation},
-        {_cylinder, std::make_shared<Material>(), cylinderTransformation}
+        { _cone, material, coneTransformation},
+        {_cylinder, material, cylinderTransformation}
     };
 
     /*
