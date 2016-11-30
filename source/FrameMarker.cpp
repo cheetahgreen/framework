@@ -139,8 +139,8 @@ std::vector<GeometryChunk> FrameMarker::getGeoChunksOfArrow(
     material->setBaseAlbedoColor({color, 1.0f});
 
     return {
-        { _cone, material, coneTransformation},
-        {_cylinder, material, cylinderTransformation}
+        { _cone, material, _transformation * coneTransformation},
+        {_cylinder, material, _transformation * cylinderTransformation}
     };
 
     /*
