@@ -57,12 +57,18 @@ void OpenGLApplication::create()
     glfwSetCharCallback(_window, OpenGLApplication::charCallback);
     glfwSetScrollCallback(_window, OpenGLApplication::scrollCallback);
     glfwSetWindowSizeCallback(_window, OpenGLApplication::windowSizeCallback);
+    glfwSetFramebufferSizeCallback(
+        _window,
+        OpenGLApplication::framebufferSizeCallback
+    );
 
     glfwGetCursorPos(
         _window,
         &_currentMousePosition.x,
         &_currentMousePosition.y
     );
+
+    glfwGetFramebufferSize(_window, &_framebufferSize.x, &_framebufferSize.y);
 
     _previousMousePosition = _currentMousePosition;
 
@@ -137,6 +143,12 @@ bool OpenGLApplication::onResize()
     return false;
 }
 
+bool OpenGLApplication::onFramebufferResize(glm::ivec2 framebufferSize)
+{
+    _framebufferSize = framebufferSize;
+    return false;
+}
+
 bool OpenGLApplication::onMouseMove(glm::dvec2 newPosition)
 {
     _previousMousePosition = _currentMousePosition;
@@ -147,9 +159,9 @@ bool OpenGLApplication::onMouseMove(glm::dvec2 newPosition)
 
 void OpenGLApplication::setWindowSize(const glm::ivec2& size)
 {
-    _windowSize = size;
-    if (_window != nullptr)
+    if (_windowSize != size && _window != nullptr)
     {
+        _windowSize = size;
         glfwSetWindowSize(_window, _windowSize.x, _windowSize.y);
     }
 }
@@ -157,6 +169,11 @@ void OpenGLApplication::setWindowSize(const glm::ivec2& size)
 const glm::ivec2& OpenGLApplication::getWindowSize() const
 {
     return _windowSize;
+}
+
+const glm::ivec2& OpenGLApplication::getFramebufferSize() const
+{
+    return _framebufferSize;
 }
 
 void OpenGLApplication::setWindowTitle(const std::string& title)
@@ -255,6 +272,19 @@ void OpenGLApplication::windowSizeCallback(
 
     app->setWindowSize({width, height});
     app->onResize();
+}
+
+void OpenGLApplication::framebufferSizeCallback(
+    GLFWwindow *window,
+    int width,
+    int height
+)
+{
+    auto app = static_cast<OpenGLApplication*>(
+        glfwGetWindowUserPointer(window)
+    );
+
+    app->onFramebufferResize({width, height});
 }
 
 void OpenGLApplication::updateFrameTimes()

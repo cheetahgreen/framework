@@ -37,9 +37,12 @@ protected:
     virtual bool onKey(int key, int scancode, int action, int mods);
     virtual bool onChar(unsigned int c);
     virtual bool onResize();
+    virtual bool onFramebufferResize(glm::ivec2 framebufferSize);
 
     void setWindowSize(const glm::ivec2& size);
     const glm::ivec2& getWindowSize() const;
+
+    const glm::ivec2& getFramebufferSize() const;
 
     void setWindowTitle(const std::string& title);
     const std::string& getTitle() const;
@@ -60,6 +63,11 @@ protected:
     );
     static void charCallback(GLFWwindow *window, unsigned int c);
     static void windowSizeCallback(GLFWwindow *window, int width, int height);
+    static void framebufferSizeCallback(
+        GLFWwindow *window,
+        int width,
+        int height
+    );
 
     GLFWwindow *_window;
 
@@ -67,6 +75,8 @@ private:
     void updateFrameTimes();
 
     glm::ivec2 _windowSize;
+    glm::ivec2 _framebufferSize;
+
     std::string _windowTitle;
 
     glm::dvec2 _previousMousePosition;
