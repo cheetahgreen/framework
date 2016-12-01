@@ -91,6 +91,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/Effect.cpp
     source/EquidistantParametricSurface.cpp
     source/FrameMarker.cpp
+    source/FreeCamera.cpp
     source/GeometryChunk.cpp
     source/Grid.cpp
     source/HeightmapGeometry.cpp
