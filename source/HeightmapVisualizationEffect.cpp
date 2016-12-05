@@ -1,6 +1,6 @@
-#include "HeightmapVisualizationEffect.hpp"
-#include "OpenGLHeaders.hpp"
-#include "Config.hpp"
+#include "fw/HeightmapVisualizationEffect.hpp"
+#include "fw/OpenGLHeaders.hpp"
+#include "fw/Resources.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -51,7 +51,7 @@ void HeightmapVisualizationEffect::setTextureMatrix(
 
 void HeightmapVisualizationEffect::setAlbedoTexture(GLuint textureId)
 {
-    glActiveTexture(GL_TEXTURE0); 
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureId);
     glUniform1i(
         glGetUniformLocation(_shaderProgram->getId(), "AlbedoTexture"),
@@ -81,11 +81,15 @@ void HeightmapVisualizationEffect::setSize(const glm::vec3 &size)
 void HeightmapVisualizationEffect::createShaders()
 {
     shared_ptr<Shader> vs = make_shared<Shader>();
-    vs->addSourceFromFile(RESOURCE("shaders/HeightmapTransform.vert"));
+    vs->addSourceFromFile(
+        getFrameworkResourcePath("shaders/HeightmapTransform.vert")
+    );
     vs->compile(GL_VERTEX_SHADER);
 
     shared_ptr<Shader> fs = make_shared<Shader>();
-    fs->addSourceFromFile(RESOURCE("shaders/HeightmapTransform.frag"));
+    fs->addSourceFromFile(
+        getFrameworkResourcePath("shaders/HeightmapTransform.frag")
+    );
     fs->compile(GL_FRAGMENT_SHADER);
 
     _shaderProgram = make_shared<ShaderProgram>();

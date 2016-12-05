@@ -1,6 +1,6 @@
 #include "fw/UniversalPhongEffect.hpp"
 #include <glm/gtc/type_ptr.hpp>
-#include "Config.hpp"
+#include "fw/Resources.hpp"
 
 namespace fw
 {
@@ -87,11 +87,15 @@ void UniversalPhongEffect::setSolidColor(glm::vec4 color)
 void UniversalPhongEffect::createShaders()
 {
     std::shared_ptr<Shader> vs = std::make_shared<Shader>();
-    vs->addSourceFromFile(RESOURCE("shaders/UniversalPhong.vert"));
+    vs->addSourceFromFile(
+        getFrameworkResourcePath("shaders/UniversalPhong.vert")
+    );
     vs->compile(GL_VERTEX_SHADER);
 
     std::shared_ptr<Shader> fs = std::make_shared<Shader>();
-    fs->addSourceFromFile(RESOURCE("shaders/UniversalPhong.frag"));
+    fs->addSourceFromFile(
+        getFrameworkResourcePath("shaders/UniversalPhong.frag")
+    );
     fs->compile(GL_FRAGMENT_SHADER);
 
     _shaderProgram = std::make_shared<ShaderProgram>();

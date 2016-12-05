@@ -32,11 +32,9 @@ add_subdirectory(${DEPENDENCIES_DIR}googletest)
 include_directories(${gtest_SOURCE_DIR}/include)
 include_directories(${gmock_SOURCE_DIR}/include)
 
-set(RESOURCES_PATH ${FRAMEWORK_RESOURCES_DIR})
-
 configure_file(
-    ${PROJECT_SOURCE_DIR}/Config.hpp.in
-    ${PROJECT_BINARY_DIR}/Config.hpp
+    ${PROJECT_SOURCE_DIR}/configuration/Config.hpp.in
+    ${PROJECT_BINARY_DIR}/configuration/Config.hpp
 )
 
 set(FRAMEWORK_INCLUDE_DIRS
@@ -74,8 +72,8 @@ if (hasParentScope)
 endif()
 
 include_directories(
-    ${PROJECT_BINARY_DIR}
     ${FRAMEWORK_INCLUDE_DIRS}
+    ${PROJECT_BINARY_DIR}/configuration
     ${PROJECT_SOURCE_DIR}/include/fw
 )
 
@@ -108,6 +106,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/ParametricSurfaceIntersectionFinder.cpp
     source/ParametricSurfaceMeshBuilder.cpp
     source/PolygonalLine.cpp
+    source/Resources.cpp
     source/Shaders.cpp
     source/StbImplementation.c
     source/SurfaceIntersectionNewtonIterable.cpp

@@ -1,5 +1,5 @@
-#include "TexturedPhongEffect.hpp"
-#include "Config.hpp"
+#include "fw/TexturedPhongEffect.hpp"
+#include "fw/Resources.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -47,11 +47,15 @@ void TexturedPhongEffect::setTexture(GLuint textureId)
 void TexturedPhongEffect::createShaders()
 {
     shared_ptr<Shader> vs = make_shared<Shader>();
-    vs->addSourceFromFile(RESOURCE("shaders/MVPTransformTexCoord.vert"));
+    vs->addSourceFromFile(
+        getFrameworkResourcePath("shaders/MVPTransformTexCoord.vert")
+    );
     vs->compile(GL_VERTEX_SHADER);
 
     shared_ptr<Shader> fs = make_shared<Shader>();
-    fs->addSourceFromFile(RESOURCE("shaders/SingleTexture.frag"));
+    fs->addSourceFromFile(
+        getFrameworkResourcePath("shaders/SingleTexture.frag")
+    );
     fs->compile(GL_FRAGMENT_SHADER);
 
     _shaderProgram = make_shared<ShaderProgram>();

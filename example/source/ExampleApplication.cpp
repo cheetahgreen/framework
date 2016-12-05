@@ -6,8 +6,7 @@
 #include "imgui.h"
 #include "fw/DebugShapes.hpp"
 #include "fw/TextureUtils.hpp"
-
-#include "Config.hpp"
+#include "fw/Resources.hpp"
 
 namespace example
 {
@@ -39,9 +38,9 @@ void ExampleApplication::onCreate()
 
     _frameMarker = std::make_shared<fw::FrameMarker>();
 
-    std::string resourcePath = RESOURCE("checker-base.png");
-    std::cerr << "res path: " << resourcePath << std::endl;
-    _testTexture = fw::loadTextureFromFile(RESOURCE("textures/checker-base.png"));
+    _testTexture = fw::loadTextureFromFile(
+        fw::getFrameworkResourcePath("textures/checker-base.png")
+    );
 
     updateProjectionMatrix();
 }
