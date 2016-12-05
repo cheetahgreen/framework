@@ -3,6 +3,7 @@
 #include <cmath>
 #include <fstream>
 #include <streambuf>
+#include "FrameworkLogging.hpp"
 
 using namespace std;
 
@@ -19,6 +20,13 @@ float fw::pif()
 std::string fw::loadASCIITextFile(const std::string &filepath)
 {
     ifstream file(filepath);
+    if (!file.is_open())
+    {
+        LOG(ERROR) << "Requested file \"" << filepath << "\" cannot be opened.";
+        // todo: don't return empty string, it's not nice
+        return "";
+    }
+
     string output;
 
     file.seekg(0, ios::end);
