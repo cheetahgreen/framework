@@ -1,5 +1,6 @@
 #include "OpenGLApplication.hpp"
 #include <string>
+#include "FrameworkLogging.hpp"
 
 using namespace std;
 
@@ -21,6 +22,7 @@ void OpenGLApplication::create()
 {
     if (!glfwInit())
     {
+        LOG(FATAL) << "Cannot initialize GLFW3";
         throw string("Cannot initialize GLFW3.");
     }
 
@@ -43,8 +45,11 @@ void OpenGLApplication::create()
     if (!_window)
     {
         glfwTerminate();
+        LOG(FATAL) << "Cannot create GLFW3 window";
         throw string("Cannot create GLFW3 window.");
     }
+
+    LOG(INFO) << "GLFW3 window created successfully.";
 
     glfwMakeContextCurrent(_window);
     gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
@@ -79,6 +84,7 @@ void OpenGLApplication::destroy()
 {
     onDestroy();
     glfwTerminate();
+    LOG(INFO) << "Window destroyed and GLFW3 terminated.";
 }
 
 void OpenGLApplication::run()

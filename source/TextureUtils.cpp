@@ -1,5 +1,6 @@
 #include "TextureUtils.hpp"
 #include <stb_image.h>
+#include "FrameworkLogging.hpp"
 
 using namespace std;
 
@@ -15,6 +16,7 @@ GLuint loadTextureFromFile(const string &filename)
 
     if (image == nullptr)
     {
+        LOG(ERROR) << "Cannot load specified texture: " << filename;
         throw string("Cannot load specified texture: " + filename);
     }
 
@@ -29,6 +31,8 @@ GLuint loadTextureFromFile(const string &filename)
         break;
     default:
         stbi_image_free(image);
+        LOG(ERROR) << "Texture \"" << filename
+            << "\" components amount is not supported.";
         throw string("Components amount currently not supported.");
     }
 
@@ -45,6 +49,8 @@ GLuint loadTextureFromFile(const string &filename)
     glBindTexture(GL_TEXTURE_2D, 0);
 
     stbi_image_free(image);
+
+    LOG(INFO) << "Texture \"" << filename << "\" has been loaded successfully.";
 
     return texture;
 }

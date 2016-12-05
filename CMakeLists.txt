@@ -45,6 +45,7 @@ set(FRAMEWORK_INCLUDE_DIRS
     ${DEPENDENCIES_DIR}/glm
     ${DEPENDENCIES_DIR}/imgui
     ${DEPENDENCIES_DIR}/stb
+    ${DEPENDENCIES_DIR}/easyloggingpp/src
 )
 
 set(FRAMEWORK_DEPENDENCIES_SOURCE_FILES
@@ -89,6 +90,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/Effect.cpp
     source/EquidistantParametricSurface.cpp
     source/FrameMarker.cpp
+    source/Framework.cpp
     source/FreeCamera.cpp
     source/GeometryChunk.cpp
     source/Grid.cpp

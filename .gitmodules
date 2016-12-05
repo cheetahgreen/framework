@@ -19,3 +19,6 @@
 [submodule "dependencies/glfw"]
 	path = dependencies/glfw
 	url = https://github.com/glfw/glfw
+[submodule "dependencies/easyloggingpp"]
+	path = dependencies/easyloggingpp
+	url = https://github.com/easylogging/easyloggingpp.git
