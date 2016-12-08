@@ -1,6 +1,6 @@
 #include "TextureUtils.hpp"
 #include <stb_image.h>
-#include "FrameworkLogging.hpp"
+#include "fw/internal/Logging.hpp"
 
 using namespace std;
 

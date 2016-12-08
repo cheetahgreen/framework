@@ -1,6 +1,6 @@
 #include "OpenGLApplication.hpp"
 #include <string>
-#include "FrameworkLogging.hpp"
+#include "fw/internal/Logging.hpp"
 
 using namespace std;
 

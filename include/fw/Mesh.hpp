@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <iostream>
+#include "fw/internal/Logging.hpp"
 
 namespace fw
 {
@@ -109,6 +110,10 @@ void Mesh<VertexType>::createBuffers(
     glGenBuffers(1, &_vbo);
     glGenBuffers(1, &_ebo);
 
+    LOG(DEBUG) << "Creating buffers (vao=" << _vao << " vbo=" << _vbo
+        << " ebo=" << _ebo << ") for " << vertices.size() << " vertices and "
+        << indices.size() << " indices";
+
     glBindVertexArray(_vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);
@@ -125,11 +130,15 @@ void Mesh<VertexType>::createBuffers(
     glBindVertexArray(0);
 
     _numElements = indices.size();
+
 }
 
 template <typename VertexType>
 void Mesh<VertexType>::destroyBuffers()
 {
+    LOG(DEBUG) << "Destroying buffers (vao=" << _vao << " vbo=" << _vbo
+        << " ebo=" << _ebo << ").";
+
     if (_vbo) glDeleteBuffers(1, &_vbo);
     if (_ebo) glDeleteBuffers(1, &_ebo);
     if (_vao) glDeleteVertexArrays(1, &_vao);

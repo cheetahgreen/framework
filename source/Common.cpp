@@ -3,7 +3,7 @@
 #include <cmath>
 #include <fstream>
 #include <streambuf>
-#include "FrameworkLogging.hpp"
+#include "fw/internal/Logging.hpp"
 
 using namespace std;
 
