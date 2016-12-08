@@ -39,6 +39,54 @@ void VertexColor::setupAttribPointers()
     );
 }
 
+StandardVertex2D::StandardVertex2D()
+{
+}
+
+StandardVertex2D::StandardVertex2D(
+    glm::vec2 position,
+    glm::vec2 texCoord,
+    glm::vec3 color
+):
+    position{position},
+    texCoord{texCoord},
+    color{color}
+{
+}
+
+void StandardVertex2D::setupAttribPointers()
+{
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(
+        0,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(StandardVertex2D),
+        (GLvoid*)0
+    );
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(
+        1,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(StandardVertex2D),
+        (GLvoid*)offsetof(StandardVertex2D, texCoord)
+    );
+
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(
+        2,
+        3,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(StandardVertex2D),
+        (GLvoid*)offsetof(StandardVertex2D, color)
+    );
+}
+
 VertexNormalTexCoords::VertexNormalTexCoords()
 {
 }

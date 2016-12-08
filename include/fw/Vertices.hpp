@@ -20,6 +20,22 @@ struct VertexColor
     static void setupAttribPointers();
 };
 
+struct StandardVertex2D
+{
+    StandardVertex2D();
+    StandardVertex2D(
+        glm::vec2 position,
+        glm::vec2 texCoord,
+        glm::vec3 color
+    );
+
+    glm::vec2 position;
+    glm::vec2 texCoord;
+    glm::vec3 color;
+
+    static void setupAttribPointers();
+};
+
 struct VertexNormalTexCoords
 {
     VertexNormalTexCoords();

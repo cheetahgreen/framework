@@ -117,6 +117,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/TexturedPhongEffect.cpp
     source/UniversalPhongEffect.cpp
     source/Vertices.cpp
+    source/effects/Standard2DEffect.cpp
 )
 
 add_library(${PROJECT_NAME_LIB}

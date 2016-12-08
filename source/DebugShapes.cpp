@@ -10,6 +10,33 @@ using namespace glm;
 namespace fw
 {
 
+std::shared_ptr<Mesh<StandardVertex2D>> createQuad2D(glm::vec2 size)
+{
+    std::vector<StandardVertex2D> vertices;
+
+    float halfWidth = 0.5f * size.x;
+    float halfLength = 0.5f * size.y;
+
+    for (int i = 0; i < 4; ++i)
+    {
+        int x = i % 2;
+        int z = i / 2;
+
+        int signX = x == 0 ? -1 : 1;
+        int signZ = z == 0 ? 1 : -1;
+
+        glm::vec2 position(signX * halfWidth, signZ * halfLength);
+        glm::vec2 texCoord(static_cast<float>(x), static_cast<float>(z));
+
+        auto vertex = StandardVertex2D(position, texCoord, {1.0f, 1.0f, 1.0f});
+        vertices.push_back(vertex);
+    }
+
+    std::vector<GLuint> indices = { 0, 1, 2, 1, 2, 3 };
+
+    return std::make_shared<Mesh<StandardVertex2D>>(vertices, indices);
+}
+
 Mesh<VertexNormalTexCoords> createPlane(float width, float length)
 {
     std::vector<VertexNormalTexCoords> vertices;
