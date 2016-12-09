@@ -10,13 +10,14 @@ out VSOut
     vec3 Color;
 } vsOut;
 
-uniform mat3 model;
-uniform mat3 view;
+uniform mat4 model;
+uniform mat4 view;
 uniform mat4 proj;
 
 void main(void)
 {
-    gl_Position = vec4(position, 0.0, 1.0);
+    vec4 modelPosition = model * vec4(position, 0.0, 1.0);
+    gl_Position = proj * view * modelPosition;
     vsOut.TexCoord = texCoord;
     vsOut.Color = color;
 }

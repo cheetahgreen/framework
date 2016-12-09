@@ -16,10 +16,10 @@ public:
     virtual void end();
 
     virtual glm::mat4 getModelMatrix();
-    virtual void setModelMatrix(const glm::mat3 &modelMatrix);
+    virtual void setModelMatrix(const glm::mat4 &modelMatrix);
 
     virtual glm::mat4 getViewMatrix();
-    virtual void setViewMatrix(const glm::mat3 &viewMatrix);
+    virtual void setViewMatrix(const glm::mat4 &viewMatrix);
 
     virtual glm::mat4 getProjectionMatrix();
     virtual void setProjectionMatrix(const glm::mat4 &projMatrix);

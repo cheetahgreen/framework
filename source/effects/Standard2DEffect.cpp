@@ -27,14 +27,14 @@ void Standard2DEffect::begin()
     glBindTexture(GL_TEXTURE_2D, _diffuseMap);
     glUniform1i(_textureLocation, 0);
 
-    glUniformMatrix3fv(
+    glUniformMatrix4fv(
         _modelMatrixLocation,
         1,
         GL_FALSE,
         glm::value_ptr(_modelMatrix)
     );
 
-    glUniformMatrix3fv(
+    glUniformMatrix4fv(
         _viewMatrixLocation,
         1,
         GL_FALSE,
@@ -58,7 +58,7 @@ glm::mat4 Standard2DEffect::getModelMatrix()
     return _modelMatrix;
 }
 
-void Standard2DEffect::setModelMatrix(const glm::mat3 &modelMatrix)
+void Standard2DEffect::setModelMatrix(const glm::mat4 &modelMatrix)
 {
     _modelMatrix = modelMatrix;
 }
@@ -68,7 +68,7 @@ glm::mat4 Standard2DEffect::getViewMatrix()
     return _viewMatrix;
 }
 
-void Standard2DEffect::setViewMatrix(const glm::mat3 &viewMatrix)
+void Standard2DEffect::setViewMatrix(const glm::mat4 &viewMatrix)
 {
     _viewMatrix = viewMatrix;
 }
