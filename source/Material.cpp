@@ -11,6 +11,16 @@ Material::~Material()
 {
 }
 
+void Material::setEmissionColor(const glm::vec3& emissionColor)
+{
+    _emissionColor = emissionColor;
+}
+
+const glm::vec3& Material::getEmissionColor() const
+{
+    return _emissionColor;
+}
+
 void Material::setBaseAlbedoColor(const glm::vec4& baseAlbedoColor)
 {
     _baseAlbedoColor = baseAlbedoColor;

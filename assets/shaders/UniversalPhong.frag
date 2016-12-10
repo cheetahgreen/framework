@@ -13,6 +13,7 @@ uniform sampler2D TextureSlot1;
 uniform vec3 LightDirection;
 uniform vec3 LightColor;
 
+uniform vec3 EmissionColor;
 uniform vec4 SolidColor;
 uniform vec4 DiffuseMapColor;
 
@@ -28,6 +29,6 @@ void main(void)
     vec3 ambientPart = clamp(albedo * ambientLight, 0, 1);
     vec3 diffusePart = clamp(albedo * diffuse, 0, 1);
 
-    color = vec4(ambientPart + diffusePart, SolidColor.a);
+    color = vec4(EmissionColor + ambientPart + diffusePart, SolidColor.a);
 }
 

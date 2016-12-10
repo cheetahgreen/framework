@@ -15,6 +15,9 @@ public:
     Material();
     ~Material();
 
+    void setEmissionColor(const glm::vec3& emissionColor);
+    const glm::vec3& getEmissionColor() const;
+
     void setBaseAlbedoColor(const glm::vec4& baseAlbedoColor);
     const glm::vec4& getBaseAlbedoColor() const;
 
@@ -28,6 +31,7 @@ public:
     const std::shared_ptr<Texture>& getNormalMap() const;
 
 private:
+    glm::vec3 _emissionColor;
     glm::vec4 _baseAlbedoColor;
     std::shared_ptr<Texture> _albedoMap;
     std::shared_ptr<Texture> _specularMap;
