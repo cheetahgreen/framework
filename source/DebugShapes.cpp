@@ -1,7 +1,6 @@
 #include "DebugShapes.hpp"
-
 #include "glm/gtc/matrix_transform.hpp"
-
+#include "fw/OpenGLHeaders.hpp"
 #include "fw/Common.hpp"
 
 using namespace std;
@@ -182,6 +181,45 @@ std::shared_ptr<Mesh<VertexNormalTexCoords>> createBox(const glm::vec3 &size)
     }
 
     return std::make_shared<Mesh<VertexNormalTexCoords>>(vertices, indices);
+}
+
+std::shared_ptr<Mesh<VertexColor>> createBoxOutline(
+    const glm::vec3& size,
+    const glm::vec3& color
+)
+{
+    auto halfWidth = size.x/2;
+    auto halfHeight = size.y/2;
+    auto halfLength = size.z/2;
+
+    std::vector<VertexColor> vertices{
+        {{-halfWidth, +halfHeight, -halfLength}, color},
+        {{+halfWidth, +halfHeight, -halfLength}, color},
+        {{-halfWidth, -halfHeight, -halfLength}, color},
+        {{+halfWidth, -halfHeight, -halfLength}, color},
+
+        {{-halfWidth, +halfHeight, +halfLength}, color},
+        {{+halfWidth, +halfHeight, +halfLength}, color},
+        {{-halfWidth, -halfHeight, +halfLength}, color},
+        {{+halfWidth, -halfHeight, +halfLength}, color}
+    };
+
+    std::vector<GLuint> indices{
+        0, 1,
+        1, 3,
+        3, 2,
+        2, 0,
+        1, 5,
+        3, 7,
+        5, 7,
+        0, 4,
+        2, 6,
+        4, 6,
+        4, 5,
+        6, 7
+    };
+
+    return std::make_shared<Mesh<VertexColor>>(vertices, indices, GL_LINES);
 }
 
 Mesh<VertexNormalTexCoords> createCylinder(

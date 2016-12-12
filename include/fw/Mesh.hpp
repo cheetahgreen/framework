@@ -25,7 +25,8 @@ public:
     Mesh();
     Mesh(
         const std::vector<VertexType> &vertices,
-        const std::vector<GLuint> &indices
+        const std::vector<GLuint> &indices,
+        GLenum primitiveType = GL_TRIANGLES
     );
 
     Mesh(const Mesh<VertexType> &mesh) = delete;
@@ -37,6 +38,7 @@ public:
     virtual void render() const;
 
 protected:
+    GLenum _primitiveType;
     GLuint _vao, _vbo, _ebo;
     int _numElements;
 
@@ -53,19 +55,22 @@ Mesh<VertexType>::Mesh():
     _numElements{0},
     _vao{0},
     _vbo{0},
-    _ebo{0}
+    _ebo{0},
+    _primitiveType{GL_TRIANGLES}
 {
 }
 
 template <typename VertexType>
 Mesh<VertexType>::Mesh(
     const std::vector<VertexType> &vertices,
-    const std::vector<GLuint> &indices
+    const std::vector<GLuint> &indices,
+    GLenum primitiveType
 ):
     _numElements{0},
     _vao{0},
     _vbo{0},
-    _ebo{0}
+    _ebo{0},
+    _primitiveType{primitiveType}
 {
     createBuffers(vertices, indices);
 }
@@ -96,7 +101,7 @@ template <typename VertexType>
 void Mesh<VertexType>::render() const
 {
     glBindVertexArray(_vao);
-    glDrawElements(GL_TRIANGLES, _numElements, GL_UNSIGNED_INT, 0);
+    glDrawElements(_primitiveType, _numElements, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
 
