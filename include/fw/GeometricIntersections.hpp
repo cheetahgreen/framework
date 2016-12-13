@@ -149,7 +149,7 @@ std::vector<TVector2D> intersectCircles(
     auto a = (lhsRadiusSq - rhsRadiusSq + originsDistanceSq)
         / (2*originsDistance);
 
-    auto h = sqrt(lhsRadiusSq - a*a);
+    auto h = static_cast<TPrecision>(sqrt(lhsRadiusSq - a*a));
     auto midpoint = glm::mix(lhsOrigin, rhsOrigin, a/originsDistance);
 
     if (h < epsilon)
