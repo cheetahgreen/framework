@@ -1,6 +1,7 @@
 #pragma once
 #include "glm/glm.hpp"
 #include <algorithm>
+#include <vector>
 
 namespace fw
 {
@@ -99,6 +100,68 @@ GeometricIntersectionResult<TPrecision> intersectSegments(
 
     result.kind = GeometricIntersectionKind::None;
     return result;
+}
+
+template <typename TVector2D, typename TPrecision>
+std::vector<TVector2D> intersectCircles(
+    TVector2D lhsOrigin,
+    TPrecision lhsRadius,
+    TVector2D rhsOrigin,
+    TPrecision rhsRadius,
+    TPrecision epsilon = 10e-6
+)
+{
+    if (lhsRadius < rhsRadius)
+    {
+        std::swap(lhsOrigin, rhsOrigin);
+        std::swap(lhsRadius, rhsRadius);
+    }
+
+    auto originVector = rhsOrigin - lhsOrigin;
+    auto originsDistance = glm::length(originVector);
+
+    if (originsDistance > lhsRadius + rhsRadius)
+    {
+        return {};
+    }
+
+    // rhs circle inside and is not contacting
+    if (originsDistance < lhsRadius - rhsRadius)
+    {
+        return {};
+    }
+
+    if (originsDistance < epsilon)
+    {
+        // todo: this is actually not true
+        return {};
+    }
+
+    auto originVectorPerpendicular = glm::normalize(TVector2D{
+        -originVector.y,
+        originVector.x
+    });
+
+    auto lhsRadiusSq = lhsRadius * lhsRadius;
+    auto rhsRadiusSq = rhsRadius * rhsRadius;
+    auto originsDistanceSq = originsDistance * originsDistance;
+
+    auto a = (lhsRadiusSq - rhsRadiusSq + originsDistanceSq)
+        / (2*originsDistance);
+
+    auto h = sqrt(lhsRadiusSq - a*a);
+    auto midpoint = glm::mix(lhsOrigin, rhsOrigin, a/originsDistance);
+
+    if (h < epsilon)
+    {
+        return {midpoint};
+    }
+
+    return
+    {
+        midpoint + h * originVectorPerpendicular,
+        midpoint - h * originVectorPerpendicular
+    };
 }
 
 }
