@@ -114,7 +114,10 @@ vector<GLfloat> createCube(float width, float height, float length)
 	};
 }
 
-std::shared_ptr<Mesh<VertexNormalTexCoords>> createBox(const glm::vec3 &size)
+std::shared_ptr<Mesh<VertexNormalTexCoords>> createBox(
+    const glm::vec3 &size,
+    bool flipNormals
+)
 {
     std::vector<GLuint> indices;
 
@@ -122,18 +125,19 @@ std::shared_ptr<Mesh<VertexNormalTexCoords>> createBox(const glm::vec3 &size)
     auto halfHeight = size.y/2;
     auto halfLength = size.z/2;
 
-    auto xAxis = glm::vec3(1.0, 0.0, 0.0);
-    auto yAxis = glm::vec3(0.0, 1.0, 0.0);
-    auto zAxis = glm::vec3(0.0, 0.0, 1.0);
+    auto flipSign = flipNormals ? -1 : +1;
+    auto xAxis = static_cast<float>(flipSign) * glm::vec3(1.0, 0.0, 0.0);
+    auto yAxis = static_cast<float>(flipSign) * glm::vec3(0.0, 1.0, 0.0);
+    auto zAxis = static_cast<float>(flipSign) * glm::vec3(0.0, 0.0, 1.0);
 
     std::vector<VertexNormalTexCoords> vertices
     {
         {{-halfWidth, -halfHeight, -halfLength}, -zAxis, {0.0f, 0.0f}},
+        {{ halfWidth,  halfHeight, -halfLength}, -zAxis, {1.0f, 1.0f}},
         {{ halfWidth, -halfHeight, -halfLength}, -zAxis, {1.0f, 0.0f}},
         {{ halfWidth,  halfHeight, -halfLength}, -zAxis, {1.0f, 1.0f}},
-        {{ halfWidth,  halfHeight, -halfLength}, -zAxis, {1.0f, 1.0f}},
-        {{-halfWidth,  halfHeight, -halfLength}, -zAxis, {0.0f, 1.0f}},
         {{-halfWidth, -halfHeight, -halfLength}, -zAxis, {0.0f, 0.0f}},
+        {{-halfWidth,  halfHeight, -halfLength}, -zAxis, {0.0f, 1.0f}},
 
         {{-halfWidth, -halfHeight,  halfLength}, +zAxis, {0.0f, 0.0f}},
         {{ halfWidth, -halfHeight,  halfLength}, +zAxis, {1.0f, 0.0f}},
@@ -150,11 +154,11 @@ std::shared_ptr<Mesh<VertexNormalTexCoords>> createBox(const glm::vec3 &size)
         {{-halfWidth,  halfHeight,  halfLength}, -xAxis, {1.0f, 0.0f}},
 
         {{ halfWidth,  halfHeight,  halfLength}, +xAxis, {1.0f, 0.0f}},
+        {{ halfWidth, -halfHeight, -halfLength}, +xAxis, {0.0f, 1.0f}},
         {{ halfWidth,  halfHeight, -halfLength}, +xAxis, {1.0f, 1.0f}},
         {{ halfWidth, -halfHeight, -halfLength}, +xAxis, {0.0f, 1.0f}},
-        {{ halfWidth, -halfHeight, -halfLength}, +xAxis, {0.0f, 1.0f}},
-        {{ halfWidth, -halfHeight,  halfLength}, +xAxis, {0.0f, 0.0f}},
         {{ halfWidth,  halfHeight,  halfLength}, +xAxis, {1.0f, 0.0f}},
+        {{ halfWidth, -halfHeight,  halfLength}, +xAxis, {0.0f, 0.0f}},
 
         {{-halfWidth, -halfHeight, -halfLength}, -yAxis, {0.0f, 1.0f}},
         {{ halfWidth, -halfHeight, -halfLength}, -yAxis, {1.0f, 1.0f}},
@@ -164,11 +168,11 @@ std::shared_ptr<Mesh<VertexNormalTexCoords>> createBox(const glm::vec3 &size)
         {{-halfWidth, -halfHeight, -halfLength}, -yAxis, {0.0f, 1.0f}},
 
         {{-halfWidth,  halfHeight, -halfLength}, +yAxis, {0.0f, 1.0f}},
+        {{ halfWidth,  halfHeight,  halfLength}, +yAxis, {1.0f, 0.0f}},
         {{ halfWidth,  halfHeight, -halfLength}, +yAxis, {1.0f, 1.0f}},
         {{ halfWidth,  halfHeight,  halfLength}, +yAxis, {1.0f, 0.0f}},
-        {{ halfWidth,  halfHeight,  halfLength}, +yAxis, {1.0f, 0.0f}},
-        {{-halfWidth,  halfHeight,  halfLength}, +yAxis, {0.0f, 0.0f}},
-        {{-halfWidth,  halfHeight, -halfLength}, +yAxis, {0.0f, 1.0f}}
+        {{-halfWidth,  halfHeight, -halfLength}, +yAxis, {0.0f, 1.0f}},
+        {{-halfWidth,  halfHeight,  halfLength}, +yAxis, {0.0f, 0.0f}}
 	};
 
     for (auto i = 0; i < 6; ++i)
