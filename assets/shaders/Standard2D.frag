@@ -9,9 +9,9 @@ in VSOut
 out vec4 outColor;
 
 uniform sampler2D TextureSlot1;
+uniform vec3 EmissionColor;
 
 void main(void)
 {
-    vec4 textureColor = texture(TextureSlot1, vsOut.TexCoord);
-    outColor = vec4(textureColor.rgb, 1.0);
+    outColor = vec4(EmissionColor, 1.0);
 }

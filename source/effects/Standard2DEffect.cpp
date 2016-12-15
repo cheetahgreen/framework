@@ -47,6 +47,8 @@ void Standard2DEffect::begin()
         GL_FALSE,
         glm::value_ptr(_projMatrix)
     );
+
+    glUniform3fv(_emissionColorLocation, 1, glm::value_ptr(_emissionColor));
 }
 
 void Standard2DEffect::end()
@@ -86,6 +88,11 @@ void Standard2DEffect::setProjectionMatrix(const glm::mat4 &projMatrix)
 void Standard2DEffect::setDiffuseTexture(GLuint textureId)
 {
     _diffuseMap = textureId;
+}
+
+void Standard2DEffect::setEmissionColor(const glm::vec3& emissionColor)
+{
+    _emissionColor = emissionColor;
 }
 
 void Standard2DEffect::createShaders()
@@ -128,6 +135,11 @@ void Standard2DEffect::getUniformLocations()
     _projMatrixLocation = glGetUniformLocation(
         _shaderProgram->getId(),
         "proj"
+    );
+
+    _emissionColorLocation = glGetUniformLocation(
+        _shaderProgram->getId(),
+        "EmissionColor"
     );
 }
 
