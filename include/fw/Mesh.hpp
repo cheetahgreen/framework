@@ -80,7 +80,8 @@ Mesh<VertexType>::Mesh(Mesh<VertexType> &&mesh) :
     _vao(std::move(mesh._vao)),
     _vbo(std::move(mesh._vbo)),
     _ebo(std::move(mesh._ebo)),
-    _numElements(std::move(mesh._numElements))
+    _numElements(std::move(mesh._numElements)),
+    _primitiveType{std::move(mesh._primitiveType)}
 {
     mesh._vao = mesh._vbo = mesh._ebo = 0;
 }
