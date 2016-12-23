@@ -1,4 +1,4 @@
-#include "BsplineEquidistantKnotGenerator.hpp"
+#include "fw/BsplineEquidistantKnotGenerator.hpp"
 #include <gtest/gtest.h>
 #include <memory>
 

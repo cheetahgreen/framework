@@ -1,5 +1,5 @@
+#include "fw/Common.hpp"
 #include <gtest/gtest.h>
-#include "Common.hpp"
 
 TEST(CommonTests, PiShouldBeAroundTrueValue)
 {

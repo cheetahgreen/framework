@@ -14,7 +14,7 @@ add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-    ${FRAMEWORK_LIBRARIES}
+    framework-lib
 )
 
 set(PROJECT_COMPILE_FEATURES

@@ -37,45 +37,12 @@ configure_file(
     ${PROJECT_BINARY_DIR}/configuration/Config.hpp
 )
 
-set(FRAMEWORK_INCLUDE_DIRS
-    ${PROJECT_SOURCE_DIR}/include
-    ${DEPENDENCIES_DIR}/ImGuizmo
-    ${DEPENDENCIES_DIR}/generated/glad/include
-    ${DEPENDENCIES_DIR}/glfw/include
-    ${DEPENDENCIES_DIR}/glm
-    ${DEPENDENCIES_DIR}/imgui
-    ${DEPENDENCIES_DIR}/stb
-    ${DEPENDENCIES_DIR}/easyloggingpp/src
-)
-
 set(FRAMEWORK_DEPENDENCIES_SOURCE_FILES
     ${DEPENDENCIES_DIR}/ImGuizmo/ImGuizmo.cpp
     ${DEPENDENCIES_DIR}/generated/glad/src/glad.c
     ${DEPENDENCIES_DIR}/imgui/imgui.cpp
     ${DEPENDENCIES_DIR}/imgui/imgui_demo.cpp
     ${DEPENDENCIES_DIR}/imgui/imgui_draw.cpp
-)
-
-set(FRAMEWORK_LIBRARIES
-    ${PROJECT_NAME_LIB}
-    glfw
-    ${OPENGL_gl_LIBRARY}
-)
-
-get_directory_property(hasParentScope PARENT_DIRECTORY)
-if (hasParentScope)
-    set(FRAMEWORK_INCLUDE_DIRS ${FRAMEWORK_INCLUDE_DIRS} PARENT_SCOPE)
-    set(FRAMEWORK_DEPENDENCIES_SOURCE_FILES
-        ${FRAMEWORK_DEPENDENCIES_SOURCE_FILES}
-        PARENT_SCOPE
-    )
-    set(FRAMEWORK_LIBRARIES ${FRAMEWORK_LIBRARIES} PARENT_SCOPE)
-endif()
-
-include_directories(
-    ${FRAMEWORK_INCLUDE_DIRS}
-    ${PROJECT_BINARY_DIR}/configuration
-    ${PROJECT_SOURCE_DIR}/include/fw
 )
 
 set(FRAMEWORK_SOURCE_FILES
@@ -125,6 +92,23 @@ add_library(${PROJECT_NAME_LIB}
     ${FRAMEWORK_DEPENDENCIES_SOURCE_FILES}
 )
 
+target_include_directories(${PROJECT_NAME_LIB}
+    PUBLIC ${DEPENDENCIES_DIR}/ImGuizmo
+    PUBLIC ${DEPENDENCIES_DIR}/easyloggingpp/src
+    PUBLIC ${DEPENDENCIES_DIR}/generated/glad/include
+    PUBLIC ${DEPENDENCIES_DIR}/glfw/include
+    PUBLIC ${DEPENDENCIES_DIR}/glm
+    PUBLIC ${DEPENDENCIES_DIR}/imgui
+    PUBLIC ${DEPENDENCIES_DIR}/stb
+    PUBLIC ${PROJECT_SOURCE_DIR}/include
+)
+
+target_include_directories(${PROJECT_NAME_LIB} PRIVATE
+    ${PROJECT_BINARY_DIR}/configuration
+    ${PROJECT_SOURCE_DIR}/include/fw
+)
+
+
 target_compile_definitions(${PROJECT_NAME_LIB} PRIVATE
     ${ADDITIONAL_DEFINITIONS}
 )
@@ -137,6 +121,11 @@ add_executable(${PROJECT_NAME_TEST}
     test/GeometricIntersectionsTests.cpp
     test/CommonTest.cpp
     test/LinearCombinationEvaluatorTests.cpp
+)
+
+target_link_libraries(${PROJECT_NAME_LIB} INTERFACE
+    glfw
+    ${OPENGL_gl_LIBRARY}
 )
 
 target_link_libraries(${PROJECT_NAME_TEST}

@@ -1,4 +1,4 @@
-#include "LinearCombinationEvaluator.hpp"
+#include "fw/LinearCombinationEvaluator.hpp"
 #include "IBasisEvaluatorMock.hpp"
 
 #include <glm/glm.hpp>

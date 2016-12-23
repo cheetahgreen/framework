@@ -1,4 +1,4 @@
-#include "GeometricIntersections.hpp"
+#include "fw/GeometricIntersections.hpp"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "glm/glm.hpp"
