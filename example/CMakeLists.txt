@@ -4,17 +4,24 @@ project(framework-example)
 set(PROJECT_NAME_LIB ${PROJECT_NAME}-lib)
 
 include_directories(
-    include
-    ${FRAMEWORK_INCLUDE_DIRS}
+    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_BINARY_DIR}
+)
+
+add_library(${PROJECT_NAME_LIB}
+    source/Application.cpp
+)
+
+target_link_libraries(${PROJECT_NAME_LIB}
+    PUBLIC framework
 )
 
 add_executable(${PROJECT_NAME}
     source/Main.cpp
-    source/ExampleApplication.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
-    framework-lib
+    ${PROJECT_NAME_LIB}
 )
 
 set(PROJECT_COMPILE_FEATURES
@@ -24,7 +31,6 @@ set(PROJECT_COMPILE_FEATURES
     cxx_range_for
 )
 
-target_compile_features(
-    ${PROJECT_NAME} PRIVATE
-    ${PROJECT_COMPILE_FEATURES}
+target_compile_features(${PROJECT_NAME}
+    PRIVATE ${PROJECT_COMPILE_FEATURES}
 )

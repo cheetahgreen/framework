@@ -1,4 +1,4 @@
-#include "ExampleApplication.hpp"
+#include "Application.hpp"
 
 #include <iostream>
 
@@ -8,20 +8,20 @@
 #include "fw/TextureUtils.hpp"
 #include "fw/Resources.hpp"
 
-namespace example
+namespace application
 {
 
-ExampleApplication::ExampleApplication():
+Application::Application():
     _enableCameraRotations{false},
     _cameraRotationSensitivity{0.2, 0.2}
 {
 }
 
-ExampleApplication::~ExampleApplication()
+Application::~Application()
 {
 }
 
-void ExampleApplication::onCreate()
+void Application::onCreate()
 {
     ImGuiApplication::onCreate();
 
@@ -45,12 +45,12 @@ void ExampleApplication::onCreate()
     updateProjectionMatrix();
 }
 
-void ExampleApplication::onDestroy()
+void Application::onDestroy()
 {
     ImGuiApplication::onDestroy();
 }
 
-void ExampleApplication::onUpdate(
+void Application::onUpdate(
     const std::chrono::high_resolution_clock::duration& deltaTime
 )
 {
@@ -63,7 +63,7 @@ void ExampleApplication::onUpdate(
     ImGui::End();
 }
 
-void ExampleApplication::onRender()
+void Application::onRender()
 {
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -97,7 +97,7 @@ void ExampleApplication::onRender()
     ImGuiApplication::onRender();
 }
 
-bool ExampleApplication::onMouseButton(int button, int action, int mods)
+bool Application::onMouseButton(int button, int action, int mods)
 {
     if (ImGuiApplication::onMouseButton(button, action, mods)) { return true; }
 
@@ -109,7 +109,7 @@ bool ExampleApplication::onMouseButton(int button, int action, int mods)
     return true;
 }
 
-bool ExampleApplication::onMouseMove(glm::dvec2 newPosition)
+bool Application::onMouseMove(glm::dvec2 newPosition)
 {
     if (ImGuiApplication::onMouseMove(newPosition)) { return true; }
 
@@ -122,7 +122,7 @@ bool ExampleApplication::onMouseMove(glm::dvec2 newPosition)
     return true;
 }
 
-bool ExampleApplication::onScroll(double xoffset, double yoffset)
+bool Application::onScroll(double xoffset, double yoffset)
 {
     if (fw::ImGuiApplication::onScroll(xoffset, yoffset))
         return true;
@@ -141,13 +141,13 @@ bool ExampleApplication::onScroll(double xoffset, double yoffset)
     return true;
 }
 
-bool ExampleApplication::onResize()
+bool Application::onResize()
 {
     updateProjectionMatrix();
     return true;
 }
 
-void ExampleApplication::updateProjectionMatrix()
+void Application::updateProjectionMatrix()
 {
     auto windowSize = getWindowSize();
     auto aspectRatio = static_cast<float>(windowSize.x) / windowSize.y;

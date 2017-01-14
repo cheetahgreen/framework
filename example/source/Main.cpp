@@ -1,18 +1,20 @@
 #include <cstdio>
 #include <iostream>
+#include <memory>
 #include "easylogging++.h"
 #include "fw/Framework.hpp"
-#include "ExampleApplication.hpp"
+#include "Application.hpp"
 
 int main(int argc, const char* argv[])
 {
     fw::initialize(argc, argv);
-    LOG(INFO) << "Starting application";
+    LOG(INFO) << "Starting application...";
 
-    example::ExampleApplication app;
-    app.create();
-    app.run();
-    app.destroy();
+    auto app = std::make_shared<application::Application>();
+    app->create();
+    app->run();
+    app->destroy();
+    app = nullptr;
 
     return EXIT_SUCCESS;
 }

@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 project(framework)
 
-set(PROJECT_NAME_LIB ${PROJECT_NAME}-lib)
 set(PROJECT_NAME_TEST ${PROJECT_NAME}-test)
 set(DEPENDENCIES_DIR ${PROJECT_SOURCE_DIR}/dependencies/)
 
@@ -87,12 +86,13 @@ set(FRAMEWORK_SOURCE_FILES
     source/effects/Standard2DEffect.cpp
 )
 
-add_library(${PROJECT_NAME_LIB}
+add_library(${PROJECT_NAME}
     ${FRAMEWORK_SOURCE_FILES}
     ${FRAMEWORK_DEPENDENCIES_SOURCE_FILES}
 )
 
-target_include_directories(${PROJECT_NAME_LIB}
+target_include_directories(${PROJECT_NAME}
+    PUBLIC ${PROJECT_SOURCE_DIR}/include
     PUBLIC ${DEPENDENCIES_DIR}/ImGuizmo
     PUBLIC ${DEPENDENCIES_DIR}/easyloggingpp/src
     PUBLIC ${DEPENDENCIES_DIR}/generated/glad/include
@@ -100,17 +100,16 @@ target_include_directories(${PROJECT_NAME_LIB}
     PUBLIC ${DEPENDENCIES_DIR}/glm
     PUBLIC ${DEPENDENCIES_DIR}/imgui
     PUBLIC ${DEPENDENCIES_DIR}/stb
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
 )
 
-target_include_directories(${PROJECT_NAME_LIB} PRIVATE
+target_include_directories(${PROJECT_NAME} PRIVATE
     ${PROJECT_BINARY_DIR}/configuration
     ${PROJECT_SOURCE_DIR}/include/fw
 )
 
 
-target_compile_definitions(${PROJECT_NAME_LIB} PRIVATE
-    ${ADDITIONAL_DEFINITIONS}
+target_compile_definitions(${PROJECT_NAME}
+    PUBLIC ${ADDITIONAL_DEFINITIONS}
 )
 
 add_executable(${PROJECT_NAME_TEST}
@@ -123,13 +122,13 @@ add_executable(${PROJECT_NAME_TEST}
     test/LinearCombinationEvaluatorTests.cpp
 )
 
-target_link_libraries(${PROJECT_NAME_LIB} INTERFACE
+target_link_libraries(${PROJECT_NAME} INTERFACE
     glfw
     ${OPENGL_gl_LIBRARY}
 )
 
 target_link_libraries(${PROJECT_NAME_TEST}
-    ${PROJECT_NAME_LIB}
+    ${PROJECT_NAME}
     gtest
     gmock
     gmock_main
@@ -142,7 +141,10 @@ set(PROJECT_COMPILE_FEATURES
     cxx_range_for
 )
 
-target_compile_features(${PROJECT_NAME_LIB} PRIVATE ${PROJECT_COMPILE_FEATURES})
+target_compile_features(${PROJECT_NAME}
+    PUBLIC ${PROJECT_COMPILE_FEATURES}
+)
+
 target_compile_features(${PROJECT_NAME_TEST} PRIVATE
     ${PROJECT_COMPILE_FEATURES}
 )

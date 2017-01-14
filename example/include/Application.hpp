@@ -13,15 +13,15 @@
 #include "fw/UniversalPhongEffect.hpp"
 #include "fw/Vertices.hpp"
 
-namespace example
+namespace application
 {
 
-class ExampleApplication:
+class Application:
     public fw::ImGuiApplication
 {
 public:
-    ExampleApplication();
-    virtual ~ExampleApplication();
+    Application();
+    virtual ~Application();
 
 protected:
     virtual void onCreate() override;
