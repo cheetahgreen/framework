@@ -1,9 +1,10 @@
 #pragma once
 
-#include <glad/glad.h>
-
 #include <string>
 #include <vector>
+
+#include "glad/glad.h"
+#include "glm/glm.hpp"
 
 namespace fw
 {
@@ -11,35 +12,41 @@ namespace fw
 class Shader
 {
 public:
-  Shader();
-  Shader(const Shader &shader) = default;
-  virtual ~Shader();
+    Shader();
+    Shader(const Shader &shader) = default;
+    virtual ~Shader();
 
-  inline GLenum getType() { return _shaderType; }
-  inline GLuint getId() { return _shaderId; }
+    inline GLenum getType() { return _shaderType; }
+    inline GLuint getId() { return _shaderId; }
 
-  void addSourceFromFile(const std::string &filename);
-  void compile(GLenum shaderType);
+    void addSourceFromFile(const std::string &filename);
+    void compile(GLenum shaderType);
 
 private:
-  std::vector<std::string> _sources;
-  GLenum _shaderType;
-  GLuint _shaderId;
+    std::vector<std::string> _sources;
+    GLenum _shaderType;
+    GLuint _shaderId;
 };
 
-class ShaderProgram {
+class ShaderProgram
+{
 public:
-  ShaderProgram();
-  ~ShaderProgram();
+    ShaderProgram();
+    ~ShaderProgram();
 
-  void attach(Shader *shader);
-  void link();
-  void use();
+    void attach(Shader *shader);
+    void link();
+    void use();
 
-  GLuint getId() { return _program; }
+    void setUniform(GLuint location, GLint v0);
+    void setUniform(GLuint location, const glm::vec3& uniform);
+    void setUniform(GLuint location, const glm::vec4& uniform);
+    void setUniform(GLuint location, const glm::mat4& uniform);
+
+    GLuint getId() { return _program; }
 
 private:
-  GLuint _program;
+    GLuint _program;
 };
 
 }

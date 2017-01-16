@@ -6,6 +6,8 @@
 #include <iostream>
 #include <iterator>
 
+#include "glm/gtc/type_ptr.hpp"
+
 using namespace std;
 
 namespace fw
@@ -30,7 +32,7 @@ void Shader::addSourceFromFile(const string &filename)
 void Shader::compile(GLenum shaderType)
 {
     vector<const char *> transformedSources;
-    
+
     transform(
         _sources.begin(),
         _sources.end(),
@@ -45,7 +47,7 @@ void Shader::compile(GLenum shaderType)
         transformedSources.size(),
         transformedSources.data(),
         nullptr
-    ); 
+    );
 
     glCompileShader(shader);
 
@@ -54,7 +56,7 @@ void Shader::compile(GLenum shaderType)
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(shader, 512, nullptr, infoLog);
-        std::cout << "Error: Shader compilation failed" << std::endl 
+        std::cout << "Error: Shader compilation failed" << std::endl
             << infoLog << std::endl;
         return; // todo: throw exception
     }
@@ -93,6 +95,26 @@ void ShaderProgram::link() {
 void ShaderProgram::use()
 {
     glUseProgram(_program);
+}
+
+void ShaderProgram::setUniform(GLuint location, GLint v0)
+{
+    glUniform1i(location, v0);
+}
+
+void ShaderProgram::setUniform(GLuint location, const glm::vec3& uniform)
+{
+    glUniform3fv(location, 1, glm::value_ptr(uniform));
+}
+
+void ShaderProgram::setUniform(GLuint location, const glm::vec4& uniform)
+{
+    glUniform4fv(location, 1, glm::value_ptr(uniform));
+}
+
+void ShaderProgram::setUniform(GLuint location, const glm::mat4& uniform)
+{
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniform));
 }
 
 }
