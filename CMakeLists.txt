@@ -7,24 +7,31 @@ set(DEPENDENCIES_DIR ${PROJECT_SOURCE_DIR}/dependencies/)
 set(FRAMEWORK_BUILD_EXAMPLE ON CACHE BOOL "")
 set(FRAMEWORK_RESOURCES_DIR ${PROJECT_SOURCE_DIR}/assets CACHE PATH "")
 
-find_library(OpenGL REQUIRED)
+find_package(OpenGL REQUIRED)
 
-if (WIN32)
-    set(GLFW_ADDITIONAL_DEFINITIONS
-        "${GLFW_ADDITIONAL_DEFINITIONS} GLFW_EXPOSE_NATIVE_WIN32"
-    )
+find_package(glfw3 3.3)
+if (glfw3_FOUND)
+    message("GLFW 3.3 found successfully.")
+else()
+    message("GLFW 3.3 not found. Library will be compiled from sources.")
 
-    set(ADDITIONAL_DEFINITIONS
-        "${ADDITIONAL_DEFINITIONS} GLFW_EXPOSE_NATIVE_WIN32"
-    )
+    if (WIN32)
+        set(GLFW_ADDITIONAL_DEFINITIONS
+            "${GLFW_ADDITIONAL_DEFINITIONS} GLFW_EXPOSE_NATIVE_WIN32"
+        )
+
+        set(ADDITIONAL_DEFINITIONS
+            "${ADDITIONAL_DEFINITIONS} GLFW_EXPOSE_NATIVE_WIN32"
+        )
+    endif()
+
+    # glfw: do not build docs, tests and examples
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "")
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "")
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "")
+    add_subdirectory(${DEPENDENCIES_DIR}glfw)
+    target_compile_definitions(glfw PRIVATE ${GLFW_ADDITIONAL_DEFINITIONS})
 endif()
-
-# glfw: do not build docs, tests and examples
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "")
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "")
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "")
-add_subdirectory(${DEPENDENCIES_DIR}glfw)
-target_compile_definitions(glfw PRIVATE ${GLFW_ADDITIONAL_DEFINITIONS})
 
 enable_testing()
 add_subdirectory(${DEPENDENCIES_DIR}googletest)
