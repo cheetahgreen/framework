@@ -5,7 +5,9 @@
 namespace fw
 {
 
-Standard2DEffect::Standard2DEffect()
+Standard2DEffect::Standard2DEffect():
+    _diffuseMapTintColor{1.0f, 1.0f, 1.0f, 1.0f},
+    _emissionColor{1.0f, 1.0f, 1.0f}
 {
     createShaders();
     getUniformLocations();
@@ -25,28 +27,16 @@ void Standard2DEffect::begin()
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _diffuseMap);
-    glUniform1i(_textureLocation, 0);
 
-    glUniformMatrix4fv(
-        _modelMatrixLocation,
-        1,
-        GL_FALSE,
-        glm::value_ptr(_modelMatrix)
+    _shaderProgram->setUniform(_textureLocation, 0);
+    _shaderProgram->setUniform(_modelMatrixLocation, _modelMatrix);
+    _shaderProgram->setUniform(_viewMatrixLocation, _viewMatrix);
+    _shaderProgram->setUniform(_projMatrixLocation, _projMatrix);
+    _shaderProgram->setUniform(
+        _diffuseMapTintColorLocation,
+        _diffuseMapTintColor
     );
-
-    glUniformMatrix4fv(
-        _viewMatrixLocation,
-        1,
-        GL_FALSE,
-        glm::value_ptr(_viewMatrix)
-    );
-
-    glUniformMatrix4fv(
-        _projMatrixLocation,
-        1,
-        GL_FALSE,
-        glm::value_ptr(_projMatrix)
-    );
+    _shaderProgram->setUniform(_emissionColorLocation, _emissionColor);
 }
 
 void Standard2DEffect::end()
@@ -83,9 +73,19 @@ void Standard2DEffect::setProjectionMatrix(const glm::mat4 &projMatrix)
     _projMatrix = projMatrix;
 }
 
+void Standard2DEffect::setDiffuseTextureTintColor(const glm::vec4& color)
+{
+    _diffuseMapTintColor = color;
+}
+
 void Standard2DEffect::setDiffuseTexture(GLuint textureId)
 {
     _diffuseMap = textureId;
+}
+
+void Standard2DEffect::setEmissionColor(const glm::vec3& emission)
+{
+    _emissionColor = emission;
 }
 
 void Standard2DEffect::createShaders()
@@ -128,6 +128,16 @@ void Standard2DEffect::getUniformLocations()
     _projMatrixLocation = glGetUniformLocation(
         _shaderProgram->getId(),
         "proj"
+    );
+
+    _diffuseMapTintColorLocation = glGetUniformLocation(
+        _shaderProgram->getId(),
+        "DiffuseMapTintColor"
+    );
+
+    _emissionColorLocation = glGetUniformLocation(
+        _shaderProgram->getId(),
+        "EmissionColor"
     );
 }
 

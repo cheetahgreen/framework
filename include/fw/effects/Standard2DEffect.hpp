@@ -24,7 +24,10 @@ public:
     virtual glm::mat4 getProjectionMatrix();
     virtual void setProjectionMatrix(const glm::mat4 &projMatrix);
 
+    void setDiffuseTextureTintColor(const glm::vec4& color);
     void setDiffuseTexture(GLuint textureId);
+
+    void setEmissionColor(const glm::vec3& emission);
 
 private:
     void createShaders();
@@ -34,9 +37,14 @@ private:
     GLuint _modelMatrixLocation;
     GLuint _viewMatrixLocation;
     GLuint _projMatrixLocation;
+    GLuint _diffuseMapTintColorLocation;
+    GLuint _emissionColorLocation;
 
     GLuint _diffuseMap;
     glm::mat4 _modelMatrix, _viewMatrix, _projMatrix;
+
+    glm::vec4 _diffuseMapTintColor;
+    glm::vec3 _emissionColor;
 
     std::shared_ptr<ShaderProgram> _shaderProgram;
 };
