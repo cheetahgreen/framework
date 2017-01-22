@@ -1,0 +1,3 @@
+#pragma once
+
+static const char *cApplicationResourcesPath = "@APPLICATION_RESOURCES_DIR@/";

@@ -3,13 +3,21 @@ project(framework-example)
 
 set(PROJECT_NAME_LIB ${PROJECT_NAME}-lib)
 
+set(APPLICATION_RESOURCES_DIR ${PROJECT_SOURCE_DIR}/assets CACHE PATH "")
+
+configure_file(
+    ${PROJECT_SOURCE_DIR}/configuration/Config.hpp.in
+    ${PROJECT_BINARY_DIR}/configuration/Config.hpp
+)
+
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
-    ${PROJECT_BINARY_DIR}
+    ${PROJECT_BINARY_DIR}/configuration
 )
 
 add_library(${PROJECT_NAME_LIB}
     source/Application.cpp
+    source/Resources.cpp
 )
 
 target_link_libraries(${PROJECT_NAME_LIB}

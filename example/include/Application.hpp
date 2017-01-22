@@ -12,6 +12,7 @@
 #include "fw/TexturedPhongEffect.hpp"
 #include "fw/UniversalPhongEffect.hpp"
 #include "fw/Vertices.hpp"
+#include "fw/models/StaticModel.hpp"
 
 namespace application
 {
@@ -39,10 +40,10 @@ protected:
     void updateProjectionMatrix();
 
 private:
+    std::shared_ptr<fw::StaticModel> _staticModel;
+
     std::shared_ptr<fw::TexturedPhongEffect> _phongEffect;
     std::shared_ptr<fw::UniversalPhongEffect> _universalPhongEffect;
-
-    std::shared_ptr<fw::Mesh<fw::VertexNormalTexCoords>> _cube;
 
     std::shared_ptr<fw::Grid> _grid;
     std::shared_ptr<fw::FrameMarker> _frameMarker;

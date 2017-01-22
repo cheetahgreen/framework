@@ -22,3 +22,6 @@
 [submodule "dependencies/easyloggingpp"]
 	path = dependencies/easyloggingpp
 	url = https://github.com/easylogging/easyloggingpp.git
+[submodule "dependencies/assimp"]
+	path = dependencies/assimp
+	url = https://github.com/assimp/assimp

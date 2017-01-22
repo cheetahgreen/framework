@@ -11,7 +11,7 @@ find_package(OpenGL REQUIRED)
 
 find_package(glfw3 3.3)
 if (glfw3_FOUND)
-    message("GLFW 3.3 found successfully.")
+    message("GLFW 3.3 found successfully in ${glfw3_DIR}.")
 else()
     message("GLFW 3.3 not found. Library will be compiled from sources.")
 
@@ -31,6 +31,14 @@ else()
     set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "")
     add_subdirectory(${DEPENDENCIES_DIR}glfw)
     target_compile_definitions(glfw PRIVATE ${GLFW_ADDITIONAL_DEFINITIONS})
+endif()
+
+find_package(assimp)
+if (assimp_FOUND)
+    message("Assimp found successully in ${assimp_DIR}")
+else()
+    message("Assimp not found. Library will be compiled from sources.")
+    add_subdirectory(${DEPENDENCIES_DIR}assimp)
 endif()
 
 enable_testing()
@@ -90,7 +98,9 @@ set(FRAMEWORK_SOURCE_FILES
     source/TexturedPhongEffect.cpp
     source/UniversalPhongEffect.cpp
     source/Vertices.cpp
+    source/common/Filesystem.cpp
     source/effects/Standard2DEffect.cpp
+    source/models/StaticModel.cpp
 )
 
 add_library(${PROJECT_NAME}
@@ -130,8 +140,9 @@ add_executable(${PROJECT_NAME_TEST}
 )
 
 target_link_libraries(${PROJECT_NAME} INTERFACE
-    glfw
     ${OPENGL_gl_LIBRARY}
+    assimp
+    glfw
 )
 
 target_link_libraries(${PROJECT_NAME_TEST}

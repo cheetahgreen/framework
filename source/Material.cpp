@@ -11,6 +11,11 @@ Material::~Material()
 {
 }
 
+bool Material::hasEmissionColor() const
+{
+    return true;
+}
+
 void Material::setEmissionColor(const glm::vec3& emissionColor)
 {
     _emissionColor = emissionColor;
@@ -21,14 +26,24 @@ const glm::vec3& Material::getEmissionColor() const
     return _emissionColor;
 }
 
-void Material::setBaseAlbedoColor(const glm::vec4& baseAlbedoColor)
+bool Material::hasAlbedoColor() const
 {
-    _baseAlbedoColor = baseAlbedoColor;
+    return true;
 }
 
-const glm::vec4& Material::getBaseAlbedoColor() const
+void Material::setAlbedoColor(const glm::vec4& albedoColor)
 {
-    return _baseAlbedoColor;
+    _albedoColor = albedoColor;
+}
+
+const glm::vec4& Material::getAlbedoColor() const
+{
+    return _albedoColor;
+}
+
+bool Material::hasAlbedoMap() const
+{
+    return _albedoMap != nullptr;
 }
 
 void Material::setAlbedoMap(const std::shared_ptr<Texture>& albedoMap)
@@ -41,6 +56,11 @@ const std::shared_ptr<Texture>& Material::getAlbedoMap() const
     return _albedoMap;
 }
 
+bool Material::hasSpecularMap() const
+{
+    return _specularMap != nullptr;
+}
+
 void Material::setSpecularMap(const std::shared_ptr<Texture>& specularMap)
 {
     _specularMap = specularMap;
@@ -49,6 +69,11 @@ void Material::setSpecularMap(const std::shared_ptr<Texture>& specularMap)
 const std::shared_ptr<Texture>& Material::getSpecularMap() const
 {
     return _specularMap;
+}
+
+bool Material::hasNormalMap() const
+{
+    return _normalMap != nullptr;
 }
 
 void Material::setNormalMap(const std::shared_ptr<Texture>& normalMap)

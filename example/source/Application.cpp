@@ -8,6 +8,8 @@
 #include "fw/TextureUtils.hpp"
 #include "fw/Resources.hpp"
 
+#include "Resources.hpp"
+
 namespace application
 {
 
@@ -30,13 +32,16 @@ void Application::onCreate()
 
     _universalPhongEffect = std::make_shared<fw::UniversalPhongEffect>();
 
-    _cube = fw::createBox({1.0, 1.0, 1.0});
     _grid = std::make_shared<fw::Grid>(
         glm::ivec2{32, 32},
         glm::vec2{0.5f, 0.5f}
     );
 
     _frameMarker = std::make_shared<fw::FrameMarker>();
+
+    _staticModel = std::make_shared<fw::StaticModel>(
+        getApplicationResourcesPath("models/Nanosuit/nanosuit.obj")
+    );
 
     _testTexture = fw::loadTextureFromFile(
         fw::getFrameworkResourcePath("textures/checker-base.png")
@@ -55,12 +60,6 @@ void Application::onUpdate(
 )
 {
     ImGuiApplication::onUpdate(deltaTime);
-
-    if (ImGui::Begin("Example window"))
-    {
-        ImGui::Text("This is an example window");
-    }
-    ImGui::End();
 }
 
 void Application::onRender()
@@ -72,24 +71,30 @@ void Application::onRender()
     _phongEffect->begin();
     _phongEffect->setProjectionMatrix(_projectionMatrix);
     _phongEffect->setViewMatrix(_camera.getViewMatrix());
-    _phongEffect->setModelMatrix({});
     _phongEffect->setTexture(_testTexture);
-    _cube->render();
+    _phongEffect->setModelMatrix({});
     _grid->render();
     _phongEffect->end();
 
-    for (const auto& chunk: _frameMarker->getGeometryChunks())
+    glm::mat4 scale = glm::scale({}, glm::vec3{0.1f, 0.1f, 0.1f});
+    for (const auto& chunk: _staticModel->getGeometryChunks())
     {
         _universalPhongEffect->setLightDirection({-1, 1, 0});
-        _universalPhongEffect->setSolidColor(
-            chunk.getMaterial()->getBaseAlbedoColor()
+
+        _universalPhongEffect->setSolidColor(glm::vec3{});
+
+        _universalPhongEffect->setDiffuseTextureColor(
+            chunk.getMaterial()->getAlbedoColor()
+        );
+
+        _universalPhongEffect->setDiffuseTexture(
+            chunk.getMaterial()->getAlbedoMap()
         );
 
         _universalPhongEffect->begin();
-        // todo: standarize a way to change uniforms
         _universalPhongEffect->setProjectionMatrix(_projectionMatrix);
         _universalPhongEffect->setViewMatrix(_camera.getViewMatrix());
-        _universalPhongEffect->setModelMatrix(chunk.getModelMatrix());
+        _universalPhongEffect->setModelMatrix(chunk.getModelMatrix() * scale);
         chunk.getMesh()->render();
         _universalPhongEffect->end();
     }

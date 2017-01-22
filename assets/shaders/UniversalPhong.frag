@@ -30,5 +30,6 @@ void main(void)
     vec3 diffusePart = clamp(albedo * diffuse, 0, 1);
 
     color = vec4(EmissionColor + ambientPart + diffusePart, SolidColor.a);
+    color.rgb = pow(color.rgb, vec3(1/2.2));
 }
 

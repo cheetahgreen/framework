@@ -76,7 +76,7 @@ void UniversalPhongEffect::setLightDirection(glm::vec3 lightDirection)
 void UniversalPhongEffect::setMaterial(const fw::Material& material)
 {
     setEmissionColor(material.getEmissionColor());
-    setSolidColor(material.getBaseAlbedoColor());
+    setSolidColor(material.getAlbedoColor());
 }
 
 void UniversalPhongEffect::setDiffuseTextureColor(glm::vec4 diffuseMultipler)
