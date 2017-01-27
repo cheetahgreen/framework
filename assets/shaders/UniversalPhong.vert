@@ -8,7 +8,11 @@ out VSOut
 {
     vec3 Normal;
     vec2 TexCoord;
+    vec3 ViewDirection;
+    vec3 ViewLightDirection;
 } vsOut;
+
+uniform vec3 LightDirection;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -16,7 +20,15 @@ uniform mat4 projection;
 
 void main(void)
 {
-    gl_Position = projection * view * model * vec4(position, 1.0f);
-    vsOut.TexCoord = vec2(texCoord.x, texCoord.y);
-    vsOut.Normal = (transpose(inverse(model)) * vec4(normal, 0)).xyz;
+    vec4 viewPosition = view * model * vec4(position, 1.0f);
+    gl_Position = projection * viewPosition;
+
+    vsOut.TexCoord = texCoord.xy;
+
+    vsOut.Normal = normalize(
+        (view * (transpose(inverse(model)) * vec4(normal, 0))).xyz
+    );
+
+    vsOut.ViewDirection = normalize(-viewPosition.xyz);
+    vsOut.ViewLightDirection = normalize((view * vec4(LightDirection, 0)).xyz);
 }
