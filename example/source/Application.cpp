@@ -50,7 +50,11 @@ void Application::onCreate()
         )
     );
 
-    _staticModel = std::make_shared<fw::StaticModel>(
+    _staticModelFactory = std::make_shared<fw::StaticModelFactory>(
+        std::static_pointer_cast<fw::ITextureManager>(_textureManager)
+    );
+
+    _staticModel = _staticModelFactory->load(
         getApplicationResourcesPath("models/Nanosuit/nanosuit.obj")
     );
 

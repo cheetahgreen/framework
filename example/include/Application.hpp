@@ -13,6 +13,7 @@
 #include "fw/UniversalPhongEffect.hpp"
 #include "fw/Vertices.hpp"
 #include "fw/models/StaticModel.hpp"
+#include "fw/models/StaticModelFactory.hpp"
 #include "fw/resources/TextureManager.hpp"
 #include "fw/editor/TextureManagerInspector.hpp"
 
@@ -62,6 +63,8 @@ private:
     std::shared_ptr<fw::Texture> _testTexture2;
     std::shared_ptr<fw::TextureManager> _textureManager;
     std::shared_ptr<fw::TextureManagerInspector> _textureManagerInspector;
+
+    std::shared_ptr<fw::StaticModelFactory> _staticModelFactory;
 
     glm::dvec2 _cameraRotationSensitivity;
 };

@@ -103,6 +103,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/editor/TextureManagerInspector.cpp
     source/effects/Standard2DEffect.cpp
     source/models/StaticModel.cpp
+    source/models/StaticModelFactory.cpp
     source/resources/TextureManager.cpp
 )
 
