@@ -1,4 +1,5 @@
 #include "ImGuiExtensions.hpp"
+#include "imgui.h"
 
 static bool constCharStringVectorGetter(
     void *vec,
@@ -6,7 +7,7 @@ static bool constCharStringVectorGetter(
     const char **outText
 )
 {
-    auto *collection = static_cast<vector<string>*>(vec);
+    auto *collection = static_cast<std::vector<std::string>*>(vec);
     if (collection == nullptr) { return false; }
     if (idx < 0 || idx >= collection->size()) { return false; }
     *outText = collection->at(idx).c_str();

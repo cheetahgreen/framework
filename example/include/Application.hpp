@@ -13,6 +13,8 @@
 #include "fw/UniversalPhongEffect.hpp"
 #include "fw/Vertices.hpp"
 #include "fw/models/StaticModel.hpp"
+#include "fw/resources/TextureManager.hpp"
+#include "fw/editor/TextureManagerInspector.hpp"
 
 namespace application
 {
@@ -50,10 +52,18 @@ private:
 
     fw::OrbitingCamera _camera;
     glm::mat4 _projectionMatrix;
+
     bool _enableCameraRotations;
 
+    bool _showTexturesInspector;
+    bool _showImGuiDemo;
+
+    std::shared_ptr<fw::Texture> _testTexture;
+    std::shared_ptr<fw::Texture> _testTexture2;
+    std::shared_ptr<fw::TextureManager> _textureManager;
+    std::shared_ptr<fw::TextureManagerInspector> _textureManagerInspector;
+
     glm::dvec2 _cameraRotationSensitivity;
-    GLuint _testTexture;
 };
 
 }

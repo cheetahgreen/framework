@@ -80,6 +80,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/HeightmapVisualizationEffect.cpp
     source/ImGuiApplication.cpp
     source/ImGuiBinding.cpp
+    source/ImGuiExtensions.cpp
     source/IntersectionCurve.cpp
     source/Material.cpp
     source/OpenGLApplication.cpp
@@ -99,8 +100,10 @@ set(FRAMEWORK_SOURCE_FILES
     source/UniversalPhongEffect.cpp
     source/Vertices.cpp
     source/common/Filesystem.cpp
+    source/editor/TextureManagerInspector.cpp
     source/effects/Standard2DEffect.cpp
     source/models/StaticModel.cpp
+    source/resources/TextureManager.cpp
 )
 
 add_library(${PROJECT_NAME}

@@ -15,7 +15,9 @@ namespace application
 
 Application::Application():
     _enableCameraRotations{false},
-    _cameraRotationSensitivity{0.2, 0.2}
+    _cameraRotationSensitivity{0.2, 0.2},
+    _showTexturesInspector{false},
+    _showImGuiDemo{false}
 {
 }
 
@@ -39,11 +41,24 @@ void Application::onCreate()
 
     _frameMarker = std::make_shared<fw::FrameMarker>();
 
+    _textureManager = std::make_shared<fw::TextureManager>();
+    _textureManager->setResourcesDirectory(fw::getFrameworkResourcePath(""));
+
+    _textureManagerInspector = std::make_shared<fw::TextureManagerInspector>(
+        std::static_pointer_cast<fw::ITextureManagerWithInspection>(
+            _textureManager
+        )
+    );
+
     _staticModel = std::make_shared<fw::StaticModel>(
         getApplicationResourcesPath("models/Nanosuit/nanosuit.obj")
     );
 
-    _testTexture = fw::loadTextureFromFile(
+    _testTexture = _textureManager->loadTexture(
+        fw::getFrameworkResourcePath("textures/wefi_cat.jpg")
+    );
+
+    _testTexture2 = _textureManager->loadTexture(
         fw::getFrameworkResourcePath("textures/checker-base.png")
     );
 
@@ -60,6 +75,30 @@ void Application::onUpdate(
 )
 {
     ImGuiApplication::onUpdate(deltaTime);
+
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("Inspectors"))
+        {
+            ImGui::MenuItem("Textures", nullptr, &_showTexturesInspector);
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Helpers"))
+        {
+            ImGui::MenuItem("ImGui Test Window", nullptr, &_showImGuiDemo);
+            ImGui::EndMenu();
+        }
+
+        ImGui::EndMainMenuBar();
+    }
+
+    _textureManagerInspector->show(_showTexturesInspector);
+
+    if (_showImGuiDemo)
+    {
+        ImGui::ShowTestWindow(&_showImGuiDemo);
+    }
 }
 
 void Application::onRender()
@@ -71,7 +110,6 @@ void Application::onRender()
     _phongEffect->begin();
     _phongEffect->setProjectionMatrix(_projectionMatrix);
     _phongEffect->setViewMatrix(_camera.getViewMatrix());
-    _phongEffect->setTexture(_testTexture);
     _phongEffect->setModelMatrix({});
     _grid->render();
     _phongEffect->end();
