@@ -1,4 +1,4 @@
-#include "BsplineBasisEvaluator.hpp"
+#include "fw/numerical/BsplineBasisEvaluator.hpp"
 #include <limits>
 #include <cmath>
 

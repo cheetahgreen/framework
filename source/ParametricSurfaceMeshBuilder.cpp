@@ -1,5 +1,5 @@
-#include "ParametricSurfaceMeshBuilder.hpp"
-#include "IParametricSurfaceUV.hpp"
+#include "fw/numerical/ParametricSurfaceMeshBuilder.hpp"
+#include "fw/numerical/IParametricSurfaceUV.hpp"
 #include "Mesh.hpp"
 #include "Vertices.hpp"
 

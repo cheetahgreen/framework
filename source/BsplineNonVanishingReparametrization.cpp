@@ -1,5 +1,5 @@
-#include "BsplineNonVanishingReparametrization.hpp"
-#include "BsplineNonVanishingCurveReparametrization.hpp"
+#include "fw/numerical/BsplineNonVanishingReparametrization.hpp"
+#include "fw/numerical/BsplineNonVanishingCurveReparametrization.hpp"
 
 namespace fw
 {

@@ -1,5 +1,5 @@
-#include "CommonBsplineSurfaces.hpp"
-#include "BsplineEquidistantKnotGenerator.hpp"
+#include "fw/numerical/CommonBsplineSurfaces.hpp"
+#include "fw/numerical/BsplineEquidistantKnotGenerator.hpp"
 
 namespace fw
 {

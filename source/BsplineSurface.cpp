@@ -1,6 +1,6 @@
-#include "BsplineSurface.hpp"
-#include "BsplineEquidistantKnotGenerator.hpp"
-#include "BsplineBasisEvaluator.hpp"
+#include "fw/numerical/BsplineSurface.hpp"
+#include "fw/numerical/BsplineEquidistantKnotGenerator.hpp"
+#include "fw/numerical/BsplineBasisEvaluator.hpp"
 
 #include <iostream>
 

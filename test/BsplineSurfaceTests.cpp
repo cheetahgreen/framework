@@ -1,4 +1,4 @@
-#include "fw/BsplineSurface.hpp"
+#include "fw/numerical/BsplineSurface.hpp"
 #include "IBsplineKnotGeneratorMock.hpp"
 
 using ::testing::Return;

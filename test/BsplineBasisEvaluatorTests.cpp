@@ -1,4 +1,4 @@
-#include "fw/BsplineBasisEvaluator.hpp"
+#include "fw/numerical/BsplineBasisEvaluator.hpp"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <memory>

@@ -1,4 +1,4 @@
-#include "ParametricSurfaceClosestPointNaiveFinder.hpp"
+#include "fw/numerical/ParametricSurfaceClosestPointNaiveFinder.hpp"
 #include <limits>
 
 namespace fw

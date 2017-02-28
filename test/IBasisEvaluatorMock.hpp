@@ -1,7 +1,7 @@
 #pragma once
 
 #include <gmock/gmock.h>
-#include <fw/IBasisEvaluator.hpp>
+#include <fw/numerical/IBasisEvaluator.hpp>
 
 class IBasisEvaluatorMock:
     public fw::IBasisEvaluator

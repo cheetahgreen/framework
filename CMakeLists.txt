@@ -63,15 +63,9 @@ set(FRAMEWORK_DEPENDENCIES_SOURCE_FILES
 
 set(FRAMEWORK_SOURCE_FILES
     source/BasicEffect.cpp
-    source/BsplineBasisEvaluator.cpp
-    source/BsplineEquidistantKnotGenerator.cpp
-    source/BsplineNonVanishingReparametrization.cpp
-    source/BsplineSurface.cpp
     source/Common.cpp
-    source/CommonBsplineSurfaces.cpp
     source/DebugShapes.cpp
     source/Effect.cpp
-    source/EquidistantParametricSurface.cpp
     source/FrameMarker.cpp
     source/Framework.cpp
     source/FreeCamera.cpp
@@ -83,19 +77,13 @@ set(FRAMEWORK_SOURCE_FILES
     source/ImGuiApplication.cpp
     source/ImGuiBinding.cpp
     source/ImGuiExtensions.cpp
-    source/IntersectionCurve.cpp
     source/Material.cpp
     source/OpenGLApplication.cpp
     source/OrbitingCamera.cpp
-    source/ParametricSurfaceClosestPointNaiveFinder.cpp
-    source/ParametricSurfaceIntersection.cpp
-    source/ParametricSurfaceIntersectionFinder.cpp
-    source/ParametricSurfaceMeshBuilder.cpp
     source/PolygonalLine.cpp
     source/Resources.cpp
     source/Shaders.cpp
     source/StbImplementation.c
-    source/SurfaceIntersectionNewtonIterable.cpp
     source/Texture.cpp
     source/TextureUtils.cpp
     source/TexturedPhongEffect.cpp
@@ -106,6 +94,18 @@ set(FRAMEWORK_SOURCE_FILES
     source/effects/Standard2DEffect.cpp
     source/models/StaticModel.cpp
     source/models/StaticModelFactory.cpp
+    source/numerical/BsplineBasisEvaluator.cpp
+    source/numerical/BsplineEquidistantKnotGenerator.cpp
+    source/numerical/BsplineNonVanishingReparametrization.cpp
+    source/numerical/BsplineSurface.cpp
+    source/numerical/CommonBsplineSurfaces.cpp
+    source/numerical/EquidistantParametricSurface.cpp
+    source/numerical/IntersectionCurve.cpp
+    source/numerical/ParametricSurfaceClosestPointNaiveFinder.cpp
+    source/numerical/ParametricSurfaceIntersection.cpp
+    source/numerical/ParametricSurfaceIntersectionFinder.cpp
+    source/numerical/ParametricSurfaceMeshBuilder.cpp
+    source/numerical/SurfaceIntersectionNewtonIterable.cpp
     source/resources/TextureManager.cpp
 )
 

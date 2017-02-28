@@ -1,5 +1,5 @@
-#include "ParametricSurfaceIntersectionFinder.hpp"
-#include "ParametricSurfaceClosestPointNaiveFinder.hpp"
+#include "fw/numerical/ParametricSurfaceIntersectionFinder.hpp"
+#include "fw/numerical/ParametricSurfaceClosestPointNaiveFinder.hpp"
 #include <iostream>
 
 namespace fw

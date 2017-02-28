@@ -1,4 +1,4 @@
-#include "SurfaceIntersectionNewtonIterable.hpp"
+#include "fw/numerical/SurfaceIntersectionNewtonIterable.hpp"
 #include <iostream>
 #include <cmath>
 

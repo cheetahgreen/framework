@@ -1,4 +1,4 @@
-#include "BsplineEquidistantKnotGenerator.hpp"
+#include "fw/numerical/BsplineEquidistantKnotGenerator.hpp"
 
 namespace fw
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <gmock/gmock.h>
-#include "fw/BsplineEquidistantKnotGenerator.hpp"
+#include "fw/numerical/BsplineEquidistantKnotGenerator.hpp"
 
 class IBsplineKnotGeneratorMock:
     public fw::IBsplineKnotGenerator

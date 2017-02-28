@@ -1,4 +1,4 @@
-#include "EquidistantParametricSurface.hpp"
+#include "fw/numerical/EquidistantParametricSurface.hpp"
 
 namespace fw
 {

@@ -1,4 +1,4 @@
-#include "IntersectionCurve.hpp"
+#include "fw/numerical/IntersectionCurve.hpp"
 #include <algorithm>
 
 namespace fw

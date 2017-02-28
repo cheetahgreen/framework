@@ -1,4 +1,4 @@
-#include "ParametricSurfaceIntersection.hpp"
+#include "fw/numerical/ParametricSurfaceIntersection.hpp"
 
 namespace fw
 {
