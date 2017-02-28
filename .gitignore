@@ -6,6 +6,9 @@ build
 *.swn
 *.swp
 
+# vim custom settings
+.lvimrc
+
 # temporary files
 *~
 
