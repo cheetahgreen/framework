@@ -36,6 +36,24 @@ struct StandardVertex2D
     static void setupAttribPointers();
 };
 
+struct StandardVertex3D
+{
+    StandardVertex3D();
+    StandardVertex3D(
+        glm::vec3 position,
+        glm::vec2 texCoords,
+        glm::vec3 normal,
+        glm::vec3 tangent
+    );
+
+    glm::vec3 position;
+    glm::vec2 texCoords;
+    glm::vec3 normal;
+    glm::vec3 tangent;
+
+    static void setupAttribPointers();
+};
+
 struct VertexNormalTexCoords
 {
     VertexNormalTexCoords();

@@ -19,7 +19,7 @@ public:
 
 private:
     std::vector<fw::GeometryChunk> _geometryChunks;
-    std::vector<std::shared_ptr<fw::Mesh<fw::VertexNormalTexCoords>>> _meshes;
+    std::vector<std::shared_ptr<fw::Mesh<fw::StandardVertex3D>>> _meshes;
 };
 
 }

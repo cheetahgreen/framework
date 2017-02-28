@@ -70,12 +70,13 @@ void StaticModelFactory::processSceneMesh(
     const aiScene* scene
 )
 {
-    std::vector<fw::VertexNormalTexCoords> vertices;
+    std::vector<fw::StandardVertex3D> vertices;
     std::vector<GLuint> indices;
 
     for (auto i = 0; i < mesh->mNumVertices; ++i)
     {
-        fw::VertexNormalTexCoords vertex;
+        fw::StandardVertex3D vertex;
+
         vertex.position = {
             mesh->mVertices[i].x,
             mesh->mVertices[i].y,
@@ -86,6 +87,12 @@ void StaticModelFactory::processSceneMesh(
             mesh->mNormals[i].x,
             mesh->mNormals[i].y,
             mesh->mNormals[i].z
+        };
+
+        vertex.tangent = {
+            mesh->mTangents[i].x,
+            mesh->mTangents[i].y,
+            mesh->mTangents[i].z
         };
 
         if (mesh->mTextureCoords[0])
@@ -126,7 +133,21 @@ void StaticModelFactory::processSceneMesh(
         material->setAlbedoMap(_textureManager->loadTexture(finalTexturePath));
     }
 
-    auto gpuMesh = std::make_shared<fw::Mesh<fw::VertexNormalTexCoords>>(
+    if (loadedMaterial->GetTextureCount(aiTextureType_HEIGHT) > 0)
+    {
+        aiString str;
+        loadedMaterial->GetTexture(aiTextureType_HEIGHT, 0, &str);
+
+        std::string finalTexturePath =
+            getPathDirectory(_modelFilename) + "/" + str.C_Str();
+
+        LOG(INFO) << "Texture requested: " << str.C_Str() << ". Changed to: "
+            << finalTexturePath;
+
+        material->setNormalMap(_textureManager->loadTexture(finalTexturePath));
+    }
+
+    auto gpuMesh = std::make_shared<fw::Mesh<fw::StandardVertex3D>>(
         vertices,
         indices
     );

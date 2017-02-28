@@ -87,6 +87,66 @@ void StandardVertex2D::setupAttribPointers()
     );
 }
 
+StandardVertex3D::StandardVertex3D()
+{
+}
+
+StandardVertex3D::StandardVertex3D(
+    glm::vec3 position,
+    glm::vec2 texCoords,
+    glm::vec3 normal,
+    glm::vec3 tangent
+):
+    position{position},
+    texCoords{texCoords},
+    normal{normal},
+    tangent{tangent}
+{
+}
+
+void StandardVertex3D::setupAttribPointers()
+{
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(
+        0,
+        3,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(StandardVertex3D),
+        (GLvoid*)0
+    );
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(
+        1,
+        2,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(StandardVertex3D),
+        (GLvoid*)offsetof(StandardVertex3D, texCoords)
+    );
+
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(
+        2,
+        3,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(StandardVertex3D),
+        (GLvoid*)offsetof(StandardVertex3D, normal)
+    );
+
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(
+        3,
+        3,
+        GL_FLOAT,
+        GL_FALSE,
+        sizeof(StandardVertex3D),
+        (GLvoid*)offsetof(StandardVertex3D, tangent)
+    );
+}
+
 VertexNormalTexCoords::VertexNormalTexCoords()
 {
 }

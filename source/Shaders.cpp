@@ -128,6 +128,11 @@ void ShaderProgram::use()
     glUseProgram(_program);
 }
 
+GLint ShaderProgram::getUniformLoc(const std::string& uniformName) const
+{
+    return glGetUniformLocation(_program, uniformName.c_str());
+}
+
 void ShaderProgram::setUniform(GLuint location, GLint v0)
 {
     glUniform1i(location, v0);

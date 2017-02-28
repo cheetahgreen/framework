@@ -13,30 +13,12 @@ UniversalPhongEffect::UniversalPhongEffect():
 {
     createShaders();
 
-    _textureLocation = glGetUniformLocation(
-        _shaderProgram->getId(),
-        "TextureSlot1"
-    );
-
-    _lightDirectionLocation = glGetUniformLocation(
-        _shaderProgram->getId(),
-        "LightDirection"
-    );
-
-    _emissionColorLocation = glGetUniformLocation(
-        _shaderProgram->getId(),
-        "EmissionColor"
-    );
-
-    _solidColorLocation = glGetUniformLocation(
-        _shaderProgram->getId(),
-        "SolidColor"
-    );
-
-    _diffuseColorLocation = glGetUniformLocation(
-        _shaderProgram->getId(),
-        "DiffuseMapColor"
-    );
+    _textureLocation = _shaderProgram->getUniformLoc("AlbedoMapSampler");
+    _normalMapLoc = _shaderProgram->getUniformLoc("NormalMapSampler");
+    _lightDirectionLocation = _shaderProgram->getUniformLoc("LightDirection");
+    _emissionColorLocation = _shaderProgram->getUniformLoc("EmissionColor");
+    _solidColorLocation = _shaderProgram->getUniformLoc("SolidColor");
+    _diffuseColorLocation = _shaderProgram->getUniformLoc("DiffuseMapColor");
 }
 
 UniversalPhongEffect::~UniversalPhongEffect()
@@ -56,6 +38,13 @@ void UniversalPhongEffect::begin()
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, _diffuseMap->getTextureId());
         glUniform1i(_textureLocation, 0);
+    }
+
+    if (_normalMap != nullptr)
+    {
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, _normalMap->getTextureId());
+        glUniform1i(_normalMapLoc, 1);
     }
 
     glUniform3fv(_lightDirectionLocation, 1, glm::value_ptr(_lightDirection));
@@ -89,6 +78,13 @@ void UniversalPhongEffect::setDiffuseTexture(
 )
 {
     _diffuseMap = texture;
+}
+
+void UniversalPhongEffect::setNormalMap(
+    const std::shared_ptr<fw::Texture>& normalMap
+)
+{
+    _normalMap = normalMap;
 }
 
 void UniversalPhongEffect::setEmissionColor(glm::vec3 color)

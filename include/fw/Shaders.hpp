@@ -40,6 +40,8 @@ public:
     void link();
     void use();
 
+    GLint getUniformLoc(const std::string& uniformName) const;
+
     void setUniform(GLuint location, GLint v0);
     void setUniform(GLuint location, const glm::vec3& uniform);
     void setUniform(GLuint location, const glm::vec4& uniform);
