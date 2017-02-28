@@ -1,12 +1,13 @@
 #include "Shaders.hpp"
-#include "Common.hpp"
 
 #include <algorithm>
 #include <cstdio>
 #include <iostream>
 #include <iterator>
 
+#include "Common.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "shabui/GLSLLoader.hpp"
 
 using namespace std;
 
@@ -21,6 +22,11 @@ Shader::~Shader() {
     glDeleteShader(_shaderId);
     _shaderId = 0;
   }
+}
+
+void Shader::addSource(const string& source)
+{
+  _sources.push_back(source);
 }
 
 void Shader::addSourceFromFile(const string &filename)
@@ -67,6 +73,31 @@ void Shader::compile(GLenum shaderType)
 
 ShaderProgram::ShaderProgram() {
   _program = glCreateProgram();
+}
+
+ShaderProgram::ShaderProgram(const std::string& fileName)
+{
+    _program = glCreateProgram();
+    Shader vs, fs;
+
+    sb::GLSLLoader loader;
+    auto code = loader.loadFile(fileName);
+
+    if (code.vertexShaderCode != "")
+    {
+        vs.addSource(code.vertexShaderCode);
+        vs.compile(GL_VERTEX_SHADER);
+        attach(&vs);
+    }
+
+    if (code.fragmentShaderCode != "")
+    {
+        fs.addSource(code.fragmentShaderCode);
+        fs.compile(GL_FRAGMENT_SHADER);
+        attach(&fs);
+    }
+
+    link();
 }
 
 ShaderProgram::~ShaderProgram() {

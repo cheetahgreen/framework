@@ -25,3 +25,6 @@
 [submodule "dependencies/assimp"]
 	path = dependencies/assimp
 	url = https://github.com/assimp/assimp
+[submodule "dependencies/shabui"]
+	path = dependencies/shabui
+	url = https://github.com/sienkiewiczkm/shabui

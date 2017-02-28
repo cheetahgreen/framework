@@ -108,22 +108,9 @@ void UniversalPhongEffect::setSolidColor(glm::vec4 color)
 
 void UniversalPhongEffect::createShaders()
 {
-    std::shared_ptr<Shader> vs = std::make_shared<Shader>();
-    vs->addSourceFromFile(
-        getFrameworkResourcePath("shaders/UniversalPhong.vert")
+    _shaderProgram = std::make_shared<ShaderProgram>(
+        getFrameworkResourcePath("shaders/UniversalPhong.sbl")
     );
-    vs->compile(GL_VERTEX_SHADER);
-
-    std::shared_ptr<Shader> fs = std::make_shared<Shader>();
-    fs->addSourceFromFile(
-        getFrameworkResourcePath("shaders/UniversalPhong.frag")
-    );
-    fs->compile(GL_FRAGMENT_SHADER);
-
-    _shaderProgram = std::make_shared<ShaderProgram>();
-    _shaderProgram->attach(vs.get());
-    _shaderProgram->attach(fs.get());
-    _shaderProgram->link();
 }
 
 }

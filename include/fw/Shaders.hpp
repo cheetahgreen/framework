@@ -19,6 +19,7 @@ public:
     inline GLenum getType() { return _shaderType; }
     inline GLuint getId() { return _shaderId; }
 
+    void addSource(const std::string &source);
     void addSourceFromFile(const std::string &filename);
     void compile(GLenum shaderType);
 
@@ -32,6 +33,7 @@ class ShaderProgram
 {
 public:
     ShaderProgram();
+    explicit ShaderProgram(const std::string& fileName);
     ~ShaderProgram();
 
     void attach(Shader *shader);

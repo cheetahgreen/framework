@@ -46,6 +46,8 @@ add_subdirectory(${DEPENDENCIES_DIR}googletest)
 include_directories(${gtest_SOURCE_DIR}/include)
 include_directories(${gmock_SOURCE_DIR}/include)
 
+add_subdirectory(${DEPENDENCIES_DIR}shabui)
+
 configure_file(
     ${PROJECT_SOURCE_DIR}/configuration/Config.hpp.in
     ${PROJECT_BINARY_DIR}/configuration/Config.hpp
@@ -128,7 +130,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/include/fw
 )
 
-
 target_compile_definitions(${PROJECT_NAME}
     PUBLIC ${ADDITIONAL_DEFINITIONS}
 )
@@ -143,10 +144,11 @@ add_executable(${PROJECT_NAME_TEST}
     test/LinearCombinationEvaluatorTests.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} INTERFACE
+target_link_libraries(${PROJECT_NAME} PUBLIC
     ${OPENGL_gl_LIBRARY}
     assimp
     glfw
+    shabui
 )
 
 target_link_libraries(${PROJECT_NAME_TEST}
