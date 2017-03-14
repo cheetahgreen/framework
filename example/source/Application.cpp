@@ -121,7 +121,10 @@ void Application::onRender()
     glm::mat4 scale = glm::scale({}, glm::vec3{0.1f, 0.1f, 0.1f});
     for (const auto& chunk: _staticModel->getGeometryChunks())
     {
-        _universalPhongEffect->setLightDirection({0, 0, -1});
+        _universalPhongEffect->setLightDirection(glm::normalize(
+            glm::vec3{-1, 0, -2}
+        ));
+
         _universalPhongEffect->setSolidColor(glm::vec3{});
 
         _universalPhongEffect->setDiffuseTextureColor(

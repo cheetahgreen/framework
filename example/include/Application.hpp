@@ -51,6 +51,8 @@ private:
     std::shared_ptr<fw::Grid> _grid;
     std::shared_ptr<fw::FrameMarker> _frameMarker;
 
+    std::shared_ptr<fw::Material> _materialOverride;
+
     fw::OrbitingCamera _camera;
     glm::mat4 _projectionMatrix;
 
