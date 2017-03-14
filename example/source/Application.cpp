@@ -8,16 +8,23 @@
 #include "fw/TextureUtils.hpp"
 #include "fw/Resources.hpp"
 
+#include "fw/components/Transform.hpp"
+#include "fw/rendering/Light.hpp"
+
 #include "Resources.hpp"
 
 namespace application
 {
 
+using StaticModelHandle = std::shared_ptr<fw::StaticModel>;
+
 Application::Application():
+    _entities{_events},
+    _systems{_entities, _events},
     _enableCameraRotations{false},
-    _cameraRotationSensitivity{0.2, 0.2},
     _showTexturesInspector{false},
-    _showImGuiDemo{false}
+    _showImGuiDemo{false},
+    _cameraRotationSensitivity{0.2, 0.2}
 {
 }
 
@@ -58,13 +65,18 @@ void Application::onCreate()
         getApplicationResourcesPath("models/Nanosuit/nanosuit.obj")
     );
 
-    _testTexture = _textureManager->loadTexture(
-        fw::getFrameworkResourcePath("textures/wefi_cat.jpg")
-    );
+    _testEntity = _entities.create();
+    _testEntity.assign_from_copy<StaticModelHandle>(_staticModel);
+    _testEntity.assign_from_copy<fw::Transform>(fw::Transform{
+        glm::translate({}, glm::vec3{0.0f, 10.0f, 0.0f})
+    });
 
-    _testTexture2 = _textureManager->loadTexture(
-        fw::getFrameworkResourcePath("textures/checker-base.png")
-    );
+    _cameraEntity = _entities.create();
+    _cameraEntity.assign<fw::OrbitingCamera>();
+
+    _renderingSystem = std::make_shared<fw::ForwardRenderingSystem>();
+    _systems.add<fw::ForwardRenderingSystem>(_renderingSystem);
+    _systems.configure();
 
     updateProjectionMatrix();
 }
@@ -111,41 +123,16 @@ void Application::onRender()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
+    /*
     _phongEffect->begin();
     _phongEffect->setProjectionMatrix(_projectionMatrix);
     _phongEffect->setViewMatrix(_camera.getViewMatrix());
     _phongEffect->setModelMatrix({});
     _grid->render();
     _phongEffect->end();
+    */
 
-    glm::mat4 scale = glm::scale({}, glm::vec3{0.1f, 0.1f, 0.1f});
-    for (const auto& chunk: _staticModel->getGeometryChunks())
-    {
-        _universalPhongEffect->setLightDirection(glm::normalize(
-            glm::vec3{-1, 0, -2}
-        ));
-
-        _universalPhongEffect->setSolidColor(glm::vec3{});
-
-        _universalPhongEffect->setDiffuseTextureColor(
-            chunk.getMaterial()->getAlbedoColor()
-        );
-
-        _universalPhongEffect->setDiffuseTexture(
-            chunk.getMaterial()->getAlbedoMap()
-        );
-
-        _universalPhongEffect->setNormalMap(
-            chunk.getMaterial()->getNormalMap()
-        );
-
-        _universalPhongEffect->begin();
-        _universalPhongEffect->setProjectionMatrix(_projectionMatrix);
-        _universalPhongEffect->setViewMatrix(_camera.getViewMatrix());
-        _universalPhongEffect->setModelMatrix(chunk.getModelMatrix() * scale);
-        chunk.getMesh()->render();
-        _universalPhongEffect->end();
-    }
+    _systems.update<fw::ForwardRenderingSystem>(entityx::TimeDelta{});
 
     ImGuiApplication::onRender();
 }
@@ -168,8 +155,9 @@ bool Application::onMouseMove(glm::dvec2 newPosition)
 
     if (_enableCameraRotations)
     {
+        auto cameraComponent = _cameraEntity.component<fw::OrbitingCamera>();
         auto movement = getMouseMovement() * _cameraRotationSensitivity;
-        _camera.rotate(movement.y, movement.x);
+        cameraComponent->rotate(movement.y, movement.x);
     }
 
     return true;
@@ -180,11 +168,14 @@ bool Application::onScroll(double xoffset, double yoffset)
     if (fw::ImGuiApplication::onScroll(xoffset, yoffset))
         return true;
 
+    auto cameraComponent = _cameraEntity.component<fw::OrbitingCamera>();
+
     const double cMinimumDistance = 1.0;
     const double cMaximumDistance = 10.0;
     const double cZoomStep = 0.5;
-    auto currentDistance = _camera.getDist();
-    _camera.setDist(
+
+    auto currentDistance = cameraComponent->getDist();
+    cameraComponent->setDist(
         std::min(
             std::max(currentDistance + cZoomStep * yoffset, cMinimumDistance),
             cMaximumDistance

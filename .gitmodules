@@ -28,3 +28,6 @@
 [submodule "dependencies/shabui"]
 	path = dependencies/shabui
 	url = https://github.com/sienkiewiczkm/shabui
+[submodule "dependencies/entityx"]
+	path = dependencies/entityx
+	url = https://github.com/alecthomas/entityx

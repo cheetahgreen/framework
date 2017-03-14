@@ -41,6 +41,8 @@ else()
     add_subdirectory(${DEPENDENCIES_DIR}assimp)
 endif()
 
+add_subdirectory(${DEPENDENCIES_DIR}entityx)
+
 enable_testing()
 add_subdirectory(${DEPENDENCIES_DIR}googletest)
 include_directories(${gtest_SOURCE_DIR}/include)
@@ -106,6 +108,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/numerical/ParametricSurfaceIntersectionFinder.cpp
     source/numerical/ParametricSurfaceMeshBuilder.cpp
     source/numerical/SurfaceIntersectionNewtonIterable.cpp
+    source/rendering/ForwardRenderingSystem.cpp
     source/resources/TextureManager.cpp
 )
 
@@ -149,6 +152,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     assimp
     glfw
     shabui
+    entityx
 )
 
 target_link_libraries(${PROJECT_NAME_TEST}

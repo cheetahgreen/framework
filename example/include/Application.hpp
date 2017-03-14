@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "glm/glm.hpp"
+#include "entityx/entityx.h"
 
 #include "fw/FrameMarker.hpp"
 #include "fw/Grid.hpp"
@@ -16,6 +17,7 @@
 #include "fw/models/StaticModelFactory.hpp"
 #include "fw/resources/TextureManager.hpp"
 #include "fw/editor/TextureManagerInspector.hpp"
+#include "fw/rendering/ForwardRenderingSystem.hpp"
 
 namespace application
 {
@@ -43,6 +45,13 @@ protected:
     void updateProjectionMatrix();
 
 private:
+    entityx::EventManager _events;
+    entityx::EntityManager _entities;
+    entityx::SystemManager _systems;
+
+    entityx::Entity _testEntity;
+    entityx::Entity _cameraEntity;
+
     std::shared_ptr<fw::StaticModel> _staticModel;
 
     std::shared_ptr<fw::TexturedPhongEffect> _phongEffect;
@@ -53,20 +62,17 @@ private:
 
     std::shared_ptr<fw::Material> _materialOverride;
 
-    fw::OrbitingCamera _camera;
     glm::mat4 _projectionMatrix;
 
     bool _enableCameraRotations;
-
     bool _showTexturesInspector;
     bool _showImGuiDemo;
 
-    std::shared_ptr<fw::Texture> _testTexture;
-    std::shared_ptr<fw::Texture> _testTexture2;
     std::shared_ptr<fw::TextureManager> _textureManager;
     std::shared_ptr<fw::TextureManagerInspector> _textureManagerInspector;
-
     std::shared_ptr<fw::StaticModelFactory> _staticModelFactory;
+
+    std::shared_ptr<fw::ForwardRenderingSystem> _renderingSystem;
 
     glm::dvec2 _cameraRotationSensitivity;
 };
