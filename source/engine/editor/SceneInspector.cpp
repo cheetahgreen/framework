@@ -9,6 +9,7 @@
 #include "imgui.h"
 #include "fw/components/EntityInfo.hpp"
 #include "fw/components/Transform.hpp"
+#include "fw/rendering/Light.hpp"
 #include "fw/ImGuiExtensions.hpp"
 
 namespace ee
@@ -52,8 +53,25 @@ void SceneInspector::showMenu()
     {
         if (ImGui::BeginMenu("Entities"))
         {
-            if (ImGui::MenuItem("New"))
+            if (ImGui::BeginMenu("New"))
             {
+                if (ImGui::MenuItem("Empty entity"))
+                {
+                    createEmptyEntity();
+                }
+
+                if (ImGui::MenuItem("Light"))
+                {
+                    createLight();
+                }
+
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Camera"))
+                {
+                }
+
+                ImGui::EndMenu();
             }
 
             if (ImGui::MenuItem("Delete", nullptr, false, isEntitySelected))
@@ -108,6 +126,16 @@ void SceneInspector::showComponentsList()
     ImGui::BeginChild("SceneInspectorRightPane");
     showEntityInfoComponent();
     showTransformComponent();
+
+    if (_selectedEntity.has_component<fw::Light>())
+    {
+        auto light = _selectedEntity.component<fw::Light>();
+        if (ImGui::CollapsingHeader("Light"))
+        {
+            _lightEditor.showEmbeddedFor(*light);
+        }
+    }
+
     ImGui::EndChild();
 }
 
@@ -119,7 +147,6 @@ void SceneInspector::showEntityInfoComponent()
     auto entityName = entityInfo->getName();
     if (ImGui::InputText("Name", entityName))
     {
-        std::cout << entityName << std::endl;
         entityInfo->setName(entityName);
     }
 
@@ -144,10 +171,40 @@ void SceneInspector::showTransformComponent()
         perspective
     );
 
-    ImGui::DragFloat3("Position", glm::value_ptr(translation));
+    ImGui::DragFloat3("Position", glm::value_ptr(translation), 0.1f);
+    ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.1f, 0.001f);
+
+    if (ImGui::Button("Reset scale"))
+    {
+        scale = {1.0f, 1.0f, 1.0f};
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::Button("Make uniform (clone X)"))
+    {
+        scale = {scale.x, scale.x, scale.x};
+    }
 
     auto newTranslationMtx = glm::translate({}, translation);
-    transform->setTransform(newTranslationMtx);
+    auto newScalingMtx = glm::scale({}, scale);
+
+    transform->setTransform(newTranslationMtx * newScalingMtx);
+}
+
+void SceneInspector::createEmptyEntity()
+{
+    auto entity = _entityManager->create();
+    entity.assign<fw::EntityInfo>("Empty");
+    entity.assign<fw::Transform>();
+}
+
+void SceneInspector::createLight()
+{
+    auto entity = _entityManager->create();
+    entity.assign<fw::EntityInfo>("Light");
+    entity.assign<fw::Transform>();
+    entity.assign<fw::Light>();
 }
 
 }

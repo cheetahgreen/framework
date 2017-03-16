@@ -7,16 +7,16 @@ namespace fw
 
 enum class LightType
 {
-    Point,
-    Directional,
-    Spotlight,
-    Area
+    Point = 0,
+    Directional = 1,
+    Spotlight = 2,
+    Area = 3
 };
 
 class Light
 {
 public:
-    Light() {}
+    Light(): _type{}, _color{}, _range{} {}
     Light(LightType type, const glm::vec3& color, float range):
         _type{type}, _color{color}, _range{range} {}
 

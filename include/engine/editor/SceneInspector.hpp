@@ -1,5 +1,6 @@
 #pragma once
 #include "entityx/entityx.h"
+#include "fw/editor/LightEditor.hpp"
 
 namespace ee
 {
@@ -21,10 +22,15 @@ protected:
     void showEntityInfoComponent();
     void showTransformComponent();
 
+    void createEmptyEntity();
+    void createLight();
+
 private:
     entityx::EntityManager* _entityManager;
     entityx::Entity _selectedEntity;
     bool _inspectorEnabled;
+
+    fw::LightEditor _lightEditor;
 };
 
 }

@@ -3,9 +3,11 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "fw/DebugShapes.hpp"
 #include "fw/cameras/ProjectionCamera.hpp"
 #include "fw/components/Transform.hpp"
 #include "fw/models/StaticModel.hpp"
+#include "fw/rendering/Light.hpp"
 
 namespace ee
 {
@@ -15,6 +17,7 @@ using StaticModelHandle = std::shared_ptr<fw::StaticModel>;
 ForwardRenderingSystem::ForwardRenderingSystem()
 {
     _universalPhongEffect = std::make_shared<fw::UniversalPhongEffect>();
+    _box = fw::createBox({0.1f, 0.1f, 0.1f});
 }
 
 ForwardRenderingSystem::~ForwardRenderingSystem()
@@ -43,12 +46,12 @@ void ForwardRenderingSystem::update(
     );
 
     entityx::ComponentHandle<fw::Transform> transformation;
+    entityx::ComponentHandle<fw::Light> light;
     entityx::ComponentHandle<StaticModelHandle> staticModel;
 
     for (auto entity:
             entities.entities_with_components(transformation, staticModel))
     {
-        glm::mat4 scale = glm::scale({}, glm::vec3{0.1f, 0.1f, 0.1f});
         for (const auto& chunk: (*staticModel)->getGeometryChunks())
         {
             _universalPhongEffect->setLightDirection(glm::normalize(
@@ -56,6 +59,7 @@ void ForwardRenderingSystem::update(
             ));
 
             _universalPhongEffect->setSolidColor(glm::vec3{});
+            _universalPhongEffect->setEmissionColor({});
 
             _universalPhongEffect->setDiffuseTextureColor(
                 chunk.getMaterial()->getAlbedoColor()
@@ -73,13 +77,27 @@ void ForwardRenderingSystem::update(
             _universalPhongEffect->setProjectionMatrix(projectionMatrix);
             _universalPhongEffect->setViewMatrix(viewMatrix);
             _universalPhongEffect->setModelMatrix(
-                transformation->getTransform() * scale
+                transformation->getTransform()
             );
 
             chunk.getMesh()->render();
 
             _universalPhongEffect->end();
         }
+    }
+
+    for (auto entity:
+            entities.entities_with_components(transformation, light))
+    {
+        _universalPhongEffect->setSolidColor(glm::vec3{});
+        _universalPhongEffect->setEmissionColor(light->getColor());
+        _universalPhongEffect->setDiffuseTextureColor(glm::vec4{});
+        _universalPhongEffect->begin();
+        _universalPhongEffect->setProjectionMatrix(projectionMatrix);
+        _universalPhongEffect->setViewMatrix(viewMatrix);
+        _universalPhongEffect->setModelMatrix(transformation->getTransform());
+        _box->render();
+        _universalPhongEffect->end();
     }
 }
 

@@ -1,6 +1,9 @@
 #pragma once
 #include "entityx/entityx.h"
+
 #include "fw/UniversalPhongEffect.hpp"
+#include "fw/Mesh.hpp"
+#include "fw/Vertices.hpp"
 
 namespace ee
 {
@@ -20,6 +23,7 @@ public:
 
 private:
     std::shared_ptr<fw::UniversalPhongEffect> _universalPhongEffect;
+    std::shared_ptr<fw::Mesh<fw::VertexNormalTexCoords>> _box;
 };
 
 }

@@ -147,7 +147,7 @@ shader "Uniform Phong Shader"
         const float PI = 3.14159265359;
         vec3 Lo = (kD * albedo / PI + BRDF) * radiance * NdotL;
 
-        Lo = Lo / (Lo + vec3(1.0));
+        Lo = Lo / (Lo + vec3(1.0)) + EmissionColor;
         vec3 gammacorrected = pow(Lo, vec3(1.0/2.2));
 
         result = vec4(gammacorrected, 1.0);

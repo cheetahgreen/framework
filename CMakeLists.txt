@@ -95,6 +95,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/cameras/ProjectionCamera.cpp
     source/common/Filesystem.cpp
     source/editor/TextureManagerInspector.cpp
+    source/editor/LightEditor.cpp
     source/effects/Standard2DEffect.cpp
     source/inputs/GenericKeyboardInput.cpp
     source/inputs/GenericMouseInput.cpp
