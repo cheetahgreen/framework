@@ -2,7 +2,7 @@
 #include "entityx/entityx.h"
 #include "fw/UniversalPhongEffect.hpp"
 
-namespace fw
+namespace ee
 {
 
 class ForwardRenderingSystem:

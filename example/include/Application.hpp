@@ -5,19 +5,18 @@
 #include "glm/glm.hpp"
 #include "entityx/entityx.h"
 
-#include "fw/FrameMarker.hpp"
-#include "fw/Grid.hpp"
 #include "fw/ImGuiApplication.hpp"
-#include "fw/Mesh.hpp"
-#include "fw/OrbitingCamera.hpp"
-#include "fw/TexturedPhongEffect.hpp"
 #include "fw/UniversalPhongEffect.hpp"
-#include "fw/Vertices.hpp"
+#include "fw/inputs/GenericKeyboardInput.hpp"
+#include "fw/inputs/GenericMouseInput.hpp"
 #include "fw/models/StaticModel.hpp"
 #include "fw/models/StaticModelFactory.hpp"
 #include "fw/resources/TextureManager.hpp"
 #include "fw/editor/TextureManagerInspector.hpp"
-#include "fw/rendering/ForwardRenderingSystem.hpp"
+
+#include "engine/info/WindowProperties.hpp"
+#include "engine/rendering/ForwardRenderingSystem.hpp"
+#include "engine/scripts/ScriptExecutionSystem.hpp"
 
 namespace application
 {
@@ -40,6 +39,7 @@ protected:
     virtual bool onMouseButton(int button, int action, int mods) override;
     virtual bool onMouseMove(glm::dvec2 newPosition) override;
     virtual bool onScroll(double xoffset, double yoffset) override;
+    virtual bool onKey(int key, int scancode, int action, int mods) override;
     virtual bool onResize() override;
 
     void updateProjectionMatrix();
@@ -53,16 +53,8 @@ private:
     entityx::Entity _cameraEntity;
 
     std::shared_ptr<fw::StaticModel> _staticModel;
-
-    std::shared_ptr<fw::TexturedPhongEffect> _phongEffect;
     std::shared_ptr<fw::UniversalPhongEffect> _universalPhongEffect;
-
-    std::shared_ptr<fw::Grid> _grid;
-    std::shared_ptr<fw::FrameMarker> _frameMarker;
-
     std::shared_ptr<fw::Material> _materialOverride;
-
-    glm::mat4 _projectionMatrix;
 
     bool _enableCameraRotations;
     bool _showTexturesInspector;
@@ -72,7 +64,12 @@ private:
     std::shared_ptr<fw::TextureManagerInspector> _textureManagerInspector;
     std::shared_ptr<fw::StaticModelFactory> _staticModelFactory;
 
-    std::shared_ptr<fw::ForwardRenderingSystem> _renderingSystem;
+    std::shared_ptr<fw::GenericKeyboardInput> _keyboardInput;
+    std::shared_ptr<fw::GenericMouseInput> _mouseInput;
+
+    std::shared_ptr<ee::WindowProperties> _windowProperties;
+    std::shared_ptr<ee::ForwardRenderingSystem> _renderingSystem;
+    std::shared_ptr<ee::ScriptExecutionSystem> _scriptExecutionSystem;
 
     glm::dvec2 _cameraRotationSensitivity;
 };

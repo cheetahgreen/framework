@@ -91,9 +91,13 @@ set(FRAMEWORK_SOURCE_FILES
     source/TexturedPhongEffect.cpp
     source/UniversalPhongEffect.cpp
     source/Vertices.cpp
+    source/cameras/FirstPersonCameraController.cpp
+    source/cameras/ProjectionCamera.cpp
     source/common/Filesystem.cpp
     source/editor/TextureManagerInspector.cpp
     source/effects/Standard2DEffect.cpp
+    source/inputs/GenericKeyboardInput.cpp
+    source/inputs/GenericMouseInput.cpp
     source/models/StaticModel.cpp
     source/models/StaticModelFactory.cpp
     source/numerical/BsplineBasisEvaluator.cpp
@@ -108,12 +112,18 @@ set(FRAMEWORK_SOURCE_FILES
     source/numerical/ParametricSurfaceIntersectionFinder.cpp
     source/numerical/ParametricSurfaceMeshBuilder.cpp
     source/numerical/SurfaceIntersectionNewtonIterable.cpp
-    source/rendering/ForwardRenderingSystem.cpp
     source/resources/TextureManager.cpp
+)
+
+set(ENGINE_SOURCE_FILES
+    source/engine/rendering/ForwardRenderingSystem.cpp
+    source/engine/scripts/ScriptExecutionSystem.cpp
+    source/engine/scripts/cameras/FirstPersonCameraScript.cpp
 )
 
 add_library(${PROJECT_NAME}
     ${FRAMEWORK_SOURCE_FILES}
+    ${ENGINE_SOURCE_FILES}
     ${FRAMEWORK_DEPENDENCIES_SOURCE_FILES}
 )
 

@@ -10,6 +10,10 @@
 
 #include "fw/components/Transform.hpp"
 #include "fw/rendering/Light.hpp"
+#include "fw/cameras/ProjectionCamera.hpp"
+
+#include "engine/scripts/ScriptCollection.hpp"
+#include "engine/scripts/cameras/FirstPersonCameraScript.hpp"
 
 #include "Resources.hpp"
 
@@ -36,17 +40,14 @@ void Application::onCreate()
 {
     ImGuiApplication::onCreate();
 
-    _phongEffect = std::make_shared<fw::TexturedPhongEffect>();
-    _phongEffect->create();
+    _windowProperties = std::make_shared<ee::WindowProperties>();
+    _windowProperties->setWindowSize(getWindowSize());
+    _windowProperties->setFramebufferSize(getFramebufferSize());
+
+    _keyboardInput = std::make_shared<fw::GenericKeyboardInput>();
+    _mouseInput = std::make_shared<fw::GenericMouseInput>();
 
     _universalPhongEffect = std::make_shared<fw::UniversalPhongEffect>();
-
-    _grid = std::make_shared<fw::Grid>(
-        glm::ivec2{32, 32},
-        glm::vec2{0.5f, 0.5f}
-    );
-
-    _frameMarker = std::make_shared<fw::FrameMarker>();
 
     _textureManager = std::make_shared<fw::TextureManager>();
     _textureManager->setResourcesDirectory(fw::getFrameworkResourcePath(""));
@@ -71,14 +72,35 @@ void Application::onCreate()
         glm::translate({}, glm::vec3{0.0f, 10.0f, 0.0f})
     });
 
+    glm::mat4 viewMtx = glm::lookAt(
+        glm::vec3{3.0f, 1.0f, 3.0f},
+        glm::vec3{0.0f, 0.0f, 0.0f},
+        glm::vec3{0.0f, 1.0f, 0.0f}
+    );
+
+    auto cameraScript = std::make_shared<ee::FirstPersonCameraScript>();
+
     _cameraEntity = _entities.create();
-    _cameraEntity.assign<fw::OrbitingCamera>();
+    _cameraEntity.assign<fw::Transform>(glm::inverse(viewMtx));
+    _cameraEntity.assign<ee::ScriptCollection>(
+        std::vector<std::shared_ptr<ee::IScript>>
+        {
+            std::static_pointer_cast<ee::IScript>(cameraScript)
+        }
+    );
+    _cameraEntity.assign<fw::ProjectionCamera>();
 
-    _renderingSystem = std::make_shared<fw::ForwardRenderingSystem>();
-    _systems.add<fw::ForwardRenderingSystem>(_renderingSystem);
+    _renderingSystem = std::make_shared<ee::ForwardRenderingSystem>();
+    _scriptExecutionSystem = std::make_shared<ee::ScriptExecutionSystem>(
+        std::static_pointer_cast<ee::IWindowProperties>(_windowProperties),
+        std::static_pointer_cast<fw::IKeyboardInput>(_keyboardInput),
+        std::static_pointer_cast<fw::IMouseInput>(_mouseInput)
+    );
+
+    _systems.add<ee::ForwardRenderingSystem>(_renderingSystem);
+    _systems.add<ee::ScriptExecutionSystem>(_scriptExecutionSystem);
+
     _systems.configure();
-
-    updateProjectionMatrix();
 }
 
 void Application::onDestroy()
@@ -123,27 +145,26 @@ void Application::onRender()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
-    /*
-    _phongEffect->begin();
-    _phongEffect->setProjectionMatrix(_projectionMatrix);
-    _phongEffect->setViewMatrix(_camera.getViewMatrix());
-    _phongEffect->setModelMatrix({});
-    _grid->render();
-    _phongEffect->end();
-    */
-
-    _systems.update<fw::ForwardRenderingSystem>(entityx::TimeDelta{});
+    _systems.update<ee::ScriptExecutionSystem>(entityx::TimeDelta{});
+    _systems.update<ee::ForwardRenderingSystem>(entityx::TimeDelta{});
 
     ImGuiApplication::onRender();
+
+    _keyboardInput->nextFrame();
+    _mouseInput->nextFrame();
 }
 
 bool Application::onMouseButton(int button, int action, int mods)
 {
     if (ImGuiApplication::onMouseButton(button, action, mods)) { return true; }
 
-    if (GLFW_MOUSE_BUTTON_LEFT == button)
+    if (action == GLFW_PRESS)
     {
-        _enableCameraRotations = GLFW_PRESS == action;
+        _mouseInput->buttonDown(button);
+    }
+    else if (action == GLFW_RELEASE)
+    {
+        _mouseInput->buttonUp(button);
     }
 
     return true;
@@ -152,14 +173,7 @@ bool Application::onMouseButton(int button, int action, int mods)
 bool Application::onMouseMove(glm::dvec2 newPosition)
 {
     if (ImGuiApplication::onMouseMove(newPosition)) { return true; }
-
-    if (_enableCameraRotations)
-    {
-        auto cameraComponent = _cameraEntity.component<fw::OrbitingCamera>();
-        auto movement = getMouseMovement() * _cameraRotationSensitivity;
-        cameraComponent->rotate(movement.y, movement.x);
-    }
-
+    _mouseInput->move(newPosition);
     return true;
 }
 
@@ -168,34 +182,28 @@ bool Application::onScroll(double xoffset, double yoffset)
     if (fw::ImGuiApplication::onScroll(xoffset, yoffset))
         return true;
 
-    auto cameraComponent = _cameraEntity.component<fw::OrbitingCamera>();
+    return true;
+}
 
-    const double cMinimumDistance = 1.0;
-    const double cMaximumDistance = 10.0;
-    const double cZoomStep = 0.5;
-
-    auto currentDistance = cameraComponent->getDist();
-    cameraComponent->setDist(
-        std::min(
-            std::max(currentDistance + cZoomStep * yoffset, cMinimumDistance),
-            cMaximumDistance
-        )
-    );
+bool Application::onKey(int key, int scancode, int action, int mods)
+{
+    if (action == GLFW_PRESS)
+    {
+        _keyboardInput->keyDown(key);
+    }
+    else if (action == GLFW_RELEASE)
+    {
+        _keyboardInput->keyUp(key);
+    }
 
     return true;
 }
 
 bool Application::onResize()
 {
-    updateProjectionMatrix();
+    _windowProperties->setWindowSize(getWindowSize());
+    _windowProperties->setFramebufferSize(getFramebufferSize());
     return true;
-}
-
-void Application::updateProjectionMatrix()
-{
-    auto windowSize = getWindowSize();
-    auto aspectRatio = static_cast<float>(windowSize.x) / windowSize.y;
-    _projectionMatrix = glm::perspective(45.0f, aspectRatio, 0.5f, 100.0f);
 }
 
 }

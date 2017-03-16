@@ -1,14 +1,15 @@
-#include "fw/rendering/ForwardRenderingSystem.hpp"
+#include "engine/rendering/ForwardRenderingSystem.hpp"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "fw/OrbitingCamera.hpp"
+#include "fw/cameras/ProjectionCamera.hpp"
 #include "fw/components/Transform.hpp"
 #include "fw/models/StaticModel.hpp"
 
-namespace fw
+namespace ee
 {
+
 using StaticModelHandle = std::shared_ptr<fw::StaticModel>;
 
 ForwardRenderingSystem::ForwardRenderingSystem()
@@ -26,12 +27,18 @@ void ForwardRenderingSystem::update(
     entityx::TimeDelta
 )
 {
-    auto projectionMatrix = glm::perspective(45.0f, 800/600.0f, 0.5f, 100.0f);
     glm::mat4 viewMatrix{};
-    entities.each<fw::OrbitingCamera>(
-        [&viewMatrix](entityx::Entity entity, fw::OrbitingCamera& camera)
+    glm::mat4 projectionMatrix{};
+
+    entities.each<fw::Transform, fw::ProjectionCamera>(
+        [&viewMatrix, &projectionMatrix](
+            entityx::Entity entity,
+            fw::Transform& transform,
+            fw::ProjectionCamera& camera
+        )
         {
-            viewMatrix = camera.getViewMatrix();
+            viewMatrix = glm::inverse(transform.getTransform());
+            projectionMatrix = camera.getProjectionMatrix();
         }
     );
 
