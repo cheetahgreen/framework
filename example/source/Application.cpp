@@ -9,6 +9,7 @@
 #include "fw/Resources.hpp"
 
 #include "fw/components/Transform.hpp"
+#include "fw/components/EntityInfo.hpp"
 #include "fw/rendering/Light.hpp"
 #include "fw/cameras/ProjectionCamera.hpp"
 
@@ -47,8 +48,6 @@ void Application::onCreate()
     _keyboardInput = std::make_shared<fw::GenericKeyboardInput>();
     _mouseInput = std::make_shared<fw::GenericMouseInput>();
 
-    _universalPhongEffect = std::make_shared<fw::UniversalPhongEffect>();
-
     _textureManager = std::make_shared<fw::TextureManager>();
     _textureManager->setResourcesDirectory(fw::getFrameworkResourcePath(""));
 
@@ -58,37 +57,11 @@ void Application::onCreate()
         )
     );
 
+    _sceneInspector = std::make_shared<ee::SceneInspector>(&_entities);
+
     _staticModelFactory = std::make_shared<fw::StaticModelFactory>(
         std::static_pointer_cast<fw::ITextureManager>(_textureManager)
     );
-
-    _staticModel = _staticModelFactory->load(
-        getApplicationResourcesPath("models/Nanosuit/nanosuit.obj")
-    );
-
-    _testEntity = _entities.create();
-    _testEntity.assign_from_copy<StaticModelHandle>(_staticModel);
-    _testEntity.assign_from_copy<fw::Transform>(fw::Transform{
-        glm::translate({}, glm::vec3{0.0f, 10.0f, 0.0f})
-    });
-
-    glm::mat4 viewMtx = glm::lookAt(
-        glm::vec3{3.0f, 1.0f, 3.0f},
-        glm::vec3{0.0f, 0.0f, 0.0f},
-        glm::vec3{0.0f, 1.0f, 0.0f}
-    );
-
-    auto cameraScript = std::make_shared<ee::FirstPersonCameraScript>();
-
-    _cameraEntity = _entities.create();
-    _cameraEntity.assign<fw::Transform>(glm::inverse(viewMtx));
-    _cameraEntity.assign<ee::ScriptCollection>(
-        std::vector<std::shared_ptr<ee::IScript>>
-        {
-            std::static_pointer_cast<ee::IScript>(cameraScript)
-        }
-    );
-    _cameraEntity.assign<fw::ProjectionCamera>();
 
     _renderingSystem = std::make_shared<ee::ForwardRenderingSystem>();
     _scriptExecutionSystem = std::make_shared<ee::ScriptExecutionSystem>(
@@ -99,8 +72,41 @@ void Application::onCreate()
 
     _systems.add<ee::ForwardRenderingSystem>(_renderingSystem);
     _systems.add<ee::ScriptExecutionSystem>(_scriptExecutionSystem);
-
     _systems.configure();
+
+    createCamera();
+    createTestEntity();
+}
+
+void Application::createCamera()
+{
+    auto cameraScript = std::make_shared<ee::FirstPersonCameraScript>();
+
+    _cameraEntity = _entities.create();
+    _cameraEntity.assign<fw::EntityInfo>("Default camera");
+    _cameraEntity.assign<fw::Transform>(glm::mat4{});
+    _cameraEntity.assign<ee::ScriptCollection>(
+        std::vector<std::shared_ptr<ee::IScript>>
+        {
+            std::static_pointer_cast<ee::IScript>(cameraScript)
+        }
+    );
+
+    _cameraEntity.assign<fw::ProjectionCamera>();
+}
+
+void Application::createTestEntity()
+{
+    _staticModel = _staticModelFactory->load(
+        getApplicationResourcesPath("models/Nanosuit/nanosuit.obj")
+    );
+
+    _testEntity = _entities.create();
+    _testEntity.assign<fw::EntityInfo>("Nanosuit");
+    _testEntity.assign_from_copy<StaticModelHandle>(_staticModel);
+    _testEntity.assign_from_copy<fw::Transform>(fw::Transform{
+        glm::translate({}, glm::vec3{0.0f, 0.0f, 0.0f})
+    });
 }
 
 void Application::onDestroy()
@@ -118,6 +124,7 @@ void Application::onUpdate(
     {
         if (ImGui::BeginMenu("Inspectors"))
         {
+            ImGui::MenuItem("Scene", nullptr, &_sceneInspector->getShowFlag());
             ImGui::MenuItem("Textures", nullptr, &_showTexturesInspector);
             ImGui::EndMenu();
         }
@@ -132,6 +139,7 @@ void Application::onUpdate(
     }
 
     _textureManagerInspector->show(_showTexturesInspector);
+    _sceneInspector->show();
 
     if (_showImGuiDemo)
     {
@@ -187,6 +195,11 @@ bool Application::onScroll(double xoffset, double yoffset)
 
 bool Application::onKey(int key, int scancode, int action, int mods)
 {
+    if (fw::ImGuiApplication::onKey(key, scancode, action, mods))
+    {
+        return true;
+    }
+
     if (action == GLFW_PRESS)
     {
         _keyboardInput->keyDown(key);

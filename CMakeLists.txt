@@ -116,6 +116,7 @@ set(FRAMEWORK_SOURCE_FILES
 )
 
 set(ENGINE_SOURCE_FILES
+    source/engine/editor/SceneInspector.cpp
     source/engine/rendering/ForwardRenderingSystem.cpp
     source/engine/scripts/ScriptExecutionSystem.cpp
     source/engine/scripts/cameras/FirstPersonCameraScript.cpp

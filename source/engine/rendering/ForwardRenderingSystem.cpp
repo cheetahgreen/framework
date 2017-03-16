@@ -73,7 +73,7 @@ void ForwardRenderingSystem::update(
             _universalPhongEffect->setProjectionMatrix(projectionMatrix);
             _universalPhongEffect->setViewMatrix(viewMatrix);
             _universalPhongEffect->setModelMatrix(
-                chunk.getModelMatrix() * scale
+                transformation->getTransform() * scale
             );
 
             chunk.getMesh()->render();

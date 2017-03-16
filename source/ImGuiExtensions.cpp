@@ -14,6 +14,26 @@ static bool constCharStringVectorGetter(
     return true;
 }
 
+bool ImGui::InputText(
+    const std::string& label,
+    std::string& value,
+    ImGuiInputTextFlags flags
+)
+{
+   std::vector<char> data;
+   data.resize(2 + value.length() * 2);
+   std::copy(std::begin(value), std::end(value), std::begin(data));
+   bool returnFlag = ImGui::InputText(
+       label.c_str(),
+       data.data(),
+       data.size(),
+       flags
+   );
+
+   value = data.data();
+   return returnFlag;
+}
+
 bool ImGui::Combo(
     const char* label,
     int* currIndex,
