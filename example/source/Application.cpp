@@ -98,11 +98,11 @@ void Application::createCamera()
 void Application::createTestEntity()
 {
     _staticModel = _staticModelFactory->load(
-        getApplicationResourcesPath("models/Nanosuit/nanosuit.obj")
+        getApplicationResourcesPath("models/Cerberus/Cerberus.obj")
     );
 
     _testEntity = _entities.create();
-    _testEntity.assign<fw::EntityInfo>("Nanosuit");
+    _testEntity.assign<fw::EntityInfo>("Cerberus PBR");
     _testEntity.assign_from_copy<StaticModelHandle>(_staticModel);
     _testEntity.assign_from_copy<fw::Transform>(fw::Transform{
         glm::translate({}, glm::vec3{0.0f, 0.0f, 0.0f})

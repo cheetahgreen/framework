@@ -89,20 +89,14 @@ shader "Uniform Phong Shader"
 
         result.TexCoord = vertex.texCoord.xy;
 
-        mat4 normalMatrix = transpose(inverse(model));
+        mat3 normalMatrix = transpose(inverse(mat3(model)));
+        mat3 viewNormalMtx = mat3(view) * normalMatrix;
 
-        result.Normal = normalize(
-            (view * normalMatrix * vec4(vertex.normal, 0)).xyz
-        );
-
-        result.Tangent = normalize(
-            (view * normalMatrix * vec4(vertex.tangent, 0)).xyz
-        );
+        result.Normal = normalize(viewNormalMtx * vertex.normal);
+        result.Tangent = normalize(viewNormalMtx * vertex.tangent);
 
         result.ViewDirection = normalize(-viewPosition.xyz);
-        result.ViewLightDirection = normalize(
-            (view * vec4(-LightDirection, 0)).xyz
-        );
+        result.ViewLightDirection = normalize(mat3(view) * (-LightDirection));
     >>>;
 
     func fragment(vertexOutput vsOut): vec4 result
@@ -124,10 +118,10 @@ shader "Uniform Phong Shader"
         vec3 albedoMapFinal = albedoMapSample.rgb;
         vec3 albedo = pow(albedoMapFinal, vec3(2.2));
 
-        vec3 lightColor = vec3(23.47f, 21.31f, 20.79f);
+        vec3 lightColor = vec3(1.7f, 2.31f, 2.79f);
 
-        float NdotV = max(dot(normal, viewDir), 0.0);
-        float NdotL = max(dot(normal, lightDir), 0.0);
+        float NdotV = max(dot(surfaceNormal, viewDir), 0.0);
+        float NdotL = max(dot(surfaceNormal, lightDir), 0.0);
         vec3 halfwayDir = normalize(viewDir + lightDir);
 
         vec3 radiance = lightColor;
@@ -135,8 +129,8 @@ shader "Uniform Phong Shader"
         float metalness = 0.0;
         vec3 F0 = mix(vec3(0.04), albedoMapFinal, metalness);
 
-        float D = D_GGX_TR(normal, halfwayDir, 0.3);
-        float G = geometrySmith(normal, viewDir, lightDir, 0.2);
+        float D = D_GGX_TR(surfaceNormal, halfwayDir, 0.3);
+        float G = geometrySmith(surfaceNormal, viewDir, lightDir, 0.2);
         vec3 F = fresnelSchlick(NdotV, vec3(0.04));
 
         vec3 BRDF = (D * F * G) / (4.0 * NdotV * NdotL + 0.001);
@@ -154,7 +148,6 @@ shader "Uniform Phong Shader"
     >>>
     requires {
         D_GGX_TR,
-        blinnPhongSpecular,
         fresnelSchlick,
         geometrySmith
     };

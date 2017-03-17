@@ -126,6 +126,13 @@ void StaticModelFactory::processSceneMesh(
         std::string finalTexturePath =
             getPathDirectory(_modelFilename) + "/" + str.C_Str();
 
+        std::replace(
+            std::begin(finalTexturePath),
+            std::end(finalTexturePath),
+            '\\',
+            '/'
+        );
+
         LOG(INFO) << "Texture requested: " << str.C_Str() << ". Changed to: "
             << finalTexturePath;
 
@@ -140,6 +147,13 @@ void StaticModelFactory::processSceneMesh(
 
         std::string finalTexturePath =
             getPathDirectory(_modelFilename) + "/" + str.C_Str();
+
+        std::replace(
+            std::begin(finalTexturePath),
+            std::end(finalTexturePath),
+            '\\',
+            '/'
+        );
 
         LOG(INFO) << "Texture requested: " << str.C_Str() << ". Changed to: "
             << finalTexturePath;

@@ -149,7 +149,6 @@ void SceneInspector::showEntityInfoComponent()
     {
         entityInfo->setName(entityName);
     }
-
 }
 
 void SceneInspector::showTransformComponent()
@@ -172,7 +171,7 @@ void SceneInspector::showTransformComponent()
     );
 
     ImGui::DragFloat3("Position", glm::value_ptr(translation), 0.1f);
-    ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.1f, 0.001f);
+    ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.01f, 0.001f, 1000.0f);
 
     if (ImGui::Button("Reset scale"))
     {
