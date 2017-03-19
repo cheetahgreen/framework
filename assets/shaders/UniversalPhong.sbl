@@ -54,10 +54,12 @@ shader "Uniform Phong Shader"
         uniform sampler2D AlbedoMapSampler;
         uniform sampler2D NormalMapSampler;
 
-        uniform vec3 LightColor;
         uniform vec3 EmissionColor;
         uniform vec4 SolidColor;
         uniform vec4 DiffuseMapColor;
+
+        uniform vec3 LightColor;
+        uniform vec3 LightPosition;
         uniform vec3 LightDirection;
 
         uniform mat4 model;
@@ -92,11 +94,16 @@ shader "Uniform Phong Shader"
         mat3 normalMatrix = transpose(inverse(mat3(model)));
         mat3 viewNormalMtx = mat3(view) * normalMatrix;
 
+        vec4 viewLightPosition = view * vec4(LightPosition, 1.0);
+        vec3 viewLightDirection = normalize(
+            viewLightPosition.xyz - viewPosition.xyz
+        );
+
         result.Normal = normalize(viewNormalMtx * vertex.normal);
         result.Tangent = normalize(viewNormalMtx * vertex.tangent);
 
         result.ViewDirection = normalize(-viewPosition.xyz);
-        result.ViewLightDirection = normalize(mat3(view) * (-LightDirection));
+        result.ViewLightDirection = viewLightDirection;
     >>>;
 
     func fragment(vertexOutput vsOut): vec4 result
@@ -118,13 +125,11 @@ shader "Uniform Phong Shader"
         vec3 albedoMapFinal = albedoMapSample.rgb;
         vec3 albedo = pow(albedoMapFinal, vec3(2.2));
 
-        vec3 lightColor = vec3(1.7f, 2.31f, 2.79f);
-
         float NdotV = max(dot(surfaceNormal, viewDir), 0.0);
         float NdotL = max(dot(surfaceNormal, lightDir), 0.0);
         vec3 halfwayDir = normalize(viewDir + lightDir);
 
-        vec3 radiance = lightColor;
+        vec3 radiance = LightColor;
 
         float metalness = 0.0;
         vec3 F0 = mix(vec3(0.04), albedoMapFinal, metalness);

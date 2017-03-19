@@ -7,6 +7,9 @@
 #include "fw/Material.hpp"
 #include "fw/Texture.hpp"
 
+#include "fw/components/Transform.hpp"
+#include "fw/rendering/Light.hpp"
+
 namespace fw
 {
 
@@ -21,7 +24,10 @@ public:
     virtual void begin() override;
     virtual void end() override;
 
-    void setLightDirection(glm::vec3 lightDirection);
+    void setLight(
+        const fw::Transform& transform,
+        const fw::Light& light
+    );
 
     void setMaterial(const fw::Material& material);
 
@@ -34,27 +40,34 @@ public:
     void setSolidColor(glm::vec3 color);
     void setSolidColor(glm::vec4 color);
 
+protected:
+    void updateLightUniforms();
+
 private:
     void createShaders();
 
     GLint _textureLocation;
     GLint _normalMapLoc;
+    GLint _lightColorLocation;
     GLint _lightDirectionLocation;
+    GLint _lightPositionLocation;
     GLint _emissionColorLocation;
     GLint _solidColorLocation;
     GLint _diffuseColorLocation;
 
+    bool _shaderActive;
+
     std::shared_ptr<fw::Texture> _diffuseMap;
     std::shared_ptr<fw::Texture> _normalMap;
+
+    fw::Transform _lightTransform;
+    fw::Light _light;
 
     glm::vec4 _diffuseMapColor;
     glm::vec4 _normalMapColor;
 
     glm::vec3 _emissionColor;
     glm::vec4 _solidColor;
-
-    glm::vec3 _lightDirection;
-
 };
 
 }

@@ -45,6 +45,21 @@ void ForwardRenderingSystem::update(
         }
     );
 
+    fw::Transform currentLightTransform;
+    fw::Light currentLight;
+
+    entities.each<fw::Transform, fw::Light>(
+        [&currentLightTransform, &currentLight](
+            entityx::Entity entity,
+            fw::Transform& transform,
+            fw::Light& light
+        )
+        {
+            currentLight = light;
+            currentLightTransform = transform;
+        }
+    );
+
     entityx::ComponentHandle<fw::Transform> transformation;
     entityx::ComponentHandle<fw::Light> light;
     entityx::ComponentHandle<StaticModelHandle> staticModel;
@@ -54,9 +69,10 @@ void ForwardRenderingSystem::update(
     {
         for (const auto& chunk: (*staticModel)->getGeometryChunks())
         {
-            _universalPhongEffect->setLightDirection(glm::normalize(
-                glm::vec3{-1, 0, -2}
-            ));
+            _universalPhongEffect->setLight(
+                currentLightTransform,
+                currentLight
+            );
 
             _universalPhongEffect->setSolidColor(glm::vec3{});
             _universalPhongEffect->setEmissionColor({});

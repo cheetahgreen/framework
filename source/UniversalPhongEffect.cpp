@@ -8,14 +8,15 @@ namespace fw
 UniversalPhongEffect::UniversalPhongEffect():
     _diffuseMapColor{0.0, 0.0, 0.0, 0.0},
     _solidColor{1.0, 0.0, 0.0, 1.0},
-    _lightDirection{0.0, 1.0, 0.0},
     _diffuseMap{nullptr}
 {
     createShaders();
 
     _textureLocation = _shaderProgram->getUniformLoc("AlbedoMapSampler");
     _normalMapLoc = _shaderProgram->getUniformLoc("NormalMapSampler");
+    _lightColorLocation = _shaderProgram->getUniformLoc("LightColor");
     _lightDirectionLocation = _shaderProgram->getUniformLoc("LightDirection");
+    _lightPositionLocation = _shaderProgram->getUniformLoc("LightPosition");
     _emissionColorLocation = _shaderProgram->getUniformLoc("EmissionColor");
     _solidColorLocation = _shaderProgram->getUniformLoc("SolidColor");
     _diffuseColorLocation = _shaderProgram->getUniformLoc("DiffuseMapColor");
@@ -47,19 +48,31 @@ void UniversalPhongEffect::begin()
         glUniform1i(_normalMapLoc, 1);
     }
 
-    glUniform3fv(_lightDirectionLocation, 1, glm::value_ptr(_lightDirection));
     glUniform3fv(_emissionColorLocation, 1, glm::value_ptr(_emissionColor));
     glUniform4fv(_solidColorLocation, 1, glm::value_ptr(_solidColor));
     glUniform4fv(_diffuseColorLocation, 1, glm::value_ptr(_diffuseMapColor));
+    updateLightUniforms();
+
+    _shaderActive = true;
 }
 
 void UniversalPhongEffect::end()
 {
+    _shaderActive = false;
 }
 
-void UniversalPhongEffect::setLightDirection(glm::vec3 lightDirection)
+void UniversalPhongEffect::setLight(
+    const fw::Transform& transform,
+    const fw::Light& light
+)
 {
-    _lightDirection = lightDirection;
+    _lightTransform = transform;
+    _light = light;
+
+    if (_shaderActive)
+    {
+        updateLightUniforms();
+    }
 }
 
 void UniversalPhongEffect::setMaterial(const fw::Material& material)
@@ -100,6 +113,19 @@ void UniversalPhongEffect::setSolidColor(glm::vec3 color)
 void UniversalPhongEffect::setSolidColor(glm::vec4 color)
 {
     _solidColor = color;
+}
+
+void UniversalPhongEffect::updateLightUniforms()
+{
+    _shaderProgram->setUniform(
+        _lightColorLocation,
+        _light.getColor()
+    );
+
+    _shaderProgram->setUniform(
+        _lightPositionLocation,
+        _lightTransform.getPosition()
+    );
 }
 
 void UniversalPhongEffect::createShaders()

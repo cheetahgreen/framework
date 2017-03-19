@@ -76,6 +76,21 @@ void Application::onCreate()
 
     createCamera();
     createTestEntity();
+
+    auto lightEntity = _entities.create();
+
+    lightEntity.assign<fw::EntityInfo>("Default light");
+
+    lightEntity.assign<fw::Transform>(glm::translate(
+        glm::mat4{},
+        glm::vec3{3.0f, 3.0f, 0.0f}
+    ));
+
+    lightEntity.assign<fw::Light>(fw::Light{
+        fw::LightType::Point,
+        glm::vec3{1.0f, 1.0f, 1.0f},
+        100.0f
+    });
 }
 
 void Application::createCamera()
