@@ -36,7 +36,7 @@ void LightEditor::showEmbeddedFor(Light& light)
     auto lightType = light.getType();
 
     auto color = light.getColor();
-    ImGui::DragFloat3("Color", glm::value_ptr(color), 0.01f, 0.0f, 1.0f);
+    ImGui::DragFloat3("Color", glm::value_ptr(color), 0.01f, 0.0f, 100.0f);
     light.setColor(color);
 
     if (lightType != LightType::Directional)
