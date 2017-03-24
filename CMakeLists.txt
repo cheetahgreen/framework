@@ -79,7 +79,6 @@ set(FRAMEWORK_SOURCE_FILES
     source/ImGuiApplication.cpp
     source/ImGuiBinding.cpp
     source/ImGuiExtensions.cpp
-    source/Material.cpp
     source/OpenGLApplication.cpp
     source/OrbitingCamera.cpp
     source/PolygonalLine.cpp
@@ -117,6 +116,7 @@ set(FRAMEWORK_SOURCE_FILES
 )
 
 set(ENGINE_SOURCE_FILES
+    source/engine/editor/MaterialEditor.cpp
     source/engine/editor/SceneInspector.cpp
     source/engine/rendering/ForwardRenderingSystem.cpp
     source/engine/scripts/ScriptExecutionSystem.cpp

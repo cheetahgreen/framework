@@ -17,6 +17,8 @@ public:
         ScriptExecutionContext& context
     );
 
+    fw::FirstPersonCameraController& getController() { return _controller; }
+
 private:
     fw::FirstPersonCameraController _controller;
 };

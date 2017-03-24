@@ -136,8 +136,8 @@ void StaticModelFactory::processSceneMesh(
         LOG(INFO) << "Texture requested: " << str.C_Str() << ". Changed to: "
             << finalTexturePath;
 
-        material->setAlbedoColor({1.0f, 1.0f, 1.0f, 1.0f});
-        material->setAlbedoMap(_textureManager->loadTexture(finalTexturePath));
+        material->AlbedoColor = {1.0f, 1.0f, 1.0f, 1.0f};
+        material->AlbedoMap = _textureManager->loadTexture(finalTexturePath);
     }
 
     if (loadedMaterial->GetTextureCount(aiTextureType_HEIGHT) > 0)
@@ -158,7 +158,7 @@ void StaticModelFactory::processSceneMesh(
         LOG(INFO) << "Texture requested: " << str.C_Str() << ". Changed to: "
             << finalTexturePath;
 
-        material->setNormalMap(_textureManager->loadTexture(finalTexturePath));
+        material->NormalMap = _textureManager->loadTexture(finalTexturePath);
     }
 
     auto gpuMesh = std::make_shared<fw::Mesh<fw::StandardVertex3D>>(

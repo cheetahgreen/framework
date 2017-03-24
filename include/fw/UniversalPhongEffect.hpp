@@ -4,11 +4,10 @@
 #include "glm/glm.hpp"
 
 #include "fw/Effect.hpp"
-#include "fw/Material.hpp"
 #include "fw/Texture.hpp"
-
 #include "fw/components/Transform.hpp"
 #include "fw/rendering/Light.hpp"
+#include "fw/rendering/Material.hpp"
 
 namespace fw
 {
@@ -48,6 +47,9 @@ private:
 
     GLint _textureLocation;
     GLint _normalMapLoc;
+    GLint _metalnessMapLoc;
+    GLint _roughnessMapLoc;
+
     GLint _lightColorLocation;
     GLint _lightDirectionLocation;
     GLint _lightPositionLocation;
@@ -59,6 +61,8 @@ private:
 
     std::shared_ptr<fw::Texture> _diffuseMap;
     std::shared_ptr<fw::Texture> _normalMap;
+    std::shared_ptr<fw::Texture> _metalnessMap;
+    std::shared_ptr<fw::Texture> _roughnessMap;
 
     fw::Transform _lightTransform;
     fw::Light _light;

@@ -76,26 +76,13 @@ void Application::onCreate()
 
     createCamera();
     createTestEntity();
-
-    auto lightEntity = _entities.create();
-
-    lightEntity.assign<fw::EntityInfo>("Default light");
-
-    lightEntity.assign<fw::Transform>(glm::translate(
-        glm::mat4{},
-        glm::vec3{3.0f, 3.0f, 0.0f}
-    ));
-
-    lightEntity.assign<fw::Light>(fw::Light{
-        fw::LightType::Point,
-        glm::vec3{1.0f, 1.0f, 1.0f},
-        100.0f
-    });
+    createLight();
 }
 
 void Application::createCamera()
 {
     auto cameraScript = std::make_shared<ee::FirstPersonCameraScript>();
+    cameraScript->getController().setPosition({0.2f, 0.14f, 0.65f});
 
     _cameraEntity = _entities.create();
     _cameraEntity.assign<fw::EntityInfo>("Default camera");
@@ -121,6 +108,49 @@ void Application::createTestEntity()
     _testEntity.assign_from_copy<StaticModelHandle>(_staticModel);
     _testEntity.assign_from_copy<fw::Transform>(fw::Transform{
         glm::translate({}, glm::vec3{0.0f, 0.0f, 0.0f})
+    });
+
+    fw::Material material;
+
+    material.AlbedoMap = _textureManager->loadTexture(
+        getApplicationResourcesPath(
+            "models/Cerberus/Textures/Cerberus_A.png"
+        )
+    );
+
+    material.NormalMap = _textureManager->loadTexture(
+        getApplicationResourcesPath(
+            "models/Cerberus/Textures/Cerberus_N.png"
+        )
+    );
+
+    material.MetalnessMap = _textureManager->loadTexture(
+        getApplicationResourcesPath(
+            "models/Cerberus/Textures/Cerberus_M.png"
+        )
+    );
+
+    material.RoughnessMap = _textureManager->loadTexture(
+        getApplicationResourcesPath(
+            "models/Cerberus/Textures/Cerberus_R.png"
+        )
+    );
+
+    _testEntity.assign_from_copy<fw::Material>(material);
+}
+
+void Application::createLight()
+{
+    auto lightEntity = _entities.create();
+    lightEntity.assign<fw::EntityInfo>("Default light");
+    lightEntity.assign<fw::Transform>(glm::translate(
+        glm::mat4{},
+        glm::vec3{1.25f, 1.0f, 0.0f}
+    ));
+    lightEntity.assign<fw::Light>(fw::Light{
+        fw::LightType::Point,
+        glm::vec3{1.0f, 1.0f, 1.0f},
+        100.0f
     });
 }
 

@@ -6,7 +6,7 @@ namespace fw
 {
 
 FirstPersonCameraController::FirstPersonCameraController():
-    _position{0.0f, 0.0f, 5.0f},
+    _position{0.0f, 0.0f, 0.0f},
     _orientation{}
 {
 }

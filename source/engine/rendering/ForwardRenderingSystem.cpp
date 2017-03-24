@@ -17,7 +17,7 @@ using StaticModelHandle = std::shared_ptr<fw::StaticModel>;
 ForwardRenderingSystem::ForwardRenderingSystem()
 {
     _universalPhongEffect = std::make_shared<fw::UniversalPhongEffect>();
-    _box = fw::createBox({0.1f, 0.1f, 0.1f});
+    _box = fw::createBox({0.01f, 0.01f, 0.01f});
 }
 
 ForwardRenderingSystem::~ForwardRenderingSystem()
@@ -67,6 +67,7 @@ void ForwardRenderingSystem::update(
     for (auto entity:
             entities.entities_with_components(transformation, staticModel))
     {
+        auto material = entity.component<fw::Material>();
         for (const auto& chunk: (*staticModel)->getGeometryChunks())
         {
             _universalPhongEffect->setLight(
@@ -74,20 +75,7 @@ void ForwardRenderingSystem::update(
                 currentLight
             );
 
-            _universalPhongEffect->setSolidColor(glm::vec3{});
-            _universalPhongEffect->setEmissionColor({});
-
-            _universalPhongEffect->setDiffuseTextureColor(
-                chunk.getMaterial()->getAlbedoColor()
-            );
-
-            _universalPhongEffect->setDiffuseTexture(
-                chunk.getMaterial()->getAlbedoMap()
-            );
-
-            _universalPhongEffect->setNormalMap(
-                chunk.getMaterial()->getNormalMap()
-            );
+            _universalPhongEffect->setMaterial(*material);
 
             _universalPhongEffect->begin();
             _universalPhongEffect->setProjectionMatrix(projectionMatrix);

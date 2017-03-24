@@ -14,6 +14,8 @@ UniversalPhongEffect::UniversalPhongEffect():
 
     _textureLocation = _shaderProgram->getUniformLoc("AlbedoMapSampler");
     _normalMapLoc = _shaderProgram->getUniformLoc("NormalMapSampler");
+    _metalnessMapLoc = _shaderProgram->getUniformLoc("MetalnessMapSampler");
+    _roughnessMapLoc = _shaderProgram->getUniformLoc("RoughnessMapSampler");
     _lightColorLocation = _shaderProgram->getUniformLoc("LightColor");
     _lightDirectionLocation = _shaderProgram->getUniformLoc("LightDirection");
     _lightPositionLocation = _shaderProgram->getUniformLoc("LightPosition");
@@ -48,6 +50,20 @@ void UniversalPhongEffect::begin()
         glUniform1i(_normalMapLoc, 1);
     }
 
+    if (_metalnessMap != nullptr)
+    {
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, _metalnessMap->getTextureId());
+        glUniform1i(_metalnessMapLoc, 2);
+    }
+
+    if (_roughnessMap != nullptr)
+    {
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, _roughnessMap->getTextureId());
+        glUniform1i(_roughnessMapLoc, 3);
+    }
+
     glUniform3fv(_emissionColorLocation, 1, glm::value_ptr(_emissionColor));
     glUniform4fv(_solidColorLocation, 1, glm::value_ptr(_solidColor));
     glUniform4fv(_diffuseColorLocation, 1, glm::value_ptr(_diffuseMapColor));
@@ -77,8 +93,12 @@ void UniversalPhongEffect::setLight(
 
 void UniversalPhongEffect::setMaterial(const fw::Material& material)
 {
-    setEmissionColor(material.getEmissionColor());
-    setSolidColor(material.getAlbedoColor());
+    setEmissionColor(material.EmissionColor);
+    setSolidColor(material.AlbedoColor);
+    setDiffuseTexture(material.AlbedoMap);
+    setNormalMap(material.NormalMap);
+    _metalnessMap = material.MetalnessMap;
+    _roughnessMap = material.RoughnessMap;
 }
 
 void UniversalPhongEffect::setDiffuseTextureColor(glm::vec4 diffuseMultipler)

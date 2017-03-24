@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-#include "fw/Material.hpp"
+#include "fw/rendering/Material.hpp"
 #include "fw/Mesh.hpp"
 #include "fw/OpenGLHeaders.hpp"
 

@@ -33,6 +33,7 @@ protected:
     virtual void onCreate() override;
     void createCamera();
     void createTestEntity();
+    void createLight();
 
     virtual void onDestroy() override;
     virtual void onUpdate(
@@ -45,7 +46,6 @@ protected:
     virtual bool onScroll(double xoffset, double yoffset) override;
     virtual bool onKey(int key, int scancode, int action, int mods) override;
     virtual bool onResize() override;
-
 
 private:
     entityx::EventManager _events;

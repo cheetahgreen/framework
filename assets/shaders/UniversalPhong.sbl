@@ -53,6 +53,8 @@ shader "Uniform Phong Shader"
     <<<
         uniform sampler2D AlbedoMapSampler;
         uniform sampler2D NormalMapSampler;
+        uniform sampler2D MetalnessMapSampler;
+        uniform sampler2D RoughnessMapSampler;
 
         uniform vec3 EmissionColor;
         uniform vec4 SolidColor;
@@ -115,6 +117,11 @@ shader "Uniform Phong Shader"
 
         vec4 albedoMapSample = texture(AlbedoMapSampler, vsOut.TexCoord);
         vec4 normalMapSample = texture(NormalMapSampler, vsOut.TexCoord);
+        vec4 metalnessMapSample = texture(MetalnessMapSampler, vsOut.TexCoord);
+        vec4 roughnessMapSample = texture(RoughnessMapSampler, vsOut.TexCoord);
+
+        float metalness = metalnessMapSample.r;
+        float roughness = roughnessMapSample.r;
 
         vec3 surfaceNormalTS = normalMapSample.rgb * 2.0 - 1.0;
         tangent = normalize(tangent - dot(tangent, normal) * normal);
@@ -131,17 +138,17 @@ shader "Uniform Phong Shader"
 
         vec3 radiance = LightColor;
 
-        float metalness = 0.0;
-        vec3 F0 = mix(vec3(0.04), albedoMapFinal, metalness);
+        vec3 F0 = mix(vec3(0.04), albedo, metalness);
 
-        float D = D_GGX_TR(surfaceNormal, halfwayDir, 0.3);
-        float G = geometrySmith(surfaceNormal, viewDir, lightDir, 0.2);
-        vec3 F = fresnelSchlick(NdotV, vec3(0.04));
+        float D = D_GGX_TR(surfaceNormal, halfwayDir, roughness);
+        float G = geometrySmith(surfaceNormal, viewDir, lightDir, roughness);
+        vec3 F = fresnelSchlick(NdotV, F0);
 
         vec3 BRDF = (D * F * G) / (4.0 * NdotV * NdotL + 0.001);
 
         vec3 kS = F;
         vec3 kD = vec3(1.0) - kS;
+        kD *= 1.0 - metalness;
 
         const float PI = 3.14159265359;
         vec3 Lo = (kD * albedo / PI + BRDF) * radiance * NdotL;
