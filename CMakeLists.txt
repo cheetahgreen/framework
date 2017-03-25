@@ -41,6 +41,8 @@ else()
     add_subdirectory(${DEPENDENCIES_DIR}assimp)
 endif()
 
+find_package(Boost 1.63.0 REQUIRED COMPONENTS filesystem)
+
 add_subdirectory(${DEPENDENCIES_DIR}entityx)
 
 enable_testing()
@@ -93,8 +95,9 @@ set(FRAMEWORK_SOURCE_FILES
     source/cameras/FirstPersonCameraController.cpp
     source/cameras/ProjectionCamera.cpp
     source/common/Filesystem.cpp
-    source/editor/TextureManagerInspector.cpp
     source/editor/LightEditor.cpp
+    source/editor/MaterialEditor.cpp
+    source/editor/TextureManagerInspector.cpp
     source/effects/Standard2DEffect.cpp
     source/inputs/GenericKeyboardInput.cpp
     source/inputs/GenericMouseInput.cpp
@@ -116,7 +119,6 @@ set(FRAMEWORK_SOURCE_FILES
 )
 
 set(ENGINE_SOURCE_FILES
-    source/engine/editor/MaterialEditor.cpp
     source/engine/editor/SceneInspector.cpp
     source/engine/rendering/ForwardRenderingSystem.cpp
     source/engine/scripts/ScriptExecutionSystem.cpp
@@ -165,6 +167,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     glfw
     shabui
     entityx
+    Boost::boost
+    Boost::filesystem
 )
 
 target_link_libraries(${PROJECT_NAME_TEST}

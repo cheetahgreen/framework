@@ -51,13 +51,19 @@ void Application::onCreate()
     _textureManager = std::make_shared<fw::TextureManager>();
     _textureManager->setResourcesDirectory(fw::getFrameworkResourcePath(""));
 
-    _textureManagerInspector = std::make_shared<fw::TextureManagerInspector>(
+    auto texMgrInspection =
         std::static_pointer_cast<fw::ITextureManagerWithInspection>(
             _textureManager
-        )
+        );
+
+    _textureManagerInspector = std::make_shared<fw::TextureManagerInspector>(
+        texMgrInspection
     );
 
-    _sceneInspector = std::make_shared<ee::SceneInspector>(&_entities);
+    _sceneInspector = std::make_shared<ee::SceneInspector>(
+        texMgrInspection,
+        &_entities
+    );
 
     _staticModelFactory = std::make_shared<fw::StaticModelFactory>(
         std::static_pointer_cast<fw::ITextureManager>(_textureManager)

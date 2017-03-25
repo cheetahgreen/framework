@@ -9,6 +9,7 @@ namespace ImGui
     bool InputText(
         const std::string& label,
         std::string& value,
+        int maxCharacters = 255,
         ImGuiInputTextFlags flags = 0
     );
 

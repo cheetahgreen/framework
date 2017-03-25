@@ -17,12 +17,13 @@ static bool constCharStringVectorGetter(
 bool ImGui::InputText(
     const std::string& label,
     std::string& value,
+    int maxCharacters,
     ImGuiInputTextFlags flags
 )
 {
-   std::vector<char> data;
-   data.resize(2 + value.length() * 2);
+   std::vector<char> data(maxCharacters);
    std::copy(std::begin(value), std::end(value), std::begin(data));
+
    bool returnFlag = ImGui::InputText(
        label.c_str(),
        data.data(),

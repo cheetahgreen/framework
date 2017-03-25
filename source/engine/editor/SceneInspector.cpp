@@ -15,8 +15,13 @@
 namespace ee
 {
 
-SceneInspector::SceneInspector(entityx::EntityManager* entityManager):
-    _entityManager{entityManager}
+SceneInspector::SceneInspector(
+    std::shared_ptr<fw::ITextureManagerWithInspection> textureManager,
+    entityx::EntityManager* entityManager
+):
+    _entityManager{entityManager},
+    _textureManager{textureManager},
+    _materialEditor{_textureManager}
 {
 }
 
@@ -124,17 +129,11 @@ void SceneInspector::showComponentsList()
     // todo: this should be more abstract, it is the way it is for simplicity
     if (!_selectedEntity.valid()) { return; }
     ImGui::BeginChild("SceneInspectorRightPane");
+
     showEntityInfoComponent();
     showTransformComponent();
-
-    if (_selectedEntity.has_component<fw::Light>())
-    {
-        auto light = _selectedEntity.component<fw::Light>();
-        if (ImGui::CollapsingHeader("Light"))
-        {
-            _lightEditor.showEmbeddedFor(*light);
-        }
-    }
+    showLightComponent();
+    showMaterialComponent();
 
     ImGui::EndChild();
 }
@@ -189,6 +188,30 @@ void SceneInspector::showTransformComponent()
     auto newScalingMtx = glm::scale({}, scale);
 
     transform->setTransform(newTranslationMtx * newScalingMtx);
+}
+
+void SceneInspector::showLightComponent()
+{
+    if (_selectedEntity.has_component<fw::Light>())
+    {
+        auto light = _selectedEntity.component<fw::Light>();
+        if (ImGui::CollapsingHeader("Light"))
+        {
+            _lightEditor.showEmbeddedFor(*light);
+        }
+    }
+}
+
+void SceneInspector::showMaterialComponent()
+{
+    if (_selectedEntity.has_component<fw::Material>())
+    {
+        auto material = _selectedEntity.component<fw::Material>();
+        if (ImGui::CollapsingHeader("Material"))
+        {
+            _materialEditor.showEmbeddedFor(*material);
+        }
+    }
 }
 
 void SceneInspector::createEmptyEntity()
