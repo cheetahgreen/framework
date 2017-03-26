@@ -1,7 +1,8 @@
-#include "fw/editor/LightEditor.hpp"
+#include "fwui/LightEditor.hpp"
+
+#include "fwui/ImGuiExtensions.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "imgui.h"
-#include "fw/ImGuiExtensions.hpp"
 
 namespace fw
 {

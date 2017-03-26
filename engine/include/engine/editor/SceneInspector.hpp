@@ -1,7 +1,7 @@
 #pragma once
 #include "entityx/entityx.h"
-#include "fw/editor/LightEditor.hpp"
-#include "fw/editor/MaterialEditor.hpp"
+#include "fwui/LightEditor.hpp"
+#include "fwui/MaterialEditor.hpp"
 #include "fw/resources/TextureManager.hpp"
 
 namespace ee

@@ -1,8 +1,8 @@
-#include "ImGuiApplication.hpp"
+#include "fwui/ImGuiApplication.hpp"
 
 #include "imgui.h"
 #include "ImGuizmo.h"
-#include "ImGuiBinding.hpp"
+#include "fwui/ImGuiBinding.hpp"
 
 namespace fw
 {

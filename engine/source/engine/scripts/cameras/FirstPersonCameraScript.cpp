@@ -4,7 +4,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "fw/components/Transform.hpp"
 
-#include "OpenGLHeaders.hpp"
+#include "fw/OpenGLHeaders.hpp"
 
 #include "engine/common/Exceptions.hpp"
 

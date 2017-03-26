@@ -1,12 +1,10 @@
-#include "fw/editor/TextureManagerInspector.hpp"
+#include "fwui/TextureManagerInspector.hpp"
 
 #include <string>
 #include <vector>
-
-#include "fw/ImGuiExtensions.hpp"
-
 #include "imgui.h"
 #include "easylogging++.h"
+#include "fwui/ImGuiExtensions.hpp"
 
 namespace fw
 {

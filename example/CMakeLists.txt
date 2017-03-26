@@ -26,10 +26,10 @@ add_library(${PROJECT_NAME_LIB}
 )
 
 target_link_libraries(${PROJECT_NAME_LIB}
-    PUBLIC framework
+    PUBLIC engine
 )
 
-add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE
+add_executable(${PROJECT_NAME} WIN32
     source/Main.cpp
     ${PROJECT_ICON}
 )

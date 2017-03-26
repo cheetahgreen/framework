@@ -10,7 +10,7 @@
 #include "fw/components/EntityInfo.hpp"
 #include "fw/components/Transform.hpp"
 #include "fw/rendering/Light.hpp"
-#include "fw/ImGuiExtensions.hpp"
+#include "fwui/ImGuiExtensions.hpp"
 
 namespace ee
 {

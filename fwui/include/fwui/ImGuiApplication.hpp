@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OpenGLApplication.hpp"
+#include "fw/OpenGLApplication.hpp"
 
 namespace fw
 {
