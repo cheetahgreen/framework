@@ -13,6 +13,7 @@
 #include "fw/models/StaticModelFactory.hpp"
 #include "fw/resources/TextureManager.hpp"
 #include "fw/editor/TextureManagerInspector.hpp"
+#include "fw/performance/PerformanceMonitor.hpp"
 
 #include "engine/editor/SceneInspector.hpp"
 #include "engine/info/WindowProperties.hpp"
@@ -73,6 +74,8 @@ private:
     std::shared_ptr<ee::WindowProperties> _windowProperties;
     std::shared_ptr<ee::ForwardRenderingSystem> _renderingSystem;
     std::shared_ptr<ee::ScriptExecutionSystem> _scriptExecutionSystem;
+
+    fw::PerformanceMonitor _perfMon;
 
     glm::dvec2 _cameraRotationSensitivity;
 };

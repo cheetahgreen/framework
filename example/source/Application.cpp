@@ -170,6 +170,7 @@ void Application::onUpdate(
 )
 {
     ImGuiApplication::onUpdate(deltaTime);
+    _perfMon.startFrame();
 
     if (ImGui::BeginMainMenuBar())
     {
@@ -185,6 +186,8 @@ void Application::onUpdate(
             ImGui::MenuItem("ImGui Test Window", nullptr, &_showImGuiDemo);
             ImGui::EndMenu();
         }
+
+        ImGui::Text("FPS: %d", _perfMon.getLastFPS());
 
         ImGui::EndMainMenuBar();
     }
