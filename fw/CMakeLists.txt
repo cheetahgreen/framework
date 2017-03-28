@@ -103,6 +103,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/numerical/ParametricSurfaceMeshBuilder.cpp
     source/numerical/SurfaceIntersectionNewtonIterable.cpp
     source/performance/PerformanceMonitor.cpp
+    source/rendering/Framebuffer.cpp
     source/resources/TextureManager.cpp
 )
 

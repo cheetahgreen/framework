@@ -20,6 +20,9 @@ public:
     void destroy();
     void run();
 
+    const glm::ivec2& getWindowSize() const;
+    const glm::ivec2& getFramebufferSize() const;
+
 protected:
     virtual void onCreate();
     virtual void onDestroy();
@@ -40,9 +43,6 @@ protected:
     virtual bool onFramebufferResize(glm::ivec2 framebufferSize);
 
     void setWindowSize(const glm::ivec2& size);
-    const glm::ivec2& getWindowSize() const;
-
-    const glm::ivec2& getFramebufferSize() const;
 
     void setWindowTitle(const std::string& title);
     const std::string& getTitle() const;

@@ -1,0 +1,34 @@
+version 1;
+version glsl 330 core;
+
+shader "Basic Fullscreen Quad"
+{
+    shared
+    <<<
+        uniform sampler2D screenTexture;
+    >>>;
+
+    struct VertexData
+    {
+        vec2 position {location=0},
+        vec2 texCoord {location=1}
+    };
+
+    struct VertexOutput
+    {
+        vec2 texCoord
+    };
+
+    func vertex(VertexData vertex): VertexOutput result
+    <<<
+        gl_Position = vec4(vertex.position.x, vertex.position.y, 0.0, 1.0);
+        result.texCoord = vertex.texCoord;
+    >>>;
+
+    func fragment(VertexData vsOut): vec4 result
+    <<<
+        result = texture(screenTexture, vsOut.texCoord);
+    >>>;
+};
+
+

@@ -16,7 +16,7 @@ public:
     ProjectionCamera();
     ~ProjectionCamera();
 
-    glm::mat4 getProjectionMatrix() const;
+    glm::mat4 getProjectionMatrix(float aspectRatio) const;
 
     bool isActive() const { return _isActive; }
     void setActive(bool isActive) { _isActive = isActive; }
@@ -26,9 +26,6 @@ public:
     {
         _projection = projection;
     }
-
-    float getAspectRatio() const { return _aspectRatio; }
-    void setAspectRatio(float aspectRatio) { _aspectRatio = aspectRatio; }
 
     float getFieldOfView() const { return _fieldOfViewRad; }
     void setFieldOfView(float fieldOfView) { _fieldOfViewRad = fieldOfView; }
@@ -42,7 +39,6 @@ public:
 private:
     bool _isActive;
     ProjectionCameraType _projection;
-    float _aspectRatio;
     float _fieldOfViewRad;
     float _nearClippingPlane;
     float _farClippingPlane;

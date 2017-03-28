@@ -61,8 +61,8 @@ void TextureManagerInspector::show()
         ImGui::Image(
             reinterpret_cast<void*>(_selectedTexture->getTextureId()),
             ImVec2(scale*textureSize.x, scale*textureSize.y),
-            ImVec2(0.0f, 0.0f),
-            ImVec2(1.0f, 1.0f),
+            ImVec2(0.0f, 1.0f),
+            ImVec2(1.0f, 0.0f),
             ImColor(255, 255, 255, 255),
             ImColor(255, 255, 255, 255)
         );

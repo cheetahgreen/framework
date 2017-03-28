@@ -99,7 +99,7 @@ void StaticModelFactory::processSceneMesh(
         {
             vertex.texCoords = {
                 mesh->mTextureCoords[0][i].x,
-                mesh->mTextureCoords[0][i].y
+                1.0f - mesh->mTextureCoords[0][i].y
             };
         }
 

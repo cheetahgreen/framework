@@ -1,5 +1,7 @@
 #include "engine/rendering/ForwardRenderingSystem.hpp"
 
+#include <stdexcept>
+
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -8,6 +10,8 @@
 #include "fw/components/Transform.hpp"
 #include "fw/models/StaticModel.hpp"
 #include "fw/rendering/Light.hpp"
+
+#include "engine/internal/Logging.hpp"
 
 namespace ee
 {
@@ -30,18 +34,34 @@ void ForwardRenderingSystem::update(
     entityx::TimeDelta
 )
 {
+    if (!_framebuffer)
+    {
+        LOG(ERROR) << "Framebuffer is not set.";
+        throw std::logic_error("Framebuffer is not set.");
+    }
+
+    _framebuffer->use();
+    auto framebufferSize = _framebuffer->getSize();
+    auto aspectRatio =
+        static_cast<double>(framebufferSize.x) / framebufferSize.y;
+
+    glViewport(0, 0, framebufferSize.x, framebufferSize.y);
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+
     glm::mat4 viewMatrix{};
     glm::mat4 projectionMatrix{};
 
     entities.each<fw::Transform, fw::ProjectionCamera>(
-        [&viewMatrix, &projectionMatrix](
+        [&viewMatrix, &projectionMatrix, aspectRatio](
             entityx::Entity entity,
             fw::Transform& transform,
             fw::ProjectionCamera& camera
         )
         {
             viewMatrix = glm::inverse(transform.getTransform());
-            projectionMatrix = camera.getProjectionMatrix();
+            projectionMatrix = camera.getProjectionMatrix(aspectRatio);
         }
     );
 

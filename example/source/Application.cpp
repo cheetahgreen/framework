@@ -45,6 +45,13 @@ void Application::onCreate()
     _windowProperties->setWindowSize(getWindowSize());
     _windowProperties->setFramebufferSize(getFramebufferSize());
 
+    auto defaultFramebuffer = std::make_shared<fw::DefaultFramebuffer>(*this);
+    _defaultFramebuffer = std::static_pointer_cast<fw::IFramebuffer>(
+        defaultFramebuffer
+    );
+
+    _framebuffer = std::make_shared<fw::Framebuffer>(glm::ivec2{1024, 768});
+
     _keyboardInput = std::make_shared<fw::GenericKeyboardInput>();
     _mouseInput = std::make_shared<fw::GenericMouseInput>();
 
@@ -203,12 +210,94 @@ void Application::onUpdate(
 
 void Application::onRender()
 {
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
+    _renderingSystem->setFramebuffer(_framebuffer);
 
     _systems.update<ee::ScriptExecutionSystem>(entityx::TimeDelta{});
     _systems.update<ee::ForwardRenderingSystem>(entityx::TimeDelta{});
+
+    if (ImGui::Begin(
+        "Render window",
+        nullptr,
+        ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_MenuBar
+    ))
+    {
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::BeginMenu("View"))
+            {
+                if (ImGui::BeginMenu("Size"))
+                {
+                    ImGui::MenuItem(
+                        "Fit to image without scaling",
+                        nullptr,
+                        false,
+                        false
+                    );
+
+                    ImGui::EndMenu();
+                }
+
+                ImGui::EndMenu();
+            }
+
+            ImGui::EndMenuBar();
+        }
+
+        auto maxSize = ImGui::GetContentRegionAvail();
+        auto rtSize = _framebuffer->getSize();
+        glm::vec2 finalSize{rtSize.x, rtSize.y};
+
+        if (maxSize.x < finalSize.x)
+        {
+            auto scaleFactor = maxSize.x / finalSize.x;
+            finalSize.x = maxSize.x;
+            finalSize.y *= scaleFactor;
+        }
+
+        if (maxSize.y < finalSize.y)
+        {
+            auto scaleFactor = maxSize.y / finalSize.y;
+            finalSize.y = maxSize.y;
+            finalSize.x *= scaleFactor;
+        }
+
+        glm::vec2 totalMargin{
+            maxSize.x - finalSize.x,
+            maxSize.y - finalSize.y
+        };
+
+        auto currentCursorPos = ImGui::GetCursorPos();
+        ImGui::SetCursorPos({
+            currentCursorPos.x + totalMargin.x / 2,
+            currentCursorPos.y + totalMargin.y / 2
+        });
+
+        ImGui::ImageButton(
+            reinterpret_cast<void*>(_framebuffer->getColorTexture()),
+            ImVec2{finalSize.x, finalSize.y},
+            ImVec2{0.0f, 1.0f},
+            ImVec2{1.0f, 0.0f},
+            0
+        );
+
+        if (ImGui::IsItemActive())
+        {
+            ImGui::CaptureKeyboardFromApp(false);
+        }
+
+        if (ImGui::IsItemHovered())
+        {
+            ImGui::CaptureMouseFromApp(false);
+        }
+    }
+    ImGui::End();
+
+    _defaultFramebuffer->use();
+    auto windowFramebufferSize = _defaultFramebuffer->getSize();
+    glViewport(0, 0, windowFramebufferSize.x, windowFramebufferSize.y);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
 
     ImGuiApplication::onRender();
 

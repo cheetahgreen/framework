@@ -9,6 +9,8 @@ namespace fw
 
 GLuint loadTextureFromFile(const string &filename)
 {
+    stbi_set_flip_vertically_on_load(true);
+
     int width, height, components;
     unsigned char *image = stbi_load(
         filename.c_str(), &width, &height, &components, 0

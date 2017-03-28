@@ -73,11 +73,6 @@ void FirstPersonCameraScript::update(
     auto invView = glm::inverse(_controller.getViewMatrix());
     transformComponent->setTransform(invView);
 
-    auto framebufferSize = context.getWindowProperties().getFramebufferSize();
-    float aspectRatio =
-        static_cast<float>(framebufferSize.x) / framebufferSize.y;
-    _controller.getProjectionCamera().setAspectRatio(aspectRatio);
-
     *projCameraComponent = _controller.getProjectionCamera();
 }
 

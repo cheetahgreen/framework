@@ -74,6 +74,9 @@ private:
     std::shared_ptr<ee::ForwardRenderingSystem> _renderingSystem;
     std::shared_ptr<ee::ScriptExecutionSystem> _scriptExecutionSystem;
 
+    std::shared_ptr<fw::IFramebuffer> _defaultFramebuffer;
+    std::shared_ptr<fw::Framebuffer> _framebuffer;
+
     fw::PerformanceMonitor _perfMon;
 
     glm::dvec2 _cameraRotationSensitivity;

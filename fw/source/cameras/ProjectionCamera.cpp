@@ -9,7 +9,6 @@ namespace fw
 ProjectionCamera::ProjectionCamera():
     _isActive{false},
     _projection{ProjectionCameraType::Perspective},
-    _aspectRatio{1.0},
     _fieldOfViewRad{fw::pif()/4.0f},
     _nearClippingPlane{0.2f},
     _farClippingPlane{100.0f}
@@ -20,7 +19,7 @@ ProjectionCamera::~ProjectionCamera()
 {
 }
 
-glm::mat4 ProjectionCamera::getProjectionMatrix() const
+glm::mat4 ProjectionCamera::getProjectionMatrix(float aspectRatio) const
 {
     glm::mat4 projection{};
 
@@ -28,7 +27,7 @@ glm::mat4 ProjectionCamera::getProjectionMatrix() const
     {
         projection = glm::perspective(
             glm::degrees(_fieldOfViewRad),
-            _aspectRatio,
+            aspectRatio,
             _nearClippingPlane,
             _farClippingPlane
         );
