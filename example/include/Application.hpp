@@ -14,6 +14,7 @@
 #include "fw/resources/TextureManager.hpp"
 #include "fwui/ImGuiApplication.hpp"
 #include "fwui/TextureManagerInspector.hpp"
+#include "fwui/VirtualFilesystemInspector.hpp"
 #include "engine/editor/SceneInspector.hpp"
 #include "engine/info/WindowProperties.hpp"
 #include "engine/rendering/ForwardRenderingSystem.hpp"
@@ -80,6 +81,9 @@ private:
     fw::PerformanceMonitor _perfMon;
 
     glm::dvec2 _cameraRotationSensitivity;
+
+    fw::VirtualFilesystem _virtualFilesystem;
+    fwui::VirtualFilesystemInspector _vfsInspector;
 };
 
 }

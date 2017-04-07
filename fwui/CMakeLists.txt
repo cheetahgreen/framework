@@ -4,12 +4,13 @@ project(framework-ui)
 set(FWUI_DEPENDENCIES_DIR ${PROJECT_SOURCE_DIR}/dependencies/)
 
 set(FWUI_SOURCE_FILES
-    source/LightEditor.cpp
-    source/MaterialEditor.cpp
-    source/TextureManagerInspector.cpp
+    source/VirtualFilesystemInspector.cpp
     source/ImGuiApplication.cpp
     source/ImGuiBinding.cpp
     source/ImGuiExtensions.cpp
+    source/LightEditor.cpp
+    source/MaterialEditor.cpp
+    source/TextureManagerInspector.cpp
 )
 
 set(FWUI_DEPENDENCIES_SOURCE_FILES

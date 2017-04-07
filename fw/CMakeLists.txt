@@ -104,6 +104,8 @@ set(FRAMEWORK_SOURCE_FILES
     source/numerical/SurfaceIntersectionNewtonIterable.cpp
     source/performance/PerformanceMonitor.cpp
     source/rendering/Framebuffer.cpp
+    source/resources/VirtualFilesystem.cpp
+    source/resources/DiskFileProvider.cpp
     source/resources/TextureManager.cpp
 )
 

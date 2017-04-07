@@ -29,7 +29,8 @@ Application::Application():
     _enableCameraRotations{false},
     _showTexturesInspector{false},
     _showImGuiDemo{false},
-    _cameraRotationSensitivity{0.2, 0.2}
+    _cameraRotationSensitivity{0.2, 0.2},
+    _vfsInspector{_virtualFilesystem}
 {
 }
 
@@ -90,6 +91,9 @@ void Application::onCreate()
     createCamera();
     createTestEntity();
     createLight();
+
+    _virtualFilesystem.addDirectory(fw::getFrameworkResourcePath(""), "fw");
+    _virtualFilesystem.addDirectory(getApplicationResourcesPath(""), "app");
 }
 
 void Application::createCamera()
@@ -183,8 +187,24 @@ void Application::onUpdate(
     {
         if (ImGui::BeginMenu("Inspectors"))
         {
-            ImGui::MenuItem("Scene", nullptr, &_sceneInspector->getShowFlag());
-            ImGui::MenuItem("Textures", nullptr, &_showTexturesInspector);
+            ImGui::MenuItem(
+                "Content",
+                nullptr,
+                &_vfsInspector.getShowFlag()
+            );
+
+            ImGui::MenuItem(
+                "Scene",
+                nullptr,
+                &_sceneInspector->getShowFlag()
+            );
+
+            ImGui::MenuItem(
+                "Textures",
+                nullptr,
+                &_showTexturesInspector
+            );
+
             ImGui::EndMenu();
         }
 
@@ -201,6 +221,7 @@ void Application::onUpdate(
 
     _textureManagerInspector->show(_showTexturesInspector);
     _sceneInspector->show();
+    _vfsInspector.show();
 
     if (_showImGuiDemo)
     {
