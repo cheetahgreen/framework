@@ -88,6 +88,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/effects/Standard2DEffect.cpp
     source/inputs/GenericKeyboardInput.cpp
     source/inputs/GenericMouseInput.cpp
+    source/models/RenderMesh.cpp
     source/models/StaticModel.cpp
     source/models/StaticModelFactory.cpp
     source/numerical/BsplineBasisEvaluator.cpp

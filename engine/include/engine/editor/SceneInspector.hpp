@@ -2,6 +2,7 @@
 #include "entityx/entityx.h"
 #include "fwui/LightEditor.hpp"
 #include "fwui/MaterialEditor.hpp"
+#include "fwui/editors/RenderMeshEditor.hpp"
 #include "fw/resources/TextureManager.hpp"
 
 namespace ee
@@ -28,6 +29,7 @@ protected:
     void showEntityInfoComponent();
     void showTransformComponent();
     void showLightComponent();
+    void showMeshComponent();
     void showMaterialComponent();
 
     void createEmptyEntity();
@@ -41,6 +43,7 @@ private:
     bool _inspectorEnabled;
 
     fw::LightEditor _lightEditor;
+    fwui::RenderMeshEditor _renderMeshEditor;
     fw::MaterialEditor _materialEditor;
 };
 

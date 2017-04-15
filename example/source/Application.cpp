@@ -51,7 +51,7 @@ void Application::onCreate()
         defaultFramebuffer
     );
 
-    _framebuffer = std::make_shared<fw::Framebuffer>(glm::ivec2{1024, 768});
+    _framebuffer = std::make_shared<fw::Framebuffer>(glm::ivec2{800, 600});
 
     _keyboardInput = std::make_shared<fw::GenericKeyboardInput>();
     _mouseInput = std::make_shared<fw::GenericMouseInput>();
@@ -122,7 +122,7 @@ void Application::createTestEntity()
 
     _testEntity = _entities.create();
     _testEntity.assign<fw::EntityInfo>("Cerberus PBR");
-    _testEntity.assign_from_copy<StaticModelHandle>(_staticModel);
+    _testEntity.assign<fw::RenderMesh>(_staticModel);
     _testEntity.assign_from_copy<fw::Transform>(fw::Transform{
         glm::translate({}, glm::vec3{0.0f, 0.0f, 0.0f})
     });

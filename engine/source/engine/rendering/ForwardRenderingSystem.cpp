@@ -9,6 +9,7 @@
 #include "fw/cameras/ProjectionCamera.hpp"
 #include "fw/components/Transform.hpp"
 #include "fw/models/StaticModel.hpp"
+#include "fw/models/RenderMesh.hpp"
 #include "fw/rendering/Light.hpp"
 
 #include "engine/internal/Logging.hpp"
@@ -82,13 +83,14 @@ void ForwardRenderingSystem::update(
 
     entityx::ComponentHandle<fw::Transform> transformation;
     entityx::ComponentHandle<fw::Light> light;
-    entityx::ComponentHandle<StaticModelHandle> staticModel;
+    entityx::ComponentHandle<fw::RenderMesh> renderMesh;
 
     for (auto entity:
-            entities.entities_with_components(transformation, staticModel))
+            entities.entities_with_components(transformation, renderMesh))
     {
+        auto staticModel = renderMesh->getMesh();
         auto material = entity.component<fw::Material>();
-        for (const auto& chunk: (*staticModel)->getGeometryChunks())
+        for (const auto& chunk: staticModel->getGeometryChunks())
         {
             _universalPhongEffect->setLight(
                 currentLightTransform,

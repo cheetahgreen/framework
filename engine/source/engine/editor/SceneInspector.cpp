@@ -11,6 +11,7 @@
 #include "fw/components/Transform.hpp"
 #include "fw/rendering/Light.hpp"
 #include "fwui/ImGuiExtensions.hpp"
+#include "fw/models/RenderMesh.hpp"
 
 namespace ee
 {
@@ -21,7 +22,8 @@ SceneInspector::SceneInspector(
 ):
     _entityManager{entityManager},
     _textureManager{textureManager},
-    _materialEditor{_textureManager}
+    _materialEditor{_textureManager},
+    _renderMeshEditor{nullptr}
 {
 }
 
@@ -133,6 +135,7 @@ void SceneInspector::showComponentsList()
     showEntityInfoComponent();
     showTransformComponent();
     showLightComponent();
+    showMeshComponent();
     showMaterialComponent();
 
     ImGui::EndChild();
@@ -198,6 +201,18 @@ void SceneInspector::showLightComponent()
         if (ImGui::CollapsingHeader("Light"))
         {
             _lightEditor.showEmbeddedFor(*light);
+        }
+    }
+}
+
+void SceneInspector::showMeshComponent()
+{
+    if (_selectedEntity.has_component<fw::RenderMesh>())
+    {
+        auto renderMesh = _selectedEntity.component<fw::RenderMesh>();
+        if (ImGui::CollapsingHeader("Mesh"))
+        {
+            _renderMeshEditor.showEmbeddedFor(*renderMesh);
         }
     }
 }
