@@ -1,8 +1,13 @@
 #pragma once
 
 #include <map>
+#include <memory>
 #include <vector>
+
+#include "boost/filesystem.hpp"
+
 #include "fw/Texture.hpp"
+#include "fw/resources/VirtualFilesystem.hpp"
 
 namespace fw
 {
@@ -14,7 +19,7 @@ public:
     virtual ~ITextureManager() = default;
 
     virtual std::shared_ptr<Texture> loadTexture(
-        const std::string& filename
+        const boost::filesystem::path& filename
     ) = 0;
 };
 
@@ -33,13 +38,16 @@ class TextureManager:
     public ITextureManagerWithInspection
 {
 public:
-    TextureManager();
+    TextureManager(
+        VirtualFilesystem& vfs
+    );
+
     virtual ~TextureManager();
 
     void setResourcesDirectory(const std::string& resourcesDirectory);
 
     virtual std::shared_ptr<Texture> loadTexture(
-        const std::string& filename
+        const boost::filesystem::path& filename
     );
 
     virtual const std::map<std::string, std::shared_ptr<Texture>>
@@ -54,6 +62,7 @@ protected:
 
 private:
     std::string _resourcesDirectory;
+    VirtualFilesystem& _vfs;
     std::map<std::string, std::shared_ptr<Texture>> _textures;
 };
 

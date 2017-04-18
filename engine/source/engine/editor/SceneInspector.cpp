@@ -17,13 +17,17 @@ namespace ee
 {
 
 SceneInspector::SceneInspector(
+    fw::VirtualFilesystem& vfs,
     std::shared_ptr<fw::ITextureManagerWithInspection> textureManager,
+    std::shared_ptr<fw::StaticModelFactory> staticModelFactory,
     entityx::EntityManager* entityManager
 ):
     _entityManager{entityManager},
+    _vfs{vfs},
     _textureManager{textureManager},
-    _materialEditor{_textureManager},
-    _renderMeshEditor{nullptr}
+    _staticModelFactory{staticModelFactory},
+    _renderMeshEditor{_vfs, _staticModelFactory},
+    _materialEditor{_vfs, _textureManager}
 {
 }
 

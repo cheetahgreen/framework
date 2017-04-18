@@ -3,7 +3,8 @@
 namespace fw
 {
 
-TextureManager::TextureManager()
+TextureManager::TextureManager(VirtualFilesystem& vfs):
+    _vfs{vfs}
 {
 }
 
@@ -19,15 +20,17 @@ void TextureManager::setResourcesDirectory(
 }
 
 std::shared_ptr<Texture> TextureManager::loadTexture(
-    const std::string& filename
+    const boost::filesystem::path& filename
 )
 {
-    auto texturePtr = findTexture(filename);
+    auto texturePtr = findTexture(filename.string());
 
     if (texturePtr == nullptr)
     {
-        texturePtr = std::make_shared<Texture>(filename);
-        _textures.emplace(filename, texturePtr);
+        auto file = _vfs.getFile(filename);
+        auto& fileStream = file->getStream();
+        texturePtr = std::make_shared<Texture>(fileStream, filename.string());
+        _textures.emplace(filename.string(), texturePtr);
     }
 
     return texturePtr;

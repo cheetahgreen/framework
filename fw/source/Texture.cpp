@@ -4,8 +4,16 @@
 namespace fw
 {
 
-Texture::Texture(GLuint textureId)
+Texture::Texture(GLuint textureId):
+    _filepath{},
+    _textureId{textureId}
 {
+}
+
+Texture::Texture(std::istream& stream, const std::string& filepath):
+    _filepath{filepath}
+{
+    _textureId = loadTextureFromMemory(stream);
 }
 
 Texture::Texture(const std::string& filepath)

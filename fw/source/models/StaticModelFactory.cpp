@@ -10,28 +10,42 @@ namespace fw
 {
 
 StaticModelFactory::StaticModelFactory(
+    VirtualFilesystem& vfs,
     const std::shared_ptr<ITextureManager>& textureManager
 ):
+    _vfs{vfs},
     _textureManager{textureManager}
 {
 }
 
 std::shared_ptr<StaticModel> StaticModelFactory::load(
-    const std::string& filepath
+    const boost::filesystem::path& filepath
 )
 {
-    _modelFilename = filepath;
     _geometryChunks.clear();
     _meshes.clear();
 
+    auto file = _vfs.getFile(filepath);
+    auto& stream = file->getStream();
+
+    stream.seekg(0, stream.end);
+    auto length = stream.tellg();
+    stream.seekg(0, stream.beg);
+
+    std::vector<unsigned char> buffer(length);
+    stream.read(reinterpret_cast<char*>(buffer.data()), length);
+
+    auto importFlags = (
+        aiProcess_CalcTangentSpace
+        | aiProcess_FlipUVs
+        | aiProcess_JoinIdenticalVertices
+        | aiProcess_SortByPType
+        | aiProcess_Triangulate
+    );
+
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(
-        filepath,
-        (aiProcess_FlipUVs |
-            aiProcess_CalcTangentSpace |
-            aiProcess_Triangulate |
-            aiProcess_JoinIdenticalVertices |
-            aiProcess_SortByPType)
+    auto scene = importer.ReadFileFromMemory(
+        buffer.data(), length, importFlags
     );
 
     if (!scene
@@ -43,8 +57,12 @@ std::shared_ptr<StaticModel> StaticModelFactory::load(
         return nullptr; // todo: error reporting
     }
 
-    processSceneNode(scene->mRootNode, scene);
+    return loadScene(scene);
+}
 
+std::shared_ptr<StaticModel> StaticModelFactory::loadScene(const aiScene* scene)
+{
+    processSceneNode(scene->mRootNode, scene);
     return std::make_shared<fw::StaticModel>(_geometryChunks);
 }
 
@@ -116,6 +134,8 @@ void StaticModelFactory::processSceneMesh(
     }
 
     auto material = std::make_shared<fw::Material>();
+
+    /*
     aiMaterial *loadedMaterial = scene->mMaterials[mesh->mMaterialIndex];
     // todo: do something with this limit
     if (loadedMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
@@ -160,6 +180,7 @@ void StaticModelFactory::processSceneMesh(
 
         material->NormalMap = _textureManager->loadTexture(finalTexturePath);
     }
+    */
 
     auto gpuMesh = std::make_shared<fw::Mesh<fw::StandardVertex3D>>(
         vertices,

@@ -140,7 +140,25 @@ std::shared_ptr<IFile> VirtualFilesystem::getFile(
     const boost::filesystem::path& virtualPath
 )
 {
-    return nullptr;
+    auto currentNode = &_rootNode;
+    for (auto node: virtualPath)
+    {
+        if (node.filename() == "/")
+        {
+            continue;
+        }
+
+        auto nextNode = currentNode->findChild(node);
+        if (nextNode == nullptr)
+        {
+            // todo: change exception type
+            throw std::logic_error("Path not found.");
+        }
+
+        currentNode = nextNode;
+    }
+
+    return currentNode->getFileProvider()->getFile();
 }
 
 }

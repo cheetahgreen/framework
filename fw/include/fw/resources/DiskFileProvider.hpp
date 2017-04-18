@@ -10,7 +10,7 @@ class DiskFile: public IFile
 {
 public:
     DiskFile(const boost::filesystem::path& filePath):
-        _stream{filePath.string()}
+        _stream{filePath.string(), std::ios::in | std::ios::binary}
     {
     }
 

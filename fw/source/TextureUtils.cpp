@@ -7,21 +7,10 @@ using namespace std;
 namespace fw
 {
 
-GLuint loadTextureFromFile(const string &filename)
+static GLuint uploadTextureToGPU(
+    unsigned char* image, int width, int height, int components
+)
 {
-    stbi_set_flip_vertically_on_load(true);
-
-    int width, height, components;
-    unsigned char *image = stbi_load(
-        filename.c_str(), &width, &height, &components, 0
-    );
-
-    if (image == nullptr)
-    {
-        LOG(ERROR) << "Cannot load specified texture: " << filename;
-        throw string("Cannot load specified texture: " + filename);
-    }
-
     GLenum componentsEnum;
     switch (components)
     {
@@ -32,9 +21,6 @@ GLuint loadTextureFromFile(const string &filename)
         componentsEnum = GL_RGBA;
         break;
     default:
-        stbi_image_free(image);
-        LOG(ERROR) << "Texture \"" << filename
-            << "\" components amount is not supported.";
         throw string("Components amount currently not supported.");
     }
 
@@ -50,9 +36,55 @@ GLuint loadTextureFromFile(const string &filename)
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
+    return texture;
+}
+
+GLuint loadTextureFromFile(const string &filename)
+{
+    stbi_set_flip_vertically_on_load(true);
+
+    int width, height, components;
+    unsigned char *image = stbi_load(
+        filename.c_str(), &width, &height, &components, 0
+    );
+
+    if (image == nullptr)
+    {
+        LOG(ERROR) << "Cannot load specified texture: " << filename;
+        throw string("Cannot load specified texture: " + filename);
+    }
+
+    auto texture = uploadTextureToGPU(image, width, height, components);
     stbi_image_free(image);
 
     LOG(INFO) << "Texture \"" << filename << "\" has been loaded successfully.";
+
+    return texture;
+}
+
+GLuint loadTextureFromMemory(std::istream& stream)
+{
+    if (stream.fail())
+    {
+        return 0;
+    }
+
+    stream.seekg(0, stream.end);
+    auto length = stream.tellg();
+    stream.seekg(0, stream.beg);
+
+    std::vector<unsigned char> buffer(length);
+    stream.read(reinterpret_cast<char*>(buffer.data()), length);
+
+    stbi_set_flip_vertically_on_load(true);
+
+    int width, height, components;
+    auto image = stbi_load_from_memory(
+        buffer.data(), length, &width, &height, &components, 0
+    );
+
+    auto texture = uploadTextureToGPU(image, width, height, components);
+    stbi_image_free(image);
 
     return texture;
 }

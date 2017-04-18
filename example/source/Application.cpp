@@ -46,6 +46,9 @@ void Application::onCreate()
     _windowProperties->setWindowSize(getWindowSize());
     _windowProperties->setFramebufferSize(getFramebufferSize());
 
+    _virtualFilesystem.addDirectory(fw::getFrameworkResourcePath(""), "fw");
+    _virtualFilesystem.addDirectory(getApplicationResourcesPath(""), "app");
+
     auto defaultFramebuffer = std::make_shared<fw::DefaultFramebuffer>(*this);
     _defaultFramebuffer = std::static_pointer_cast<fw::IFramebuffer>(
         defaultFramebuffer
@@ -56,7 +59,7 @@ void Application::onCreate()
     _keyboardInput = std::make_shared<fw::GenericKeyboardInput>();
     _mouseInput = std::make_shared<fw::GenericMouseInput>();
 
-    _textureManager = std::make_shared<fw::TextureManager>();
+    _textureManager = std::make_shared<fw::TextureManager>(_virtualFilesystem);
     _textureManager->setResourcesDirectory(fw::getFrameworkResourcePath(""));
 
     auto texMgrInspection =
@@ -68,13 +71,16 @@ void Application::onCreate()
         texMgrInspection
     );
 
-    _sceneInspector = std::make_shared<ee::SceneInspector>(
-        texMgrInspection,
-        &_entities
+    _staticModelFactory = std::make_shared<fw::StaticModelFactory>(
+        _virtualFilesystem,
+        std::static_pointer_cast<fw::ITextureManager>(_textureManager)
     );
 
-    _staticModelFactory = std::make_shared<fw::StaticModelFactory>(
-        std::static_pointer_cast<fw::ITextureManager>(_textureManager)
+    _sceneInspector = std::make_shared<ee::SceneInspector>(
+        _virtualFilesystem,
+        texMgrInspection,
+        _staticModelFactory,
+        &_entities
     );
 
     _renderingSystem = std::make_shared<ee::ForwardRenderingSystem>();
@@ -91,9 +97,6 @@ void Application::onCreate()
     createCamera();
     createTestEntity();
     createLight();
-
-    _virtualFilesystem.addDirectory(fw::getFrameworkResourcePath(""), "fw");
-    _virtualFilesystem.addDirectory(getApplicationResourcesPath(""), "app");
 }
 
 void Application::createCamera()
@@ -117,7 +120,7 @@ void Application::createCamera()
 void Application::createTestEntity()
 {
     _staticModel = _staticModelFactory->load(
-        getApplicationResourcesPath("models/Cerberus/Cerberus.obj")
+        "/app/models/Cerberus/Cerberus.obj"
     );
 
     _testEntity = _entities.create();
@@ -130,27 +133,19 @@ void Application::createTestEntity()
     fw::Material material;
 
     material.AlbedoMap = _textureManager->loadTexture(
-        getApplicationResourcesPath(
-            "models/Cerberus/Textures/Cerberus_A.png"
-        )
+        "/app/models/Cerberus/Textures/Cerberus_A.png"
     );
 
     material.NormalMap = _textureManager->loadTexture(
-        getApplicationResourcesPath(
-            "models/Cerberus/Textures/Cerberus_N.png"
-        )
+        "/app/models/Cerberus/Textures/Cerberus_N.png"
     );
 
     material.MetalnessMap = _textureManager->loadTexture(
-        getApplicationResourcesPath(
-            "models/Cerberus/Textures/Cerberus_M.png"
-        )
+        "/app/models/Cerberus/Textures/Cerberus_M.png"
     );
 
     material.RoughnessMap = _textureManager->loadTexture(
-        getApplicationResourcesPath(
-            "models/Cerberus/Textures/Cerberus_R.png"
-        )
+        "/app/models/Cerberus/Textures/Cerberus_R.png"
     );
 
     _testEntity.assign_from_copy<fw::Material>(material);

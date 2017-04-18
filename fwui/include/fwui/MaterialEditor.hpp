@@ -3,6 +3,8 @@
 #include <string>
 #include "fw/rendering/Material.hpp"
 #include "fw/resources/TextureManager.hpp"
+#include "fw/resources/VirtualFilesystem.hpp"
+#include "fwui/widgets/VirtualFSSearch.hpp"
 
 namespace fw
 {
@@ -11,6 +13,7 @@ class MaterialEditor
 {
 public:
     MaterialEditor(
+        VirtualFilesystem& vfs,
         std::shared_ptr<ITextureManagerWithInspection> textureManager
     );
 
@@ -24,16 +27,10 @@ protected:
         std::shared_ptr<fw::Texture>& texture
     );
 
-    void showQuickTexturePicker();
-    bool showTextureListEntry(
-        const std::shared_ptr<Texture>& texture,
-        const std::string& filter
-    );
-
+    VirtualFilesystem& _vfs;
     std::shared_ptr<ITextureManagerWithInspection> _textureManager;
 
-    std::string _searchText;
-    std::shared_ptr<fw::Texture>* _textureContext;
+    fwui::VirtualFSSearch _search;
     static const std::string _textureDetailsPopupName;
 };
 

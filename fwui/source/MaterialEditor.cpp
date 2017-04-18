@@ -16,10 +16,14 @@ const std::string MaterialEditor::_textureDetailsPopupName{
 };
 
 MaterialEditor::MaterialEditor(
+    VirtualFilesystem &vfs,
     std::shared_ptr<ITextureManagerWithInspection> textureManager
 ):
-    _textureManager{textureManager}
+    _vfs{vfs},
+    _textureManager{textureManager},
+    _search{vfs}
 {
+    _search.setExtensions({".png", ".jpg", ".jpeg", ".tga"});
 }
 
 MaterialEditor::~MaterialEditor()
@@ -46,7 +50,6 @@ void MaterialEditor::showEmbeddedFor(Material& material)
     showTextureEditor("Normal", material.NormalMap);
     showTextureEditor("Metalness", material.MetalnessMap);
     showTextureEditor("Roughness", material.RoughnessMap);
-    showQuickTexturePicker();
 }
 
 void MaterialEditor::showTextureEditor(
@@ -54,8 +57,26 @@ void MaterialEditor::showTextureEditor(
     std::shared_ptr<fw::Texture>& texture
 )
 {
+    ImGui::PushID(texture.get());
+
     std::string textureFilenameShort{"none"};
     std::string textureFilenameTooltip{};
+
+    if (ImGui::BeginPopup(_textureDetailsPopupName.c_str()))
+    {
+        if (_search.show())
+        {
+            auto newTexture = _textureManager->loadTexture(
+                _search.getSearchText()
+            );
+
+            if (newTexture != nullptr)
+            {
+                texture = newTexture;
+            }
+        }
+        ImGui::EndPopup();
+    }
 
     if (texture)
     {
@@ -72,60 +93,14 @@ void MaterialEditor::showTextureEditor(
         ImGui::SetTooltip("%s", textureFilenameTooltip.c_str());
     }
 
-    const std::string buttonName{"...##" + name};
-    const std::string popupName{"textureEditorPopup" + name};
-
     ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 30);
-    if (ImGui::Button(buttonName.c_str()))
+    if (ImGui::Button("..."))
     {
-        _textureContext = &texture;
+        _search.clear();
         ImGui::OpenPopup(_textureDetailsPopupName.c_str());
     }
 
-}
-
-void MaterialEditor::showQuickTexturePicker()
-{
-    if (ImGui::BeginPopup(_textureDetailsPopupName.c_str()))
-    {
-        if (ImGui::MenuItem(
-            "Unset",
-            nullptr,
-            nullptr,
-            *_textureContext != nullptr
-        ))
-        {
-            *_textureContext = nullptr;
-        }
-
-        ImGui::Separator();
-
-        ImGui::InputText({"Search"}, _searchText, 128);
-
-        for (auto& texture: _textureManager->getAllTextures())
-        {
-            if (showTextureListEntry(texture.second, _searchText))
-            {
-                *_textureContext = texture.second;
-            }
-        }
-
-        ImGui::EndPopup();
-    }
-}
-
-bool MaterialEditor::showTextureListEntry(
-    const std::shared_ptr<Texture>& texture,
-    const std::string& filter
-)
-{
-    fs::path path{texture->getFilePath()};
-    std::string filename = path.filename().string();
-    bool containsSearch = filename.find(filter) != std::string::npos;
-
-    if (!containsSearch) { return false; }
-
-    return ImGui::Selectable(filename.c_str());
+    ImGui::PopID();
 }
 
 }

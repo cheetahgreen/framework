@@ -11,6 +11,7 @@ class Texture
 {
 public:
     Texture(GLuint textureId);
+    Texture(std::istream& stream, const std::string& filepath = "");
     Texture(const std::string& filepath);
     virtual ~Texture();
 
