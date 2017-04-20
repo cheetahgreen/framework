@@ -36,7 +36,10 @@ std::shared_ptr<Mesh<StandardVertex2D>> createQuad2D(glm::vec2 size)
     return std::make_shared<Mesh<StandardVertex2D>>(vertices, indices);
 }
 
-Mesh<VertexNormalTexCoords> createPlane(float width, float length)
+std::unique_ptr<Mesh<VertexNormalTexCoords>> createPlane(
+    float width,
+    float length
+)
 {
     std::vector<VertexNormalTexCoords> vertices;
 
@@ -61,7 +64,7 @@ Mesh<VertexNormalTexCoords> createPlane(float width, float length)
 
     std::vector<GLuint> indices = { 0, 1, 2, 1, 2, 3 };
 
-    return Mesh<VertexNormalTexCoords>(vertices, indices);
+    return std::make_unique<Mesh<VertexNormalTexCoords>>(vertices, indices);
 }
 
 vector<GLfloat> createCube(float width, float height, float length)

@@ -12,7 +12,12 @@ namespace fw
 {
 
 std::shared_ptr<Mesh<StandardVertex2D>> createQuad2D(glm::vec2 size);
-Mesh<VertexNormalTexCoords> createPlane(float width, float length);
+
+std::unique_ptr<Mesh<VertexNormalTexCoords>> createPlane(
+    float width,
+    float length
+);
+
 std::vector<GLfloat> createCube(float width, float height, float length);
 
 std::shared_ptr<Mesh<VertexNormalTexCoords>> createBox(

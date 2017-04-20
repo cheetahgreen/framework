@@ -10,7 +10,9 @@
 #include "fw/components/Transform.hpp"
 #include "fw/models/StaticModel.hpp"
 #include "fw/models/RenderMesh.hpp"
+
 #include "fw/rendering/Light.hpp"
+#include "fw/rendering/AreaLight.hpp"
 
 #include "engine/internal/Logging.hpp"
 
@@ -23,6 +25,7 @@ ForwardRenderingSystem::ForwardRenderingSystem()
 {
     _universalPhongEffect = std::make_shared<fw::UniversalPhongEffect>();
     _box = fw::createBox({0.01f, 0.01f, 0.01f});
+    _plane = fw::createPlane(1.0f, 1.0f);
 }
 
 ForwardRenderingSystem::~ForwardRenderingSystem()
@@ -83,6 +86,7 @@ void ForwardRenderingSystem::update(
 
     entityx::ComponentHandle<fw::Transform> transformation;
     entityx::ComponentHandle<fw::Light> light;
+    entityx::ComponentHandle<fw::AreaLight> areaLight;
     entityx::ComponentHandle<fw::RenderMesh> renderMesh;
 
     for (auto entity:
@@ -123,6 +127,29 @@ void ForwardRenderingSystem::update(
         _universalPhongEffect->setViewMatrix(viewMatrix);
         _universalPhongEffect->setModelMatrix(transformation->getTransform());
         _box->render();
+        _universalPhongEffect->end();
+    }
+
+    for (auto entity:
+            entities.entities_with_components(transformation, areaLight))
+    {
+        _universalPhongEffect->setSolidColor(glm::vec3{});
+        _universalPhongEffect->setEmissionColor(areaLight->color);
+        _universalPhongEffect->setDiffuseTextureColor(glm::vec4{});
+        _universalPhongEffect->begin();
+        _universalPhongEffect->setProjectionMatrix(projectionMatrix);
+        _universalPhongEffect->setViewMatrix(viewMatrix);
+
+        auto areaLightSizeMat = glm::scale(
+            glm::mat4{},
+            glm::vec3{areaLight->size.x, 0.0f, areaLight->size.y}
+        );
+
+        _universalPhongEffect->setModelMatrix(
+            transformation->getTransform() * areaLightSizeMat
+        );
+
+        _plane->render();
         _universalPhongEffect->end();
     }
 }

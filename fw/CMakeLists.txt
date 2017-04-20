@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.8)
 project(framework)
 
 set(PROJECT_NAME_TEST ${PROJECT_NAME}-test)
@@ -161,6 +161,7 @@ target_link_libraries(${PROJECT_NAME_TEST}
 
 set(PROJECT_COMPILE_FEATURES
     ${PROJECT_COMPILE_FEATURES}
+    cxx_std_14
     cxx_auto_type
     cxx_nullptr
     cxx_range_for

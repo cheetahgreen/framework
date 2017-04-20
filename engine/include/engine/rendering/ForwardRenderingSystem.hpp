@@ -30,6 +30,7 @@ public:
 private:
     std::shared_ptr<fw::UniversalPhongEffect> _universalPhongEffect;
     std::shared_ptr<fw::Mesh<fw::VertexNormalTexCoords>> _box;
+    std::unique_ptr<fw::Mesh<fw::VertexNormalTexCoords>> _plane;
     std::shared_ptr<fw::IFramebuffer> _framebuffer;
 };
 

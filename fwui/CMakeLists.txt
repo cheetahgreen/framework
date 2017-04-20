@@ -11,6 +11,7 @@ set(FWUI_SOURCE_FILES
     source/MaterialEditor.cpp
     source/TextureManagerInspector.cpp
     source/VirtualFilesystemInspector.cpp
+    source/editors/AreaLightEditor.cpp
     source/editors/RenderMeshEditor.cpp
     source/widgets/VirtualFSSearch.cpp
 )

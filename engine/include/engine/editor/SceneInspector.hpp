@@ -3,6 +3,7 @@
 #include "fwui/LightEditor.hpp"
 #include "fwui/MaterialEditor.hpp"
 #include "fwui/editors/RenderMeshEditor.hpp"
+#include "fwui/editors/AreaLightEditor.hpp"
 #include "fw/resources/TextureManager.hpp"
 #include "fw/models/StaticModelFactory.hpp"
 
@@ -32,11 +33,14 @@ protected:
     void showEntityInfoComponent();
     void showTransformComponent();
     void showLightComponent();
+    void showAreaLightComponent();
     void showMeshComponent();
     void showMaterialComponent();
 
     void createEmptyEntity();
     void createLight();
+
+    void attachAreaLight();
 
 private:
     entityx::EntityManager* _entityManager;
@@ -51,6 +55,7 @@ private:
     fw::LightEditor _lightEditor;
     fwui::RenderMeshEditor _renderMeshEditor;
     fw::MaterialEditor _materialEditor;
+    fwui::AreaLightEditor _areaLightEditor;
 };
 
 }

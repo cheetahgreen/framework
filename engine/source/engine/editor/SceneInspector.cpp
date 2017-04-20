@@ -10,6 +10,7 @@
 #include "fw/components/EntityInfo.hpp"
 #include "fw/components/Transform.hpp"
 #include "fw/rendering/Light.hpp"
+#include "fw/rendering/AreaLight.hpp"
 #include "fwui/ImGuiExtensions.hpp"
 #include "fw/models/RenderMesh.hpp"
 
@@ -94,6 +95,11 @@ void SceneInspector::showMenu()
 
         if (ImGui::BeginMenu("Components", isEntitySelected))
         {
+            if (ImGui::MenuItem("Area light"))
+            {
+                attachAreaLight();
+            }
+
             ImGui::EndMenu();
         }
 
@@ -139,6 +145,7 @@ void SceneInspector::showComponentsList()
     showEntityInfoComponent();
     showTransformComponent();
     showLightComponent();
+    showAreaLightComponent();
     showMeshComponent();
     showMaterialComponent();
 
@@ -209,6 +216,18 @@ void SceneInspector::showLightComponent()
     }
 }
 
+void SceneInspector::showAreaLightComponent()
+{
+    if (_selectedEntity.has_component<fw::AreaLight>())
+    {
+        auto light = _selectedEntity.component<fw::AreaLight>();
+        if (ImGui::CollapsingHeader("Area light"))
+        {
+            _areaLightEditor.showEmbeddedFor(*light);
+        }
+    }
+}
+
 void SceneInspector::showMeshComponent()
 {
     if (_selectedEntity.has_component<fw::RenderMesh>())
@@ -246,6 +265,11 @@ void SceneInspector::createLight()
     entity.assign<fw::EntityInfo>("Light");
     entity.assign<fw::Transform>();
     entity.assign<fw::Light>();
+}
+
+void SceneInspector::attachAreaLight()
+{
+    _selectedEntity.assign<fw::AreaLight>();
 }
 
 }
