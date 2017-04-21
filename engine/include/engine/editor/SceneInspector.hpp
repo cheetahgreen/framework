@@ -52,6 +52,9 @@ private:
     entityx::Entity _selectedEntity;
     bool _inspectorEnabled;
 
+    glm::vec3 _currentRotationAngle;
+    bool _objectRotating;
+
     fw::LightEditor _lightEditor;
     fwui::RenderMeshEditor _renderMeshEditor;
     fw::MaterialEditor _materialEditor;

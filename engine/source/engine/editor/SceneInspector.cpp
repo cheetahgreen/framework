@@ -183,12 +183,31 @@ void SceneInspector::showTransformComponent()
         perspective
     );
 
-    ImGui::DragFloat3("Position", glm::value_ptr(translation), 0.1f);
-    ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.01f, 0.001f, 1000.0f);
+    // currently glm::decompose is returning conjugate of orientation
+    orientation = glm::conjugate(orientation);
+
+    bool anyChange = false;
+
+    if (ImGui::DragFloat3("Position", glm::value_ptr(translation), 0.1f))
+    {
+        anyChange = true;
+    }
+
+    if (ImGui::DragFloat3(
+        "Scale",
+        glm::value_ptr(scale),
+        0.01f,
+        0.001f,
+        1000.0f
+    ))
+    {
+        anyChange = true;
+    }
 
     if (ImGui::Button("Reset scale"))
     {
         scale = {1.0f, 1.0f, 1.0f};
+        anyChange = true;
     }
 
     ImGui::SameLine();
@@ -196,12 +215,37 @@ void SceneInspector::showTransformComponent()
     if (ImGui::Button("Make uniform (clone X)"))
     {
         scale = {scale.x, scale.x, scale.x};
+        anyChange = true;
     }
 
-    auto newTranslationMtx = glm::translate({}, translation);
-    auto newScalingMtx = glm::scale({}, scale);
+    if (!_objectRotating)
+    {
+        _currentRotationAngle = glm::degrees(glm::eulerAngles(orientation));
+    }
 
-    transform->setTransform(newTranslationMtx * newScalingMtx);
+    if (ImGui::DragFloat3(
+        "Rotation",
+        glm::value_ptr(_currentRotationAngle),
+        1.0f
+    ))
+    {
+        anyChange = true;
+        _objectRotating = true;
+    }
+    else
+    {
+        _objectRotating = false;
+    }
+
+    if (anyChange)
+    {
+        //orientation = glm::quat{glm::radians(_currentRotationAngle)};
+        auto newTranslationMtx = glm::translate({}, translation);
+        auto newRotationMtx = glm::mat4_cast(orientation);
+        auto newScalingMtx = glm::scale({}, scale);
+        auto newTransform = newTranslationMtx * newRotationMtx * newScalingMtx;
+        transform->setTransform(newTransform);
+    }
 }
 
 void SceneInspector::showLightComponent()
