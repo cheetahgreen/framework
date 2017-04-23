@@ -10,6 +10,7 @@
 #include "fw/components/Transform.hpp"
 #include "fw/models/StaticModel.hpp"
 #include "fw/models/RenderMesh.hpp"
+#include "fw/Resources.hpp"
 
 #include "fw/rendering/Light.hpp"
 #include "fw/rendering/AreaLight.hpp"
@@ -25,7 +26,16 @@ ForwardRenderingSystem::ForwardRenderingSystem()
 {
     _universalPhongEffect = std::make_shared<fw::UniversalPhongEffect>();
     _box = fw::createBox({0.01f, 0.01f, 0.01f});
+    _skybox = fw::createBox({1.0f, 1.0f, 1.0f});
     _plane = fw::createPlane(1.0f, 1.0f);
+
+    _skyboxShader = std::make_shared<fw::ShaderProgram>(
+        fw::getFrameworkResourcePath("shaders/Skybox.sbl")
+    );
+
+    _skyboxViewLoc = _skyboxShader->getUniformLoc("view");
+    _skyboxProjLoc = _skyboxShader->getUniformLoc("projection");
+    _skyboxLoc = _skyboxShader->getUniformLoc("skyboxCube");
 }
 
 ForwardRenderingSystem::~ForwardRenderingSystem()
@@ -151,6 +161,18 @@ void ForwardRenderingSystem::update(
 
         _plane->render();
         _universalPhongEffect->end();
+    }
+
+    if (_cubemap)
+    {
+        glDepthFunc(GL_LEQUAL);
+        _skyboxShader->use();
+        _skyboxShader->setUniform(_skyboxViewLoc, viewMatrix);
+        _skyboxShader->setUniform(_skyboxProjLoc, projectionMatrix);
+        LOG_EVERY_N(100, INFO) << " Cubemap id = " << _cubemap->getId();
+        glBindTexture(GL_TEXTURE_CUBE_MAP, _cubemap->getId());
+        _skybox->render();
+        glDepthFunc(GL_LESS);
     }
 }
 

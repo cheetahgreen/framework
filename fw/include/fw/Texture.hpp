@@ -11,7 +11,10 @@ class Texture
 {
 public:
     Texture(GLuint textureId);
-    Texture(std::istream& stream, const std::string& filepath = "");
+    Texture(
+        std::istream& stream,
+        const std::string& filepath = ""
+    );
     Texture(const std::string& filepath);
     virtual ~Texture();
 
@@ -21,6 +24,20 @@ public:
     glm::ivec2 getSize(int mipLevel = 0) const;
 
 private:
+    void loadTextureLDR(
+        unsigned char* image,
+        int width,
+        int height,
+        int components
+    );
+
+    void loadTextureHDR(
+        float* image,
+        int width,
+        int height,
+        int components
+    );
+
     std::string _filepath;
     GLuint _textureId;
 };

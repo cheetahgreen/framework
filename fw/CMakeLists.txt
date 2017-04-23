@@ -85,6 +85,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/cameras/FirstPersonCameraController.cpp
     source/cameras/ProjectionCamera.cpp
     source/common/Filesystem.cpp
+    source/common/StreamUtils.cpp
     source/effects/Standard2DEffect.cpp
     source/inputs/GenericKeyboardInput.cpp
     source/inputs/GenericMouseInput.cpp
@@ -105,9 +106,12 @@ set(FRAMEWORK_SOURCE_FILES
     source/numerical/SurfaceIntersectionNewtonIterable.cpp
     source/performance/PerformanceMonitor.cpp
     source/rendering/Framebuffer.cpp
-    source/resources/VirtualFilesystem.cpp
+    source/rendering/preprocessing/CubemapGeneratorBase.cpp
+    source/rendering/preprocessing/EquirectangularToCubemapConverter.cpp
+    source/resources/Cubemap.cpp
     source/resources/DiskFileProvider.cpp
     source/resources/TextureManager.cpp
+    source/resources/VirtualFilesystem.cpp
 )
 
 add_library(${PROJECT_NAME}

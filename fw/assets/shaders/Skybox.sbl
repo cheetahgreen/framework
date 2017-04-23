@@ -1,0 +1,28 @@
+version 1;
+version glsl 330 core;
+
+shader "Skybox"
+{
+    shared
+    <<<
+        uniform mat4 projection;
+        uniform mat4 view;
+        uniform samplerCube skyboxCube;
+    >>>;
+
+    func vertex(vec3 position {location = 0}): vec3 localPosition
+    <<<
+        localPosition = position;
+        mat4 rotationView = mat4(mat3(view));
+        vec4 clipPos = projection * rotationView * vec4(position, 1.0);
+        gl_Position = clipPos.xyww;
+    >>>;
+
+    func fragment(vec3 localPosition): vec4 result
+    <<<
+        vec3 envColor = texture(skyboxCube, localPosition).rgb;
+        envColor = envColor / (envColor + vec3(1.0));
+        envColor = pow(envColor, vec3(1.0/2.2));
+        result = vec4(envColor, 1.0);
+    >>>;
+};

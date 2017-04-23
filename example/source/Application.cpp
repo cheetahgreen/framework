@@ -97,6 +97,18 @@ void Application::onCreate()
     createCamera();
     createTestEntity();
     createLight();
+
+    auto envTexture = _textureManager->loadTexture(
+        "/app/textures/newport_loft.hdr"
+    );
+
+    _equirectCubemapConv =
+        std::make_unique<fw::EquirectangularToCubemapConverter>(envTexture);
+
+    std::shared_ptr<fw::Cubemap> cubemap = _equirectCubemapConv->generate(
+        {512, 512}
+    );
+    _renderingSystem->setSkybox(cubemap);
 }
 
 void Application::createCamera()

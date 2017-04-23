@@ -11,7 +11,9 @@
 #include "fw/models/StaticModel.hpp"
 #include "fw/models/StaticModelFactory.hpp"
 #include "fw/performance/PerformanceMonitor.hpp"
+#include "fw/rendering/preprocessing/EquirectangularToCubemapConverter.hpp"
 #include "fw/resources/TextureManager.hpp"
+#include "fw/resources/Cubemap.hpp"
 #include "fwui/ImGuiApplication.hpp"
 #include "fwui/TextureManagerInspector.hpp"
 #include "fwui/VirtualFilesystemInspector.hpp"
@@ -77,6 +79,10 @@ private:
 
     std::shared_ptr<fw::IFramebuffer> _defaultFramebuffer;
     std::shared_ptr<fw::Framebuffer> _framebuffer;
+
+    std::unique_ptr<fw::Cubemap> _envCubemap;
+
+    std::unique_ptr<fw::EquirectangularToCubemapConverter> _equirectCubemapConv;
 
     fw::PerformanceMonitor _perfMon;
 
