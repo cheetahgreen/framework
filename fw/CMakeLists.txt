@@ -107,6 +107,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/performance/PerformanceMonitor.cpp
     source/rendering/Framebuffer.cpp
     source/rendering/preprocessing/CubemapGeneratorBase.cpp
+    source/rendering/preprocessing/DiffuseIrradianceCubemapGenerator.cpp
     source/rendering/preprocessing/EquirectangularToCubemapConverter.cpp
     source/resources/Cubemap.cpp
     source/resources/DiskFileProvider.cpp

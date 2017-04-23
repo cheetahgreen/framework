@@ -45,11 +45,13 @@ std::unique_ptr<Cubemap> CubemapGeneratorBase::generate(
             0
         );
 
-        glClearColor(1.0f, 0, 1.0f, 1.0f);
+        glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         renderFace(captureViews[i], captureProjection);
     }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     return cubemap;
 }

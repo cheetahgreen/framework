@@ -108,7 +108,13 @@ void Application::onCreate()
     std::shared_ptr<fw::Cubemap> cubemap = _equirectCubemapConv->generate(
         {512, 512}
     );
-    _renderingSystem->setSkybox(cubemap);
+
+    fw::DiffuseIrradianceCubemapGenerator diffIrrGen(cubemap);
+    std::shared_ptr<fw::Cubemap> irradianceCubemap = diffIrrGen.generate(
+        {512, 512}
+    );
+
+    _renderingSystem->setSkybox(irradianceCubemap);
 }
 
 void Application::createCamera()

@@ -169,9 +169,12 @@ void ForwardRenderingSystem::update(
         _skyboxShader->use();
         _skyboxShader->setUniform(_skyboxViewLoc, viewMatrix);
         _skyboxShader->setUniform(_skyboxProjLoc, projectionMatrix);
-        LOG_EVERY_N(100, INFO) << " Cubemap id = " << _cubemap->getId();
+
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, _cubemap->getId());
+
         _skybox->render();
+
         glDepthFunc(GL_LESS);
     }
 }

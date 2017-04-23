@@ -1,0 +1,59 @@
+version 1;
+version glsl 330 core;
+
+shader "Diffuse Irradiance"
+{
+    shared
+    <<<
+        uniform mat4 projection;
+        uniform mat4 view;
+        uniform samplerCube environmentCubemap;
+
+        const float PI = 3.14159265359f;
+    >>>;
+
+    func vertex(vec3 position {location = 0}): vec3 localPosition
+    <<<
+        localPosition = position;
+        mat4 viewProj = projection * view;
+        gl_Position =  viewProj * vec4(position, 1.0);
+    >>>;
+
+    func fragment(vec3 localPosition): vec4 result
+    <<<
+        vec3 normal = normalize(localPosition);
+
+        vec3 irradiance = vec3(0.0);
+
+        vec3 up = vec3(0.0, 1.0, 0.0);
+        vec3 right = cross(up, normal);
+        up = cross(normal, right);
+
+        float sampleDelta = 0.05f;
+        float numSamples = 0.0f;
+
+        for(float phi = 0.0; phi < 2.0 * PI; phi += sampleDelta)
+        {
+            for(float theta = 0.0; theta < 0.5 * PI; theta += sampleDelta)
+            {
+                vec3 tangentSample = vec3(
+                    sin(theta) * cos(phi),
+                    sin(theta) * sin(phi),
+                    cos(theta)
+                );
+
+                vec3 sampleVec = tangentSample.x * right
+                    + tangentSample.y * up
+                    + tangentSample.z * normal;
+
+                vec3 cubemapSample = texture(environmentCubemap, sampleVec).rgb;
+                irradiance += cubemapSample * cos(theta) * sin(theta);
+
+                ++numSamples;
+            }
+        }
+
+        irradiance = PI * irradiance * (1.0 / float(numSamples));
+        result = vec4(irradiance, 1.0);
+    >>>;
+};
