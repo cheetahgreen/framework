@@ -21,13 +21,12 @@ std::unique_ptr<Cubemap> CubemapGeneratorBase::generate(
     const glm::ivec2& faceResolution
 )
 {
+    LOG(INFO) << "Cubemap generation started.";
     _faceResolution = faceResolution;
 
     auto cubemap = getEmptyCubemap();
     auto captureProjection = getProjection();
     auto captureViews = getViews();
-
-    LOG(INFO) << "Generating cubemap with (id=" << cubemap->getId() << ")";
 
     generateBuffers();
 
@@ -52,6 +51,9 @@ std::unique_ptr<Cubemap> CubemapGeneratorBase::generate(
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    LOG(INFO) << "Cubemap generation done. OpenGL texture id = "
+        << cubemap->getId();
 
     return cubemap;
 }

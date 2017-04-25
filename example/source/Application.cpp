@@ -114,7 +114,8 @@ void Application::onCreate()
         {512, 512}
     );
 
-    _renderingSystem->setSkybox(irradianceCubemap);
+    _renderingSystem->setSkybox(cubemap);
+    _renderingSystem->setIrradianceMap(irradianceCubemap);
 }
 
 void Application::createCamera()

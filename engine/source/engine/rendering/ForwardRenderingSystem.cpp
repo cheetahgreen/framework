@@ -112,6 +112,7 @@ void ForwardRenderingSystem::update(
             );
 
             _universalPhongEffect->setMaterial(*material);
+            _universalPhongEffect->setIrradianceMap(_irradianceMap);
 
             _universalPhongEffect->begin();
             _universalPhongEffect->setProjectionMatrix(projectionMatrix);

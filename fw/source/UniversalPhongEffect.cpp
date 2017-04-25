@@ -6,9 +6,9 @@ namespace fw
 {
 
 UniversalPhongEffect::UniversalPhongEffect():
+    _diffuseMap{nullptr},
     _diffuseMapColor{0.0, 0.0, 0.0, 0.0},
-    _solidColor{1.0, 0.0, 0.0, 1.0},
-    _diffuseMap{nullptr}
+    _solidColor{1.0, 0.0, 0.0, 1.0}
 {
     createShaders();
 
@@ -16,6 +16,7 @@ UniversalPhongEffect::UniversalPhongEffect():
     _normalMapLoc = _shaderProgram->getUniformLoc("NormalMapSampler");
     _metalnessMapLoc = _shaderProgram->getUniformLoc("MetalnessMapSampler");
     _roughnessMapLoc = _shaderProgram->getUniformLoc("RoughnessMapSampler");
+    _irradianceMapLoc = _shaderProgram->getUniformLoc("IrradianceMap");
     _lightColorLocation = _shaderProgram->getUniformLoc("LightColor");
     _lightDirectionLocation = _shaderProgram->getUniformLoc("LightDirection");
     _lightPositionLocation = _shaderProgram->getUniformLoc("LightPosition");
@@ -62,6 +63,13 @@ void UniversalPhongEffect::begin()
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_2D, _roughnessMap->getTextureId());
         glUniform1i(_roughnessMapLoc, 3);
+    }
+
+    if (_irradianceMap != nullptr)
+    {
+        glActiveTexture(GL_TEXTURE4);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, _irradianceMap->getId());
+        glUniform1i(_irradianceMapLoc, 4);
     }
 
     glUniform3fv(_emissionColorLocation, 1, glm::value_ptr(_emissionColor));
@@ -118,6 +126,13 @@ void UniversalPhongEffect::setNormalMap(
 )
 {
     _normalMap = normalMap;
+}
+
+void UniversalPhongEffect::setIrradianceMap(
+    const std::shared_ptr<fw::Cubemap>& irradianceCubemap
+)
+{
+    _irradianceMap = irradianceCubemap;
 }
 
 void UniversalPhongEffect::setEmissionColor(glm::vec3 color)

@@ -5,6 +5,7 @@
 
 #include "fw/Effect.hpp"
 #include "fw/Texture.hpp"
+#include "fw/resources/Cubemap.hpp"
 #include "fw/components/Transform.hpp"
 #include "fw/rendering/Light.hpp"
 #include "fw/rendering/Material.hpp"
@@ -32,8 +33,8 @@ public:
 
     void setDiffuseTextureColor(glm::vec4 diffuseMultipler);
     void setDiffuseTexture(const std::shared_ptr<fw::Texture>& texture);
-
     void setNormalMap(const std::shared_ptr<fw::Texture>& normalMap);
+    void setIrradianceMap(const std::shared_ptr<fw::Cubemap>& normalMap);
 
     void setEmissionColor(glm::vec3 color);
     void setSolidColor(glm::vec3 color);
@@ -49,6 +50,7 @@ private:
     GLint _normalMapLoc;
     GLint _metalnessMapLoc;
     GLint _roughnessMapLoc;
+    GLint _irradianceMapLoc;
 
     GLint _lightColorLocation;
     GLint _lightDirectionLocation;
@@ -63,6 +65,7 @@ private:
     std::shared_ptr<fw::Texture> _normalMap;
     std::shared_ptr<fw::Texture> _metalnessMap;
     std::shared_ptr<fw::Texture> _roughnessMap;
+    std::shared_ptr<fw::Cubemap> _irradianceMap;
 
     fw::Transform _lightTransform;
     fw::Light _light;

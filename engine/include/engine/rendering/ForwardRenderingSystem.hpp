@@ -30,8 +30,14 @@ public:
 
     void setSkybox(std::shared_ptr<fw::Cubemap> cubemap) { _cubemap = cubemap; }
 
+    void setIrradianceMap(std::shared_ptr<fw::Cubemap> cubemap)
+    {
+        _irradianceMap = cubemap;
+    }
+
 private:
     std::shared_ptr<fw::Cubemap> _cubemap;
+    std::shared_ptr<fw::Cubemap> _irradianceMap;
     std::shared_ptr<fw::UniversalPhongEffect> _universalPhongEffect;
 
     std::shared_ptr<fw::Mesh<fw::VertexNormalTexCoords>> _box;
