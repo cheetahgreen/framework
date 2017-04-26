@@ -8,6 +8,7 @@
 #include "Common.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "shabui/GLSLLoader.hpp"
+#include "fw/internal/Logging.hpp"
 
 using namespace std;
 
@@ -80,6 +81,8 @@ ShaderProgram::ShaderProgram(const std::string& fileName)
     _program = glCreateProgram();
     Shader vs, fs;
 
+    LOG(DEBUG) << "Loading Shabui file: \"" << fileName << "\"";
+
     sb::GLSLLoader loader;
     auto code = loader.loadFile(fileName);
 
@@ -131,6 +134,11 @@ void ShaderProgram::use()
 GLint ShaderProgram::getUniformLoc(const std::string& uniformName) const
 {
     return glGetUniformLocation(_program, uniformName.c_str());
+}
+
+void ShaderProgram::setUniform(GLuint location, GLfloat v0)
+{
+    glUniform1f(location, v0);
 }
 
 void ShaderProgram::setUniform(GLuint location, GLint v0)

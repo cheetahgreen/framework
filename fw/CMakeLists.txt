@@ -109,6 +109,7 @@ set(FRAMEWORK_SOURCE_FILES
     source/rendering/preprocessing/CubemapGeneratorBase.cpp
     source/rendering/preprocessing/DiffuseIrradianceCubemapGenerator.cpp
     source/rendering/preprocessing/EquirectangularToCubemapConverter.cpp
+    source/rendering/preprocessing/PrefilteredEnvMapGenerator.cpp
     source/resources/Cubemap.cpp
     source/resources/DiskFileProvider.cpp
     source/resources/TextureManager.cpp

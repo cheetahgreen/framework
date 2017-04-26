@@ -54,6 +54,8 @@ void ForwardRenderingSystem::update(
         throw std::logic_error("Framebuffer is not set.");
     }
 
+    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+
     _framebuffer->use();
     auto framebufferSize = _framebuffer->getSize();
     auto aspectRatio =

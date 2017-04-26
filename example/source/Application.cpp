@@ -11,10 +11,12 @@
 #include "fw/components/Transform.hpp"
 #include "fw/components/EntityInfo.hpp"
 #include "fw/rendering/Light.hpp"
+#include "fw/rendering/preprocessing/PrefilteredEnvMapGenerator.hpp"
 #include "fw/cameras/ProjectionCamera.hpp"
 
 #include "engine/scripts/ScriptCollection.hpp"
 #include "engine/scripts/cameras/FirstPersonCameraScript.hpp"
+
 
 #include "Resources.hpp"
 
@@ -114,7 +116,11 @@ void Application::onCreate()
         {512, 512}
     );
 
-    _renderingSystem->setSkybox(cubemap);
+    fw::PrefilteredEnvMapGenerator prefilteredEnvMapGen(cubemap);
+    std::shared_ptr<fw::Cubemap> prefilteredEnvMap =
+        prefilteredEnvMapGen.generate({128, 128}, 5);
+
+    _renderingSystem->setSkybox(prefilteredEnvMap);
     _renderingSystem->setIrradianceMap(irradianceCubemap);
 }
 

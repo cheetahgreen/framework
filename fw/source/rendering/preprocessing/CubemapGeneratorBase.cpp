@@ -18,41 +18,92 @@ CubemapGeneratorBase::~CubemapGeneratorBase()
 }
 
 std::unique_ptr<Cubemap> CubemapGeneratorBase::generate(
-    const glm::ivec2& faceResolution
+    const glm::ivec2& faceResolution,
+    unsigned int mipLevels
 )
 {
-    LOG(INFO) << "Cubemap generation started.";
+    if (mipLevels <= 0)
+    {
+        LOG(WARNING) << "Requested no mip levels. Returned to default 1.";
+        mipLevels = 1;
+    }
+
+    // if mipLevels is too high make it smaller
+
+    _maxMipLevel = mipLevels;
+
+    LOG(DEBUG) << "Cubemap generation started.";
     _faceResolution = faceResolution;
 
     auto cubemap = getEmptyCubemap();
+
+    if (mipLevels > 1)
+    {
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap->getId());
+
+        glTexParameteri(
+            GL_TEXTURE_CUBE_MAP,
+            GL_TEXTURE_MIN_FILTER,
+            GL_LINEAR_MIPMAP_LINEAR
+        );
+
+        glTexParameteri(
+            GL_TEXTURE_CUBE_MAP,
+            GL_TEXTURE_MAG_FILTER,
+            GL_LINEAR
+        );
+
+        glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+
+        glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+    }
+
     auto captureProjection = getProjection();
     auto captureViews = getViews();
 
     generateBuffers();
 
-    glViewport(0, 0, _faceResolution.x, _faceResolution.y);
     glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap->getId());
 
-    for (auto i = 0; i < 6; ++i)
+    auto currentResolution = _faceResolution;
+
+    for (
+        _currentMipLevel = 0;
+        _currentMipLevel < _maxMipLevel;
+        ++_currentMipLevel
+    )
     {
-        glFramebufferTexture2D(
-            GL_FRAMEBUFFER,
-            GL_COLOR_ATTACHMENT0,
-            GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-            cubemap->getId(),
-            0
+        glBindRenderbuffer(GL_RENDERBUFFER, _rbo);
+        glRenderbufferStorage(
+            GL_RENDERBUFFER,
+            GL_DEPTH_COMPONENT24,
+            currentResolution.x,
+            currentResolution.y
         );
 
-        glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glViewport(0, 0, currentResolution.x, currentResolution.y);
 
-        renderFace(captureViews[i], captureProjection);
+        for (auto i = 0; i < 6; ++i)
+        {
+            glFramebufferTexture2D(
+                GL_FRAMEBUFFER,
+                GL_COLOR_ATTACHMENT0,
+                GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                cubemap->getId(),
+                _currentMipLevel
+            );
+
+            glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            renderFace(captureViews[i], captureProjection);
+        }
+
+        currentResolution /= 2;
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    LOG(INFO) << "Cubemap generation done. OpenGL texture id = "
+    LOG(DEBUG) << "Cubemap generation done. OpenGL texture id = "
         << cubemap->getId();
 
     return cubemap;

@@ -17,7 +17,10 @@ public:
     CubemapGeneratorBase();
     virtual ~CubemapGeneratorBase();
 
-    std::unique_ptr<Cubemap> generate(const glm::ivec2& faceResolution);
+    std::unique_ptr<Cubemap> generate(
+        const glm::ivec2& faceResolution,
+        unsigned int mipLevels = 1
+    );
 
 protected:
     virtual std::unique_ptr<Cubemap> getEmptyCubemap() const;
@@ -32,10 +35,14 @@ protected:
 
     std::shared_ptr<Mesh<VertexNormalTexCoords>> _cube;
 
+    unsigned int getCurrentMipLevel() const { return _currentMipLevel; }
+    unsigned int getMaxMipLevel() const { return _maxMipLevel; }
+
 private:
     glm::ivec2 _faceResolution;
     GLuint _fbo, _rbo;
     std::shared_ptr<ShaderProgram> _shaderProgram;
+    unsigned int _currentMipLevel, _maxMipLevel;
 };
 
 }
