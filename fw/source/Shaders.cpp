@@ -83,7 +83,8 @@ ShaderProgram::ShaderProgram(const std::string& fileName)
 
     LOG(DEBUG) << "Loading Shabui file: \"" << fileName << "\"";
 
-    sb::GLSLLoader loader;
+    sb::GLSLLoaderFileDependencyResolver dependencyResolver{fileName};
+    sb::GLSLLoader loader{dependencyResolver};
     auto code = loader.loadFile(fileName);
 
     if (code.vertexShaderCode != "")

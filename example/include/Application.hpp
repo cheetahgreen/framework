@@ -82,6 +82,7 @@ private:
     std::shared_ptr<fw::Framebuffer> _framebuffer;
 
     std::unique_ptr<fw::Cubemap> _envCubemap;
+    std::shared_ptr<fw::Texture> _brdfLutTexture;
 
     std::unique_ptr<fw::EquirectangularToCubemapConverter> _equirectCubemapConv;
 

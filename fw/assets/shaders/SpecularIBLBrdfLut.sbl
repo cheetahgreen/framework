@@ -1,0 +1,38 @@
+version 1;
+version glsl 330 core;
+
+include "PBR.sbl";
+
+shader "Specular IBL BRDF Lookup"
+{
+    shared
+    <<<
+        const float PI = 3.14159265359f;
+    >>>;
+
+    struct vertexLayout
+    {
+        vec2 position {location = 0}
+    };
+
+    struct vertexOutput
+    {
+        vec2 Coordinate
+    };
+
+    func vertex(vertexLayout vertex): vertexOutput result
+    <<<
+        gl_Position = vec4(vertex.position.x, vertex.position.y, 0.0, 1.0);
+        result.Coordinate = (vertex.position.xy + 1.0) * 0.5;
+    >>>;
+
+    func fragment(vertexOutput vsOut): vec4 result
+    <<<
+        vec2 integrationResult = integrate_brdf(
+            vsOut.Coordinate.x,
+            vsOut.Coordinate.y
+        );
+
+        result = vec4(integrationResult, 0.0, 1.0);
+    >>> requires { integrate_brdf };
+};

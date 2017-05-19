@@ -57,6 +57,7 @@ Texture::Texture(const std::string& filepath)
 
 Texture::~Texture()
 {
+    LOG(INFO) << "Texture id=" << _textureId << " released.";
 }
 
 const std::string& Texture::getFilePath() const

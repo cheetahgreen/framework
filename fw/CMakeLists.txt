@@ -110,6 +110,8 @@ set(FRAMEWORK_SOURCE_FILES
     source/rendering/preprocessing/DiffuseIrradianceCubemapGenerator.cpp
     source/rendering/preprocessing/EquirectangularToCubemapConverter.cpp
     source/rendering/preprocessing/PrefilteredEnvMapGenerator.cpp
+    source/rendering/preprocessing/TextureGeneratorBase.cpp
+    source/rendering/preprocessing/SpecularIBLBrdfLutGenerator.cpp
     source/resources/Cubemap.cpp
     source/resources/DiskFileProvider.cpp
     source/resources/TextureManager.cpp

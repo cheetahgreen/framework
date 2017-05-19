@@ -12,6 +12,7 @@
 #include "fw/components/EntityInfo.hpp"
 #include "fw/rendering/Light.hpp"
 #include "fw/rendering/preprocessing/PrefilteredEnvMapGenerator.hpp"
+#include "fw/rendering/preprocessing/SpecularIBLBrdfLutGenerator.hpp"
 #include "fw/cameras/ProjectionCamera.hpp"
 
 #include "engine/scripts/ScriptCollection.hpp"
@@ -119,6 +120,9 @@ void Application::onCreate()
     fw::PrefilteredEnvMapGenerator prefilteredEnvMapGen(cubemap);
     std::shared_ptr<fw::Cubemap> prefilteredEnvMap =
         prefilteredEnvMapGen.generate({128, 128}, 5);
+
+    fw::SpecularIBLBrdfLutGenerator specIBLBrdfLutGen{};
+    _brdfLutTexture = specIBLBrdfLutGen.generate({512, 512});
 
     _renderingSystem->setSkybox(prefilteredEnvMap);
     _renderingSystem->setIrradianceMap(irradianceCubemap);
@@ -255,6 +259,22 @@ void Application::onRender()
 
     _systems.update<ee::ScriptExecutionSystem>(entityx::TimeDelta{});
     _systems.update<ee::ForwardRenderingSystem>(entityx::TimeDelta{});
+
+    {
+        auto textureSize = _brdfLutTexture->getSize();
+        auto availableWidth = ImGui::GetContentRegionAvailWidth();
+        float scale = std::min(1.0f, availableWidth / textureSize.x);
+
+        ImGui::Image(
+            reinterpret_cast<void*>(_brdfLutTexture->getTextureId()),
+            ImVec2(scale*textureSize.x, scale*textureSize.y),
+            ImVec2(0.0f, 1.0f),
+            ImVec2(1.0f, 0.0f),
+            ImColor(255, 255, 255, 255),
+            ImColor(255, 255, 255, 255)
+        );
+    }
+
 
     if (ImGui::Begin(
         "Render window",
