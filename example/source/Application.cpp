@@ -97,6 +97,10 @@ void Application::onCreate()
     _systems.add<ee::ScriptExecutionSystem>(_scriptExecutionSystem);
     _systems.configure();
 
+    GLint maxUnits;
+    glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnits);
+    LOG(INFO) << "OpenGL Max. texture units = " << maxUnits;
+
     createCamera();
     createTestEntity();
     createLight();
@@ -126,6 +130,8 @@ void Application::onCreate()
 
     _renderingSystem->setSkybox(prefilteredEnvMap);
     _renderingSystem->setIrradianceMap(irradianceCubemap);
+    _renderingSystem->setPrefilterMap(prefilteredEnvMap);
+    _renderingSystem->setBrdfLut(_brdfLutTexture);
 }
 
 void Application::createCamera()

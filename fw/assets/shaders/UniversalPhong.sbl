@@ -12,6 +12,9 @@ shader "Uniform Phong Shader"
         uniform sampler2D MetalnessMapSampler;
         uniform sampler2D RoughnessMapSampler;
 
+        uniform samplerCube PrefilterMap;
+        uniform sampler2D BRDF_LUT;
+
         uniform samplerCube IrradianceMap;
 
         uniform vec3 EmissionColor;
@@ -123,14 +126,33 @@ shader "Uniform Phong Shader"
             Lo += (kD * albedo / PI + BRDF) * radiance * NdotL;
         }
 
+        vec3 F = fresnel_schlick(max(dot(surfaceNormal, viewDir), 0.0), F0);
+
         /* DIFFUSE IBL */
         vec3 kS = fresnel_schlick(max(dot(surfaceNormal, viewDir), 0.0), F0);
         vec3 kD = 1.0 - kS;
         kD *= 1.0 - metalness;
         vec3 irradiance = texture(IrradianceMap, worldSurfaceNormal).rgb;
         vec3 diffuse = irradiance * albedo;
+
+        // SPECULAR IBL
+        vec3 R = reflect(-viewDir, surfaceNormal);
+        const float MAX_REFLECTION_LOD = 4.0;
+        vec3 prefilteredColor = textureLod(
+            PrefilterMap,
+            inverse(mat3(view)) * R,
+            MAX_REFLECTION_LOD * roughness
+        ).rgb;
+
+        vec2 envBRDF  = texture(
+            BRDF_LUT,
+            vec2(max(dot(surfaceNormal, viewDir), 0.0), roughness)
+        ).rg;
+
+        vec3 specular = prefilteredColor * (F * envBRDF.x + envBRDF.y);
+
         float ao = 1.0;
-        vec3 ambient = (kD * diffuse) * ao;
+        vec3 ambient = (kD * diffuse + specular) * ao;
 
         vec3 color = Lo + ambient + EmissionColor;
         color = color / (color + vec3(1.0));

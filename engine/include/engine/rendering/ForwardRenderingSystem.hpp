@@ -35,9 +35,22 @@ public:
         _irradianceMap = cubemap;
     }
 
+    void setPrefilterMap(std::shared_ptr<fw::Cubemap> cubemap)
+    {
+        _prefilterMap = cubemap;
+    }
+
+    void setBrdfLut(std::shared_ptr<fw::Texture> texture)
+    {
+        _brdfLut = texture;
+    }
+
 private:
     std::shared_ptr<fw::Cubemap> _cubemap;
     std::shared_ptr<fw::Cubemap> _irradianceMap;
+    std::shared_ptr<fw::Cubemap> _prefilterMap;
+    std::shared_ptr<fw::Texture> _brdfLut;
+
     std::shared_ptr<fw::UniversalPhongEffect> _universalPhongEffect;
 
     std::shared_ptr<fw::Mesh<fw::VertexNormalTexCoords>> _box;

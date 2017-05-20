@@ -35,6 +35,8 @@ public:
     void setDiffuseTexture(const std::shared_ptr<fw::Texture>& texture);
     void setNormalMap(const std::shared_ptr<fw::Texture>& normalMap);
     void setIrradianceMap(const std::shared_ptr<fw::Cubemap>& normalMap);
+    void setPrefilterMap(const std::shared_ptr<fw::Cubemap>& prefilterMap);
+    void setBrdfLut(const std::shared_ptr<fw::Texture>& brdfLut);
 
     void setEmissionColor(glm::vec3 color);
     void setSolidColor(glm::vec3 color);
@@ -51,6 +53,8 @@ private:
     GLint _metalnessMapLoc;
     GLint _roughnessMapLoc;
     GLint _irradianceMapLoc;
+    GLint _prefilterMapLoc;
+    GLint _brdfLutLoc;
 
     GLint _lightColorLocation;
     GLint _lightDirectionLocation;
@@ -66,6 +70,8 @@ private:
     std::shared_ptr<fw::Texture> _metalnessMap;
     std::shared_ptr<fw::Texture> _roughnessMap;
     std::shared_ptr<fw::Cubemap> _irradianceMap;
+    std::shared_ptr<fw::Cubemap> _prefilterMap;
+    std::shared_ptr<fw::Texture> _brdfLut;
 
     fw::Transform _lightTransform;
     fw::Light _light;

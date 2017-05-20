@@ -17,6 +17,9 @@ UniversalPhongEffect::UniversalPhongEffect():
     _metalnessMapLoc = _shaderProgram->getUniformLoc("MetalnessMapSampler");
     _roughnessMapLoc = _shaderProgram->getUniformLoc("RoughnessMapSampler");
     _irradianceMapLoc = _shaderProgram->getUniformLoc("IrradianceMap");
+    _prefilterMapLoc = _shaderProgram->getUniformLoc("PrefilterMap");
+    _brdfLutLoc = _shaderProgram->getUniformLoc("BRDF_LUT");
+
     _lightColorLocation = _shaderProgram->getUniformLoc("LightColor");
     _lightDirectionLocation = _shaderProgram->getUniformLoc("LightDirection");
     _lightPositionLocation = _shaderProgram->getUniformLoc("LightPosition");
@@ -70,6 +73,20 @@ void UniversalPhongEffect::begin()
         glActiveTexture(GL_TEXTURE4);
         glBindTexture(GL_TEXTURE_CUBE_MAP, _irradianceMap->getId());
         glUniform1i(_irradianceMapLoc, 4);
+    }
+
+    if (_prefilterMap != nullptr)
+    {
+        glActiveTexture(GL_TEXTURE5);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, _prefilterMap->getId());
+        glUniform1i(_prefilterMapLoc, 5);
+    }
+
+    if (_brdfLut != nullptr)
+    {
+        glActiveTexture(GL_TEXTURE6);
+        glBindTexture(GL_TEXTURE_2D, _brdfLut->getTextureId());
+        glUniform1i(_brdfLutLoc, 6);
     }
 
     glUniform3fv(_emissionColorLocation, 1, glm::value_ptr(_emissionColor));
@@ -133,6 +150,20 @@ void UniversalPhongEffect::setIrradianceMap(
 )
 {
     _irradianceMap = irradianceCubemap;
+}
+
+void UniversalPhongEffect::setPrefilterMap(
+    const std::shared_ptr<fw::Cubemap>& prefilterMap
+)
+{
+    _prefilterMap = prefilterMap;
+}
+
+void UniversalPhongEffect::setBrdfLut(
+    const std::shared_ptr<fw::Texture>& brdfLut
+)
+{
+    _brdfLut = brdfLut;
 }
 
 void UniversalPhongEffect::setEmissionColor(glm::vec3 color)
