@@ -102,8 +102,10 @@ void Application::onCreate()
     LOG(INFO) << "OpenGL Max. texture units = " << maxUnits;
 
     createCamera();
-    createTestEntity();
+    //createTestEntity();
+    createPlane();
     createLight();
+    createArealight();
 
     auto envTexture = _textureManager->loadTexture(
         "/app/textures/newport_loft.hdr"
@@ -128,7 +130,7 @@ void Application::onCreate()
     fw::SpecularIBLBrdfLutGenerator specIBLBrdfLutGen{};
     _brdfLutTexture = specIBLBrdfLutGen.generate({512, 512});
 
-    _renderingSystem->setSkybox(prefilteredEnvMap);
+    //_renderingSystem->setSkybox(prefilteredEnvMap);
     _renderingSystem->setIrradianceMap(irradianceCubemap);
     _renderingSystem->setPrefilterMap(prefilteredEnvMap);
     _renderingSystem->setBrdfLut(_brdfLutTexture);
@@ -184,6 +186,48 @@ void Application::createTestEntity()
     );
 
     _testEntity.assign_from_copy<fw::Material>(material);
+
+}
+
+void Application::createArealight()
+{
+    auto entity = _entities.create();
+    entity.assign<fw::EntityInfo>("Arealight");
+    entity.assign<fw::Transform>(
+        glm::translate({}, glm::vec3{-0.5f, 0.0f, 0.0f})
+        * glm::rotate(
+            glm::mat4{},
+            glm::radians(45.0f),
+            glm::vec3{0.0f, 0.0f, 1.0f}
+        )
+        * glm::rotate(
+            glm::mat4{},
+            glm::radians(90.0f),
+            glm::vec3{0.0f, 1.0f, 0.0f}
+        )
+    );
+    entity.assign<fw::AreaLight>();
+}
+
+void Application::createPlane()
+{
+    auto planeMaterial = std::make_shared<fw::Material>();
+
+    std::shared_ptr<fw::Mesh<fw::VertexNormalTexCoords>> planeMesh =
+        fw::createPlane(10.0f, 10.0f);
+
+    fw::GeometryChunk chunk{planeMesh, planeMaterial, {}};
+    _planeModel = std::make_shared<fw::StaticModel>(
+        std::vector<fw::GeometryChunk> {chunk}
+    );
+
+    auto planeEntity = _entities.create();
+    planeEntity.assign<fw::EntityInfo>("Plane");
+    planeEntity.assign<fw::RenderMesh>(_planeModel);
+    planeEntity.assign_from_copy<fw::Transform>(fw::Transform{
+        glm::translate({}, glm::vec3{0.0f, -0.5f, 0.0f})
+    });
+    planeEntity.assign_from_copy<fw::Material>(*planeMaterial);
 }
 
 void Application::createLight()

@@ -35,9 +35,12 @@ public:
 
 protected:
     virtual void onCreate() override;
+
     void createCamera();
     void createTestEntity();
     void createLight();
+    void createArealight();
+    void createPlane();
 
     virtual void onDestroy() override;
     virtual void onUpdate(
@@ -60,6 +63,7 @@ private:
     entityx::Entity _cameraEntity;
 
     std::shared_ptr<fw::StaticModel> _staticModel;
+    std::shared_ptr<fw::StaticModel> _planeModel;
 
     bool _enableCameraRotations;
     bool _showTexturesInspector;
