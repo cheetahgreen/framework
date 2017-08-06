@@ -73,6 +73,7 @@ shader "Uniform Phong Shader"
 
     func fragment(vertexOutput vsOut): vec4 result
     <<<
+        /* HACK: COMMENTED TO SAVE DEVELOPMENT TIME, FIX THIS!
         vec3 normal = normalize(vsOut.Normal);
         vec3 tangent = normalize(vsOut.Tangent);
         vec3 lightDir = normalize(vsOut.ViewLightDirection);
@@ -128,7 +129,7 @@ shader "Uniform Phong Shader"
 
         vec3 F = fresnel_schlick(max(dot(surfaceNormal, viewDir), 0.0), F0);
 
-        /* DIFFUSE IBL */
+        // DIFFUSE IBL
         vec3 kS = fresnel_schlick(max(dot(surfaceNormal, viewDir), 0.0), F0);
         vec3 kD = 1.0 - kS;
         kD *= 1.0 - metalness;
@@ -157,7 +158,8 @@ shader "Uniform Phong Shader"
         vec3 color = Lo + ambient + EmissionColor;
         color = color / (color + vec3(1.0));
         vec3 gammaCorrected = pow(color, vec3(1.0/2.2));
-        result = vec4(gammaCorrected, 1.0);
+        */
+        result = vec4(EmissionColor, 1.0);
     >>>
     requires {
         distribution_ggx_tr,

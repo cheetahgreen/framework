@@ -1,4 +1,3 @@
-#pragma once
 #include "fw/rendering/preprocessing/SpecularIBLBrdfLutGenerator.hpp"
 #include "fw/Resources.hpp"
 #include "fw/DebugShapes.hpp"

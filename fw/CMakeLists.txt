@@ -106,12 +106,13 @@ set(FRAMEWORK_SOURCE_FILES
     source/numerical/SurfaceIntersectionNewtonIterable.cpp
     source/performance/PerformanceMonitor.cpp
     source/rendering/Framebuffer.cpp
+    source/rendering/arealights/ArealightLTC.cpp
     source/rendering/preprocessing/CubemapGeneratorBase.cpp
     source/rendering/preprocessing/DiffuseIrradianceCubemapGenerator.cpp
     source/rendering/preprocessing/EquirectangularToCubemapConverter.cpp
     source/rendering/preprocessing/PrefilteredEnvMapGenerator.cpp
-    source/rendering/preprocessing/TextureGeneratorBase.cpp
     source/rendering/preprocessing/SpecularIBLBrdfLutGenerator.cpp
+    source/rendering/preprocessing/TextureGeneratorBase.cpp
     source/resources/Cubemap.cpp
     source/resources/DiskFileProvider.cpp
     source/resources/TextureManager.cpp

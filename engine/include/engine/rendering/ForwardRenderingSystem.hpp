@@ -6,6 +6,7 @@
 #include "fw/Mesh.hpp"
 #include "fw/Vertices.hpp"
 #include "fw/rendering/Framebuffer.hpp"
+#include "fw/rendering/arealights/ArealightLTC.hpp"
 
 namespace ee
 {
@@ -52,6 +53,7 @@ private:
     std::shared_ptr<fw::Texture> _brdfLut;
 
     std::shared_ptr<fw::UniversalPhongEffect> _universalPhongEffect;
+    std::shared_ptr<fw::ArealightLTC> _areaLightShader;
 
     std::shared_ptr<fw::Mesh<fw::VertexNormalTexCoords>> _box;
     std::shared_ptr<fw::Mesh<fw::VertexNormalTexCoords>> _skybox;

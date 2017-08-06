@@ -107,6 +107,7 @@ void Application::onCreate()
     createLight();
     createArealight();
 
+    /*
     auto envTexture = _textureManager->loadTexture(
         "/app/textures/newport_loft.hdr"
     );
@@ -134,6 +135,7 @@ void Application::onCreate()
     _renderingSystem->setIrradianceMap(irradianceCubemap);
     _renderingSystem->setPrefilterMap(prefilteredEnvMap);
     _renderingSystem->setBrdfLut(_brdfLutTexture);
+    */
 }
 
 void Application::createCamera()
@@ -309,22 +311,6 @@ void Application::onRender()
 
     _systems.update<ee::ScriptExecutionSystem>(entityx::TimeDelta{});
     _systems.update<ee::ForwardRenderingSystem>(entityx::TimeDelta{});
-
-    {
-        auto textureSize = _brdfLutTexture->getSize();
-        auto availableWidth = ImGui::GetContentRegionAvailWidth();
-        float scale = std::min(1.0f, availableWidth / textureSize.x);
-
-        ImGui::Image(
-            reinterpret_cast<void*>(_brdfLutTexture->getTextureId()),
-            ImVec2(scale*textureSize.x, scale*textureSize.y),
-            ImVec2(0.0f, 1.0f),
-            ImVec2(1.0f, 0.0f),
-            ImColor(255, 255, 255, 255),
-            ImColor(255, 255, 255, 255)
-        );
-    }
-
 
     if (ImGui::Begin(
         "Render window",

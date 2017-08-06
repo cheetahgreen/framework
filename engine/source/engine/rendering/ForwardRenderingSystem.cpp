@@ -25,6 +25,8 @@ using StaticModelHandle = std::shared_ptr<fw::StaticModel>;
 ForwardRenderingSystem::ForwardRenderingSystem()
 {
     _universalPhongEffect = std::make_shared<fw::UniversalPhongEffect>();
+    _areaLightShader = std::make_shared<fw::ArealightLTC>();
+
     _box = fw::createBox({0.01f, 0.01f, 0.01f});
     _skybox = fw::createBox({1.0f, 1.0f, 1.0f});
     _plane = fw::createPlane(1.0f, 1.0f);
@@ -81,20 +83,24 @@ void ForwardRenderingSystem::update(
         }
     );
 
-    fw::Transform currentLightTransform;
-    fw::Light currentLight;
+    fw::Transform currentAreaLightTransform;
+    fw::AreaLight currentAreaLight;
 
-    entities.each<fw::Transform, fw::Light>(
-        [&currentLightTransform, &currentLight](
+    entities.each<fw::Transform, fw::AreaLight>(
+        [&currentAreaLightTransform, &currentAreaLight](
             entityx::Entity entity,
             fw::Transform& transform,
-            fw::Light& light
+            fw::AreaLight& light
         )
         {
-            currentLight = light;
-            currentLightTransform = transform;
+            currentAreaLight = light;
+            currentAreaLightTransform = transform;
         }
     );
+
+    _universalPhongEffect->setIrradianceMap(_irradianceMap);
+    _universalPhongEffect->setPrefilterMap(_prefilterMap);
+    _universalPhongEffect->setBrdfLut(_brdfLut);
 
     entityx::ComponentHandle<fw::Transform> transformation;
     entityx::ComponentHandle<fw::Light> light;
@@ -108,26 +114,19 @@ void ForwardRenderingSystem::update(
         auto material = entity.component<fw::Material>();
         for (const auto& chunk: staticModel->getGeometryChunks())
         {
-            _universalPhongEffect->setLight(
-                currentLightTransform,
-                currentLight
+            _areaLightShader->setArealight(currentAreaLight);
+            _areaLightShader->setArealightTransform(
+                currentAreaLightTransform.getTransform()
             );
 
-            _universalPhongEffect->setMaterial(*material);
-            _universalPhongEffect->setIrradianceMap(_irradianceMap);
-            _universalPhongEffect->setPrefilterMap(_prefilterMap);
-            _universalPhongEffect->setBrdfLut(_brdfLut);
-
-            _universalPhongEffect->begin();
-            _universalPhongEffect->setProjectionMatrix(projectionMatrix);
-            _universalPhongEffect->setViewMatrix(viewMatrix);
-            _universalPhongEffect->setModelMatrix(
-                transformation->getTransform()
-            );
+            _areaLightShader->begin();
+            _areaLightShader->setProjectionMatrix(projectionMatrix);
+            _areaLightShader->setViewMatrix(viewMatrix);
+            _areaLightShader->setModelMatrix(transformation->getTransform());
 
             chunk.getMesh()->render();
 
-            _universalPhongEffect->end();
+            _areaLightShader->end();
         }
     }
 

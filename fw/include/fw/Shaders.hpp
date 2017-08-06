@@ -44,6 +44,7 @@ public:
 
     void setUniform(GLuint location, GLint v0);
     void setUniform(GLuint location, GLfloat v0);
+    void setUniform(GLuint location, const glm::vec2& uniform);
     void setUniform(GLuint location, const glm::vec3& uniform);
     void setUniform(GLuint location, const glm::vec4& uniform);
     void setUniform(GLuint location, const glm::mat4& uniform);
